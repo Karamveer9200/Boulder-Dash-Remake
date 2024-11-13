@@ -1,9 +1,0 @@
-# Ignore Java compiled class files
-*.class
-
-# Ignore XML files
-*.xml
-
-# Ignore IntelliJ IDEA project files
-*.iml
-.idea/
