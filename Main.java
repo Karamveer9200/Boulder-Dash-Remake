@@ -48,7 +48,8 @@ public class Main extends Application {
 
 	// The width of the grid in number of cells.
 	private static final int GRID_WIDTH = 12;
-	
+	// The length of the grid in number of cells.
+	private static final int GRID_LENGTH = 8;
 	// The canvas in the GUI. This needs to be a global variable
 	// (in this setup) as we need to access it in different methods.
 	// We could use FXML to place code in the controller instead.
@@ -105,39 +106,28 @@ public class Main extends Application {
 	 */
 	public void processKeyEvent(KeyEvent event) {
 		// We change the behaviour depending on the actual key that was pressed.
-		switch (event.getCode()) {			
-		    case RIGHT:
-		    	// Right key was pressed. So move the player right by one cell.
-	        	playerX = playerX + 1;
-	        	break;
-			case LEFT:
-				// Left key was pressed. So move the player left by one cell.
-				playerX = playerX - 1;
-				break;
-			case UP:
-				// Up key was pressed. So move the player up by one cell.
-				playerY = playerY - 1;
-				break;
-			case DOWN:
-				// Down key was pressed. So move the player down by one cell.
-				playerY = playerY + 1;
-				break;
 
-
-
-
-
-
-
-
-
-
-
-
-
-	        default:
-	        	// Do nothing for all other keys.
-	        	break;
+		switch (event.getCode()) {
+				if(RIGHT)
+//		    case RIGHT:
+//		    	// Right key was pressed. So move the player right by one cell.
+//	        	playerX = playerX + 1;
+//	        	break;
+//			case LEFT:
+//				// Left key was pressed. So move the player left by one cell.
+//				playerX = playerX - 1;
+//				break;
+//			case UP:
+//				// Up key was pressed. So move the player up by one cell.
+//				playerY = playerY - 1;
+//				break;
+//			case DOWN:
+//				// Down key was pressed. So move the player down by one cell.
+//				playerY = playerY + 1;
+//				break;
+//	        default:
+//	        	// Do nothing for all other keys.
+//	        	break;
 		}
 		
 		// Redraw game as the player may have moved.
