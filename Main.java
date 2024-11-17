@@ -121,8 +121,8 @@ public class Main extends Application {
 				break;
 			case UP:
 				if (playerY > GRID_LENGTH - 1) {
-					// Up key was pressed. So move the player up by one cell.
-					playerY = playerY - 1;
+				// Up key was pressed. So move the player up by one cell.
+				playerY = playerY - 1;
 				}
 				break;
 			case DOWN:
