@@ -45,7 +45,7 @@ public class Main extends Application {
 	// The width and height (in pixels) of each cell that makes up the game.
 	private static final int GRID_CELL_WIDTH = 50;
 	private static final int GRID_CELL_HEIGHT = 50;
-	
+
 	// The width of the grid in number of cells.
 	private static final int GRID_WIDTH = 12;
 	
@@ -109,7 +109,32 @@ public class Main extends Application {
 		    case RIGHT:
 		    	// Right key was pressed. So move the player right by one cell.
 	        	playerX = playerX + 1;
-	        	break;		        
+	        	break;
+			case LEFT:
+				// Left key was pressed. So move the player left by one cell.
+				playerX = playerX - 1;
+				break;
+			case UP:
+				// Up key was pressed. So move the player up by one cell.
+				playerY = playerY - 1;
+				break;
+			case DOWN:
+				// Down key was pressed. So move the player down by one cell.
+				playerY = playerY + 1;
+				break;
+
+
+
+
+
+
+
+
+
+
+
+
+
 	        default:
 	        	// Do nothing for all other keys.
 	        	break;
