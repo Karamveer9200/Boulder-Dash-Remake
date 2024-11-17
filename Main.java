@@ -106,28 +106,34 @@ public class Main extends Application {
 	 */
 	public void processKeyEvent(KeyEvent event) {
 		// We change the behaviour depending on the actual key that was pressed.
-
 		switch (event.getCode()) {
-				if(RIGHT)
-//		    case RIGHT:
-//		    	// Right key was pressed. So move the player right by one cell.
-//	        	playerX = playerX + 1;
-//	        	break;
-//			case LEFT:
-//				// Left key was pressed. So move the player left by one cell.
-//				playerX = playerX - 1;
-//				break;
-//			case UP:
-//				// Up key was pressed. So move the player up by one cell.
-//				playerY = playerY - 1;
-//				break;
-//			case DOWN:
-//				// Down key was pressed. So move the player down by one cell.
-//				playerY = playerY + 1;
-//				break;
-//	        default:
-//	        	// Do nothing for all other keys.
-//	        	break;
+		    case RIGHT:
+				if (playerX < GRID_WIDTH - 1) {
+					// Right key was pressed. So move the player right by one cell.
+					playerX = playerX + 1;
+				}
+	        	break;
+			case LEFT:
+				if(playerX > GRID_WIDTH + 1) {
+					// Left key was pressed. So move the player left by one cell.
+					playerX = playerX - 1;
+				}
+				break;
+			case UP:
+				if (playerY > GRID_LENGTH - 1) {
+					// Up key was pressed. So move the player up by one cell.
+					playerY = playerY - 1;
+				}
+				break;
+			case DOWN:
+				if (playerY < GRID_LENGTH - 1) {
+					// Down key was pressed. So move the player down by one cell.
+					playerY = playerY + 1;
+				}
+				break;
+	        default:
+	        	// Do nothing for all other keys.
+	        	break;
 		}
 		
 		// Redraw game as the player may have moved.
