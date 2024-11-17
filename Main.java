@@ -45,10 +45,11 @@ public class Main extends Application {
 	// The width and height (in pixels) of each cell that makes up the game.
 	private static final int GRID_CELL_WIDTH = 50;
 	private static final int GRID_CELL_HEIGHT = 50;
-	
+
 	// The width of the grid in number of cells.
 	private static final int GRID_WIDTH = 12;
-	
+	// The length of the grid in number of cells.
+	private static final int GRID_LENGTH = 8;
 	// The canvas in the GUI. This needs to be a global variable
 	// (in this setup) as we need to access it in different methods.
 	// We could use FXML to place code in the controller instead.
@@ -105,11 +106,31 @@ public class Main extends Application {
 	 */
 	public void processKeyEvent(KeyEvent event) {
 		// We change the behaviour depending on the actual key that was pressed.
-		switch (event.getCode()) {			
+		switch (event.getCode()) {
 		    case RIGHT:
-		    	// Right key was pressed. So move the player right by one cell.
-	        	playerX = playerX + 1;
-	        	break;		        
+				if (playerX < GRID_WIDTH - 1) {
+					// Right key was pressed. So move the player right by one cell.
+					playerX = playerX + 1;
+				}
+	        	break;
+			case LEFT:
+				if (playerX > 0) {
+					// Left key was pressed. So move the player left by one cell.
+					playerX = playerX - 1;
+				}
+				break;
+			case UP:
+				if (playerY > 0) {
+					// Up key was pressed. So move the player up by one cell.
+					playerY = playerY - 1;
+				}
+				break;
+			case DOWN:
+				if (playerY < GRID_LENGTH - 1) {
+					// Down key was pressed. So move the player down by one cell.
+					playerY = playerY + 1;
+				}
+				break;
 	        default:
 	        	// Do nothing for all other keys.
 	        	break;
@@ -267,56 +288,11 @@ public class Main extends Application {
 			startTickTimelineButton.setDisable(false);
 		});
 
-		// Setup a draggable image.
-		ImageView draggableImage = new ImageView();
-		draggableImage.setImage(iconImage);
-        toolbar.getChildren().add(draggableImage);
-        
-        // This code setup what happens when the dragging starts on the image.
-        // You probably don't need to change this (unless you wish to do more advanced things).
-        draggableImage.setOnDragDetected(new EventHandler<MouseEvent>() {
-		    public void handle(MouseEvent event) {
-		        // Mark the drag as started.
-		    	// We do not use the transfer mode (this can be used to indicate different forms
-		    	// of drags operations, for example, moving files or copying files).
-		    	Dragboard db = draggableImage.startDragAndDrop(TransferMode.ANY);
 
-		    	// We have to put some content in the clipboard of the drag event.
-		    	// We do not use this, but we could use it to store extra data if we wished.
-                ClipboardContent content = new ClipboardContent();
-                content.putString("Hello");
-                db.setContent(content);
-                
-		    	// Consume the event. This means we mark it as dealt with. 
-		        event.consume();
-		    }
-		});
 		
-        // This code allows the canvas to receive a dragged object within its bounds.
-        // You probably don't need to change this (unless you wish to do more advanced things).
-        canvas.setOnDragOver(new EventHandler<DragEvent>() {
-            public void handle(DragEvent event) {
-		        // Mark the drag as acceptable if the source was the draggable image.
-            	// (for example, we don't want to allow the user to drag things or files into our application)
-            	if (event.getGestureSource() == draggableImage) {
-    		    	// Mark the drag event as acceptable by the canvas.
-            		event.acceptTransferModes(TransferMode.ANY);
-    		    	// Consume the event. This means we mark it as dealt with.
-            		event.consume();
-            	}
-            }
-        });
+
         
-        // This code allows the canvas to react to a dragged object when it is finally dropped.
-        // You probably don't need to change this (unless you wish to do more advanced things).
-        canvas.setOnDragDropped(new EventHandler<DragEvent>() {
-            public void handle(DragEvent event) {                
-            	// We call this method which is where the bulk of the behaviour takes place.
-            	canvasDragDroppedOccured(event);
-            	// Consume the event. This means we mark it as dealt with.
-            	event.consume();
-             }
-        });
+
         
 		// Finally, return the border pane we built up.
         return root;
