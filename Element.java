@@ -2,52 +2,51 @@ import javafx.scene.image.Image;
 public abstract class Element {
 
     protected Image image;
-    protected int x;
-    protected int y;
+    protected int column;
+    protected int row;
     protected boolean canExplode;
-    //FOR THE MOMENT ONLY ACTOR IS A PLAYER
     protected boolean canBeEntered;
     protected String name;
 
-    public Element(int x, int y, boolean canExplode, Image image) {
-        this.x = x;
-        this.y = y;
+    public Element(int column, int row, boolean canExplode, Image image) {
+        this.column = column;
+        this.row = row;
         this.canExplode = canExplode;
         this.image = image;
     }
 
-    public Element(int x, int y, boolean canExplode) {
-        this.x = x;
-        this.y = y;
+    public Element(int column, int row, boolean canExplode) {
+        this.column = column;
+        this.row = row;
         this.canExplode = canExplode;
     }
 
-    public Element(int x, int y) {
-        this.x = x;
-        this.y = y;
+    public Element(int column, int row) {
+        this.column = column;
+        this.row = row;
     }
 
-    public int getY() {
-        return y;
+    public int getRow() {
+        return row;
     }
 
-    public void setY(int y) {
-        this.y = y;
+    public void setRow(int row) {
+        this.row = row;
     }
 
-    public int getX() {
-        return x;
+    public int getColumn() {
+        return column;
     }
 
-    public void setX(int x) {
-        this.x = x;
+    public void setColumn(int column) {
+        this.column = column;
     }
 
-    public javafx.scene.image.Image getImage() {
+    public Image getImage() {
         return image;
     }
 
-    public void setImage(javafx.scene.image.Image image) {
+    public void setImage(Image image) {
         this.image = image;
     }
 

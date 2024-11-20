@@ -3,7 +3,7 @@ public class NormalWall extends Element {
 
     public NormalWall(int x, int y) {
         super(x, y);
-        image = new Image("icon.png");
+        image = new Image("images/icon.png");
         canBeEntered = false;
         boolean canExplode = true;
         name = "NormalWall";
