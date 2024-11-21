@@ -2,284 +2,120 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.Dragboard;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 /**
- * Sample application that demonstrates the use of JavaFX Canvas for a Game.
- * This class is intentionally not structured very well. This is just a starting point to show
- * how to draw an image on a canvas, respond to arrow key presses, use a tick method that is
- * called periodically, and use drag and drop.
- * 
- * Do not build the whole application in one file. This file should probably remain very small.
- *
- * @author Liam O'Reilly
+ * Main sets up the GUI and initialises everything for a game to take place
  */
 public class Main extends Application {
-	// The dimensions of the window
-	private static final int WINDOW_WIDTH = 800;
-	private static final int WINDOW_HEIGHT = 500;
+	public static final int WINDOW_WIDTH = 800;
+	public static final int WINDOW_HEIGHT = 500;
+	public static final int GRID_CELL_WIDTH = 50;
+	public static final int GRID_CELL_HEIGHT = 50;
 
-	// The dimensions of the canvas
-	private static final int CANVAS_WIDTH = 600;
-	private static final int CANVAS_HEIGHT = 400;
+	// Timeline for periodic ticks
+	private Timeline tickTimeline;
 
-	// The width and height (in pixels) of each cell that makes up the game.
-	private static final int GRID_CELL_WIDTH = 50;
-	private static final int GRID_CELL_HEIGHT = 50;
-
-	// The width of the grid in number of cells.
-	private static final int GRID_WIDTH = 12;
-	// The length of the grid in number of cells.
-	private static final int GRID_LENGTH = 8;
-	// The canvas in the GUI. This needs to be a global variable
-	// (in this setup) as we need to access it in different methods.
-	// We could use FXML to place code in the controller instead.
-	private Canvas canvas;
-		
-	// Loaded images
-	private Image playerImage;
-	private Image dirtImage;
-	private Image iconImage;
-	
-	// X and Y coordinate of player on the grid.
-	private int playerX = 0;
-	private int playerY = 0;
-	
-	// Timeline which will cause tick method to be called periodically.
-	private Timeline tickTimeline; 
-	
-	/**
-	 * Setup the new application.
-	 * @param primaryStage The stage that is to be used for the application.
-	 */
+	@Override
 	public void start(Stage primaryStage) {
-		// Load images. Note we use png images with a transparent background.
-		playerImage = new Image("player.png");
-		dirtImage = new Image("dirt.png");
-		iconImage = new Image("icon.png");
+		// Load the initial grid from a file
+		int[][] initialGrid = FileHandler.readFile("PlaceHolder.txt");
 
-		// Build the GUI 
-		Pane root = buildGUI();
-		
-		// Create a scene from the GUI
+		final int canvasWidth = initialGrid[0].length * GRID_CELL_WIDTH;
+		final int canvasHeight = initialGrid.length * GRID_CELL_HEIGHT;
+
+		// Create the canvas
+		Canvas canvas = new Canvas(canvasWidth, canvasHeight);
+
+		// Initialize the game controller with the grid and canvas
+		GameController gameController = new GameController(initialGrid, canvas);
+
+		// Build the GUI
+		Pane root = buildGUI(gameController);
+
+		// Create a scene and register key press events
 		Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
-				
-		// Register an event handler for key presses.
-		// This causes the processKeyEvent method to be called each time a key is pressed.
-		scene.addEventFilter(KeyEvent.KEY_PRESSED, event -> processKeyEvent(event));
-				
-		// Register a tick method to be called periodically.
-		// Make a new timeline with one keyframe that triggers the tick method every half a second.
-		tickTimeline = new Timeline(new KeyFrame(Duration.millis(500), event -> tick()));
-		 // Loop the timeline forever
+		scene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+			gameController.handlePlayerMovement(event.getCode());
+			event.consume();
+		});
+
+		// Set up the periodic tick timeline
+		tickTimeline = new Timeline(new KeyFrame(Duration.millis(500), event -> {
+			gameController.tick();
+			gameController.draw();
+		}));
 		tickTimeline.setCycleCount(Animation.INDEFINITE);
-		// We start the timeline upon a button press.
-		
-		// Display the scene on the stage
-		drawGame();
+
+		// Draw the initial grid
+		gameController.draw();
+
+		// Show the stage
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
-	
-	/**
-	 * Process a key event due to a key being pressed, e.g., to move the player.
-	 * @param event The key event that was pressed.
-	 */
-	public void processKeyEvent(KeyEvent event) {
-		// We change the behaviour depending on the actual key that was pressed.
-		switch (event.getCode()) {
-		    case RIGHT:
-				if (playerX < GRID_WIDTH - 1) {
-					// Right key was pressed. So move the player right by one cell.
-					playerX = playerX + 1;
-				}
-	        	break;
-			case LEFT:
-				if (playerX > 0) {
-					// Left key was pressed. So move the player left by one cell.
-					playerX = playerX - 1;
-				}
-				break;
-			case UP:
-				if (playerY > 0) {
-					// Up key was pressed. So move the player up by one cell.
-					playerY = playerY - 1;
-				}
-				break;
-			case DOWN:
-				if (playerY < GRID_LENGTH - 1) {
-					// Down key was pressed. So move the player down by one cell.
-					playerY = playerY + 1;
-				}
-				break;
-	        default:
-	        	// Do nothing for all other keys.
-	        	break;
-		}
-		
-		// Redraw game as the player may have moved.
-		drawGame();
-		
-		// Consume the event. This means we mark it as dealt with. This stops other GUI nodes (buttons etc) responding to it.
-		event.consume();
-	}
-	
-	/**
-	 * Draw the game on the canvas.
-	 */
-	public void drawGame() {
-		// Get the Graphic Context of the canvas. This is what we draw on.
-		GraphicsContext gc = canvas.getGraphicsContext2D();
-		
-		// Clear canvas
-		gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-		
-		// Set the background to gray.
-		gc.setFill(Color.GRAY);
-		gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-		
-		// Draw row of dirt images
-		// We multiply by the cell width and height to turn a coordinate in our grid into a pixel coordinate.
-		// We draw the row at y value 2.
-		for (int x = 0; x < GRID_WIDTH; x++) {
-			gc.drawImage(dirtImage, x * GRID_CELL_WIDTH, 2 * GRID_CELL_HEIGHT);	
-		}
-		
-		// Draw player at current location
-		gc.drawImage(playerImage, playerX * GRID_CELL_WIDTH, playerY * GRID_CELL_HEIGHT);			
-	}
-	
-	/**
-	 * Reset the player's location and move them back to (0,0). 
-	 */
-	public void resetPlayerLocation() { 
-		playerX = 0;
-		playerY = 0;
-		drawGame();
-	}
-	
-	/**
-	 * Move the player to roughly the center of the grid.
-	 */
-	public void movePlayerToCenter() {
-		// We just move the player to cell (5, 2)
-		playerX = 5;
-		playerY = 2;
-		drawGame();		
-	}
-	
-	/**
-	 * This method is called periodically by the tick timeline
-	 * and would for, example move, perform logic in the game,
-	 * this might cause the bad guys to move (by e.g., looping
-	 * over them all and calling their own tick method). 
-	 */
-	public void tick() {
-		// Here we move the player right one cell and teleport
-		// them back to the left side when they reach the right side.
-		playerX = playerX + 1;
-		if (playerX > 11) {
-			playerX = 0;
-		}
-		// We then redraw the whole canvas.
-		drawGame();
-	}
-	
 
-	
-	/**
-	 * Create the GUI.
-	 * @return The panel that contains the created GUI.
-	 */
-	private Pane buildGUI() {
-		// Create top-level panel that will hold all GUI nodes.
+	private Pane buildGUI(GameController gameController) {
 		BorderPane root = new BorderPane();
-				
-		// Create the canvas that we will draw on.
-		// We store this as a gloabl variable so other methods can access it.
-		canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
-		root.setCenter(canvas);
-		
-		// Create a toolbar with some nice padding and spacing
-		HBox toolbar = new HBox();
-		toolbar.setSpacing(10);
-		toolbar.setPadding(new Insets(10, 10, 10, 10)); 
-		root.setTop(toolbar);
-		
-		// Create the toolbar content
-		
-		// Reset Player Location Button
-		Button resetPlayerLocationButton = new Button("Reset Player");
-		toolbar.getChildren().add(resetPlayerLocationButton);
 
-		// Setup the behaviour of the button.
-		resetPlayerLocationButton.setOnAction(e -> {
-			// We keep this method short and use a method for the bulk of the work.
-			resetPlayerLocation();
+		// Add the canvas to the center
+		root.setCenter(gameController.getCanvas());
+
+		// Create a toolbar with buttons
+		HBox toolbar = new HBox(10);
+		toolbar.setPadding(new Insets(10));
+
+		Button resetButton = new Button("Reset Player");
+		resetButton.setOnAction(e -> {
+			gameController.resetPlayerLocation();
+			gameController.draw();
 		});
 
-		// Center Player Button		
-		Button centerPlayerLocationButton = new Button("Center Player");
-		toolbar.getChildren().add(centerPlayerLocationButton);		
-
-		// Setup the behaviour of the button.
-		centerPlayerLocationButton.setOnAction(e -> {
-			// We keep this method short and use a method for the bulk of the work.
-			movePlayerToCenter();
+		Button centerButton = new Button("Center Player");
+		centerButton.setOnAction(e -> {
+			gameController.movePlayerToCenter();
+			gameController.draw();
 		});
-		
-		// Tick Timeline buttons
-		Button startTickTimelineButton = new Button("Start Ticks");
-		Button stopTickTimelineButton = new Button("Stop Ticks");
-		// We add both buttons at the same time to the timeline (we could have done this in two steps).
-		toolbar.getChildren().addAll(startTickTimelineButton, stopTickTimelineButton);
-		// Stop button is disabled by default
-		stopTickTimelineButton.setDisable(true);
 
-		// Setup the behaviour of the buttons.
-		startTickTimelineButton.setOnAction(e -> {
-			// Start the tick timeline and enable/disable buttons as appropriate.
-			startTickTimelineButton.setDisable(true);
+		Button startTickButton = new Button("Start Ticks");
+		Button stopTickButton = new Button("Stop Ticks");
+		stopTickButton.setDisable(true);
+
+		startTickButton.setOnAction(e -> {
 			tickTimeline.play();
-			stopTickTimelineButton.setDisable(false);
+			startTickButton.setDisable(true);
+			stopTickButton.setDisable(false);
 		});
 
-		stopTickTimelineButton.setOnAction(e -> {
-			// Stop the tick timeline and enable/disable buttons as appropriate.
-			stopTickTimelineButton.setDisable(true);
+		stopTickButton.setOnAction(e -> {
 			tickTimeline.stop();
-			startTickTimelineButton.setDisable(false);
+			stopTickButton.setDisable(true);
+			startTickButton.setDisable(false);
 		});
 
+		Button resetGridButton = new Button("Reset Grid");
+		resetGridButton.setOnAction(e -> {
+			int[][] initialGrid = FileHandler.readFile("PlaceHolder.txt");
+			gameController.getGridManager().initializeGrid(initialGrid);
+			gameController.initializePlayer(initialGrid);
+			gameController.draw();
+		});
 
-		
+		toolbar.getChildren().addAll(resetButton, centerButton, startTickButton, stopTickButton,resetGridButton);
+		root.setTop(toolbar);
 
-        
-
-        
-		// Finally, return the border pane we built up.
-        return root;
+		return root;
 	}
-	        	
+
 	public static void main(String[] args) {
 		launch(args);
 	}
