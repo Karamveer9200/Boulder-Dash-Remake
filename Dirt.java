@@ -3,7 +3,7 @@ public class Dirt extends Element {
 
     public Dirt(int x, int y) {
         super(x, y);
-        boolean canExplode = true;
+        canExplode = true;
         image = new Image("images/dirt.png");
         canBeEntered = true;
         name = "Dirt";

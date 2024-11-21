@@ -1,29 +1,20 @@
 import javafx.scene.image.Image;
 public abstract class Element {
 
+    protected String name;
     protected Image image;
     protected int column;
     protected int row;
     protected boolean canExplode;
     protected boolean canBeEntered;
-    protected String name;
-
-    public Element(int column, int row, boolean canExplode, Image image) {
-        this.column = column;
-        this.row = row;
-        this.canExplode = canExplode;
-        this.image = image;
-    }
-
-    public Element(int column, int row, boolean canExplode) {
-        this.column = column;
-        this.row = row;
-        this.canExplode = canExplode;
-    }
 
     public Element(int column, int row) {
         this.column = column;
         this.row = row;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public int getRow() {
@@ -57,10 +48,5 @@ public abstract class Element {
     public boolean isCanBeEntered() {
         return canBeEntered;
     }
-
-    public String getName() {
-        return name;
-    }
-
 
 }

@@ -1,3 +1,7 @@
+/**
+ * The GridManager is responsible for managing the grid of elements.
+ * It initializes the grid based on a template, provides access to individual elements, and updates the grid
+ */
 public class GridManager {
     private final Element[][] elementGrid;
 
@@ -6,7 +10,7 @@ public class GridManager {
         initializeGrid(gridTemplate);
     }
 
-    private void initializeGrid(int[][] gridTemplate) {
+    public void initializeGrid(int[][] gridTemplate) {
         for (int row = 0; row < gridTemplate.length; row++) {
             for (int col = 0; col < gridTemplate[row].length; col++) {
                 elementGrid[row][col] = createElement(gridTemplate[row][col], row, col);

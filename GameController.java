@@ -1,6 +1,10 @@
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.KeyCode;
 
+/**
+ * GameController manages the player's movements, interactions, and rendering of the grid-based game.
+ * It handles key inputs, updates the player's position, and coordinates with the Renderer and GridManager.
+ */
 public class GameController {
     private final Canvas canvas;
     private final GridManager gridManager;
@@ -15,7 +19,8 @@ public class GameController {
         initializePlayer(gridTemplate);
     }
 
-    private void initializePlayer(int[][] gridTemplate) {
+    // Initialise the initial playerRow and playerColumn variables, crucial for knowing where the player is
+    public void initializePlayer(int[][] gridTemplate) {
         Element[][] elementGrid = gridManager.getElementGrid();
         for (int row = 0; row < gridTemplate.length; row++) {
             for (int col = 0; col < gridTemplate[row].length; col++) {
@@ -35,14 +40,13 @@ public class GameController {
             case LEFT -> movePlayerTo(playerRow, playerColumn - 1);
             case RIGHT -> movePlayerTo(playerRow, playerColumn + 1);
         }
-        draw();
+        draw(); //Redraw grid after update of player movement
     }
 
     public void movePlayerTo(int newRow, int newColumn) {
         if (isValidMove(newRow, newColumn)) {
-            Element[][] elementGrid = gridManager.getElementGrid();
-            gridManager.setElement(playerRow, playerColumn, new Path(playerRow, playerColumn));
-            gridManager.setElement(newRow, newColumn, new Player(newRow, newColumn));
+            gridManager.setElement(playerRow, playerColumn, new Path(playerRow, playerColumn)); //Put a path where the player just was
+            gridManager.setElement(newRow, newColumn, new Player(newRow, newColumn)); //Put a player where the player is going to
             playerRow = newRow;
             playerColumn = newColumn;
         }
@@ -51,8 +55,8 @@ public class GameController {
     private boolean isValidMove(int row, int col) {
         Element[][] elementGrid = gridManager.getElementGrid();
         return row >= 0 && row < elementGrid.length &&
-                col >= 0 && col < elementGrid[0].length &&
-                elementGrid[row][col].isCanBeEntered();
+                col >= 0 && col < elementGrid[0].length && // returns true if player is moving to a co-ordinate in bounds
+                elementGrid[row][col].isCanBeEntered(); // and moving to a co-ordinate that canBeEntered == true
     }
 
     public void draw() {
@@ -68,12 +72,17 @@ public class GameController {
     }
 
     public void tick() {
-        // Example: move the player to the right in a loop
+        // move the player to the right in a loop
+        // HERE WE WILL HAVE TO LOOP THROUGH EVERYTHING IN THE ELEMENT GRID AND DO THEIR TICK METHOD
         movePlayerTo(playerRow, (playerColumn + 1) % gridManager.getElementGrid()[0].length);
     }
 
     public Canvas getCanvas() {
         return canvas;
+    }
+
+    public GridManager getGridManager() {
+        return gridManager;
     }
 }
 

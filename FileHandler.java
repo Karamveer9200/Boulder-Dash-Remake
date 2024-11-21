@@ -1,3 +1,6 @@
+/**
+ * FileHandler handles reading and writing grid templates to and from files.
+ */
 public class FileHandler {
 
     public static int [][] initialGrid = {

@@ -5,7 +5,7 @@ public class NormalWall extends Element {
         super(x, y);
         image = new Image("images/icon.png");
         canBeEntered = false;
-        boolean canExplode = true;
+        canExplode = true;
         name = "NormalWall";
     }
 

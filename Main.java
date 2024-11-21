@@ -13,16 +13,14 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+/**
+ * Main sets up the GUI and initialises everything for a game to take place
+ */
 public class Main extends Application {
-	// Constants for window, grid, and canvas sizes
-	private static final int WINDOW_WIDTH = 800;
-	private static final int WINDOW_HEIGHT = 500;
-	private static final int GRID_CELL_WIDTH = 50;
-	private static final int GRID_CELL_HEIGHT = 50;
-	private static final int GRID_WIDTH = 5;
-	private static final int GRID_LENGTH = 5;
-	private static final int CANVAS_WIDTH = GRID_CELL_WIDTH * GRID_WIDTH;
-	private static final int CANVAS_HEIGHT = GRID_CELL_HEIGHT * GRID_LENGTH;
+	public static final int WINDOW_WIDTH = 800;
+	public static final int WINDOW_HEIGHT = 500;
+	public static final int GRID_CELL_WIDTH = 50;
+	public static final int GRID_CELL_HEIGHT = 50;
 
 	// Timeline for periodic ticks
 	private Timeline tickTimeline;
@@ -32,8 +30,11 @@ public class Main extends Application {
 		// Load the initial grid from a file
 		int[][] initialGrid = FileHandler.readFile("PlaceHolder.txt");
 
+		final int canvasWidth = initialGrid[0].length * GRID_CELL_WIDTH;
+		final int canvasHeight = initialGrid.length * GRID_CELL_HEIGHT;
+
 		// Create the canvas
-		Canvas canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
+		Canvas canvas = new Canvas(canvasWidth, canvasHeight);
 
 		// Initialize the game controller with the grid and canvas
 		GameController gameController = new GameController(initialGrid, canvas);
@@ -47,14 +48,15 @@ public class Main extends Application {
 			gameController.handlePlayerMovement(event.getCode());
 			event.consume();
 		});
+
 		// Set up the periodic tick timeline
 		tickTimeline = new Timeline(new KeyFrame(Duration.millis(500), event -> {
 			gameController.tick();
-			gameController.draw(); // Redraw the game on each tick
+			gameController.draw();
 		}));
 		tickTimeline.setCycleCount(Animation.INDEFINITE);
 
-		// Draw the initial game state
+		// Draw the initial grid
 		gameController.draw();
 
 		// Show the stage
@@ -100,7 +102,15 @@ public class Main extends Application {
 			startTickButton.setDisable(false);
 		});
 
-		toolbar.getChildren().addAll(resetButton, centerButton, startTickButton, stopTickButton);
+		Button resetGridButton = new Button("Reset Grid");
+		resetGridButton.setOnAction(e -> {
+			int[][] initialGrid = FileHandler.readFile("PlaceHolder.txt");
+			gameController.getGridManager().initializeGrid(initialGrid);
+			gameController.initializePlayer(initialGrid);
+			gameController.draw();
+		});
+
+		toolbar.getChildren().addAll(resetButton, centerButton, startTickButton, stopTickButton,resetGridButton);
 		root.setTop(toolbar);
 
 		return root;
