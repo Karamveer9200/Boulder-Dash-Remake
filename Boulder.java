@@ -1,10 +1,11 @@
 import javafx.scene.image.Image;
-public class Player extends Actor {
-    public Player(int x, int y){
+public class Boulder extends Actor {
+
+    public Boulder(int x, int y){
         super(x,y);
         canExplode = true;
-        image = new Image("images/player.png");
-        canBeEntered = true;
+        image = new Image("images/boulder.png");
+        canBeEntered = false;
         name = "Player";
     }
 

@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 /**
  * The GridManager is responsible for managing the grid of elements.
  * It initializes the grid based on a template, provides access to individual elements, and updates the grid
@@ -24,6 +26,7 @@ public class GridManager {
             case 1 -> new Dirt(row, col);
             case 2 -> new Player(row, col);
             case 3 -> new NormalWall(row, col);
+            case 4 -> new Boulder(row, col);
             default -> throw new IllegalArgumentException("Unknown element code: " + code);
         };
     }
@@ -39,4 +42,5 @@ public class GridManager {
     public void setElement(int row, int col, Element element) {
         elementGrid[row][col] = element;
     }
+
 }

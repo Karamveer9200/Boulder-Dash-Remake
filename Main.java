@@ -45,12 +45,12 @@ public class Main extends Application {
 		// Create a scene and register key press events
 		Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
 		scene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-			gameController.handlePlayerMovement(event.getCode());
+			gameController.holdNextPlayerInput(event.getCode());
 			event.consume();
 		});
 
 		// Set up the periodic tick timeline
-		tickTimeline = new Timeline(new KeyFrame(Duration.millis(500), event -> {
+		tickTimeline = new Timeline(new KeyFrame(Duration.millis(50), event -> {
 			gameController.tick();
 			gameController.draw();
 		}));
