@@ -24,6 +24,8 @@ public class GridManager {
             case 1 -> new Dirt(row, col);
             case 2 -> new Player(row, col);
             case 3 -> new NormalWall(row, col);
+            case 4 -> new TitaniumWall(row, col);
+            case 5 -> new MagicWall(row, col);
             default -> throw new IllegalArgumentException("Unknown element code: " + code);
         };
     }
