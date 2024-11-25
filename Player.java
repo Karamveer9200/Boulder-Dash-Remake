@@ -1,7 +1,7 @@
 import javafx.scene.image.Image;
 public class Player extends Actor {
-    public Player(int x, int y){
-        super(x,y);
+    public Player(int column, int row){
+        super(column,row);
         canExplode = true;
         image = new Image("images/player.png");
         canBeEntered = true;

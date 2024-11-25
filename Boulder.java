@@ -50,6 +50,22 @@ public class Boulder extends Actor {
 
 
 
+//    private boolean isValidMoveBoulder(int col, int row ) {
+//        Element[][] elementGrid = Grid.getElementGrid();
+//        return row >= 0 && row < elementGrid.length &&
+//                col >= 0 && col < elementGrid[0].length && // returns true if player is moving to a co-ordinate in bounds
+//                elementGrid[row][col].isCanBeEntered(); // and moving to a co-ordinate that canBeEntered == true
+//    }
+//
+//    public void moveBoulderDown() {
+//        if (isValidMove(newRow, newColumn)) {
+//            gridManager.setElement(player.getRow(), player.getColumn(), new Path(player.getRow(), player.getColumn())); //Put a path where the player just was
+//            gridManager.setElement(newRow, newColumn, player); //Put a player where the player is going to
+//            player.setRow(newRow);
+//            player.setColumn(newColumn);
+//        }
+//    }
+
     @Override
     public void notified(){
 
