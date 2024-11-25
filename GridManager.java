@@ -12,6 +12,7 @@ public class GridManager {
     private final ArrayList<Player> players = new ArrayList<>();
     private final ArrayList<NormalWall> walls = new ArrayList<>();
     final ArrayList<Boulder> boulders = new ArrayList<>();
+    private  Player player;
 
     /**
      * Constructs a GridManager with a grid template.
@@ -22,6 +23,7 @@ public class GridManager {
     public GridManager(int[][] gridTemplate) {
         this.elementGrid = new Element[gridTemplate.length][gridTemplate[0].length];
         initializeGrid(gridTemplate);
+
     }
 
     /**
@@ -56,7 +58,7 @@ public class GridManager {
         return switch (code) {
             case 0 -> new Path(row, col);
             case 1 -> new Dirt(row, col);
-            case 2 -> new Player(row, col);
+            case 2 -> player = new Player(row, col);
             case 3 -> new NormalWall(row, col);
             case 4 -> new Boulder(row, col);
             default -> throw new IllegalArgumentException("Unknown element code: " + code);
