@@ -3,110 +3,157 @@ import javafx.scene.input.KeyCode;
 
 /**
  * GameController manages the player's movements, interactions, and rendering of the grid-based game.
- * It handles key inputs, updates the player's position, and coordinates with the Renderer and GridManager.
+ * It handles key inputs, updates the player's position, manages boulder interactions, and coordinates
+ * with the Renderer and GridManager to display the game.
  */
 public class GameController {
     private final Canvas canvas;
     private final GridManager gridManager;
     private final Renderer renderer;
-    private int playerRow;
-    private int playerColumn;
+    private final PlayerManager playerManager;
+    private final InputHandler inputHandler;
+    private int tickCounter;
 
-    private boolean isThereAPlayerInput;
-    private enum PlayerInput {
+    /**
+     * Represents possible inputs for the player.
+     */
+    public enum PlayerInput {
         LEFT,
         RIGHT,
         DOWN,
         UP;
     }
-    private PlayerInput nextPlayerInput;
-    private int counter;
 
+    /**
+     * Constructs a GameController with the given grid template and canvas.
+     * Initializes the grid, player, renderer, and input handler.
+     *
+     * @param gridTemplate the 2D array representing the initial grid layout
+     * @param canvas       the Canvas object used for rendering the game
+     */
     public GameController(int[][] gridTemplate, Canvas canvas) {
         this.canvas = canvas;
         this.gridManager = new GridManager(gridTemplate);
         this.renderer = new Renderer();
+        this.playerManager = new PlayerManager(new Player(0, 0));
+        this.inputHandler = new InputHandler();
         initializePlayer(gridTemplate);
-        this.counter = 0;
     }
 
-    // Initialise the initial playerRow and playerColumn variables, crucial for knowing where the player is
+    /**
+     * Initializes the player's position based on the grid template.
+     * Searches for the Player element in the grid and sets its initial location.
+     *
+     * @param gridTemplate the 2D array representing the grid layout
+     */
     public void initializePlayer(int[][] gridTemplate) {
         Element[][] elementGrid = gridManager.getElementGrid();
         for (int row = 0; row < gridTemplate.length; row++) {
             for (int col = 0; col < gridTemplate[row].length; col++) {
                 if (elementGrid[row][col] instanceof Player) {
-                    playerRow = row;
-                    playerColumn = col;
+                    playerManager.getPlayer().setRow(row);
+                    playerManager.getPlayer().setColumn(col);
                     break;
                 }
             }
         }
     }
 
-    public void handlePlayerMovement(PlayerInput nextPlayerInput) {
-        switch (nextPlayerInput) {
-            case UP -> movePlayerTo(playerRow - 1, playerColumn);
-            case DOWN -> movePlayerTo(playerRow + 1, playerColumn);
-            case LEFT -> movePlayerTo(playerRow, playerColumn - 1);
-            case RIGHT -> movePlayerTo(playerRow, playerColumn + 1);
+    /**
+     * Executes the boulder tick, triggering all boulders to perform their movement logic.
+     * Updates the grid and redraws the game.
+     */
+    public void boulderTick() {
+        for (Boulder boulder : gridManager.getBoulders()) {
+            boulder.fall(gridManager);
         }
+        draw();
     }
 
-    public void movePlayerTo(int newRow, int newColumn) {
-        if (isValidMove(newRow, newColumn)) {
-            gridManager.setElement(playerRow, playerColumn, new Path(playerRow, playerColumn)); //Put a path where the player just was
-            gridManager.setElement(newRow, newColumn, new Player(newRow, newColumn)); //Put a player where the player is going to
-            playerRow = newRow;
-            playerColumn = newColumn;
+    /**
+     * Executes the player tick, handling input and updating the player's position on the grid.
+     * Processes player movement and redraws the game.
+     */
+    public void playerTick() {
+        if (inputHandler.isInputPending()) {
+            PlayerInput input = inputHandler.consumeInput();
+            if (input != null) {
+                switch (input) {
+                    case UP -> playerManager.movePlayer(
+                            playerManager.getPlayer().getRow() - 1,
+                            playerManager.getPlayer().getColumn(),
+                            gridManager
+                    );
+                    case DOWN -> playerManager.movePlayer(
+                            playerManager.getPlayer().getRow() + 1,
+                            playerManager.getPlayer().getColumn(),
+                            gridManager
+                    );
+                    case LEFT -> playerManager.movePlayer(
+                            playerManager.getPlayer().getRow(),
+                            playerManager.getPlayer().getColumn() - 1,
+                            gridManager
+                    );
+                    case RIGHT -> playerManager.movePlayer(
+                            playerManager.getPlayer().getRow(),
+                            playerManager.getPlayer().getColumn() + 1,
+                            gridManager
+                    );
+                }
+            }
         }
+        draw();
     }
 
-    private boolean isValidMove(int row, int col) {
-        Element[][] elementGrid = gridManager.getElementGrid();
-        return row >= 0 && row < elementGrid.length &&
-                col >= 0 && col < elementGrid[0].length && // returns true if player is moving to a co-ordinate in bounds
-                elementGrid[row][col].isCanBeEntered(); // and moving to a co-ordinate that canBeEntered == true
-    }
-
+    /**
+     * Draws the current state of the game using the Renderer.
+     */
     public void draw() {
         renderer.draw(canvas.getGraphicsContext2D(), gridManager.getElementGrid());
     }
 
-    public void resetPlayerLocation() {
-        movePlayerTo(0, 0);
+    /**
+     * Registers a key press input and passes it to the InputHandler.
+     *
+     * @param code the KeyCode representing the player's input
+     */
+    public void registerInput(KeyCode code) {
+        inputHandler.registerInput(code);
     }
 
-    public void movePlayerToCenter() {
-        movePlayerTo(gridManager.getElementGrid().length / 2, gridManager.getElementGrid()[0].length / 2);
-    }
-
-    public void tick() {
-        counter++;
-        if (isThereAPlayerInput && counter % 2 == 0) {
-            handlePlayerMovement(nextPlayerInput);
-            isThereAPlayerInput = false;
-            System.out.println("hi");
-        }
-        System.out.println(counter);
-        draw(); //Redraw grid after each tick
-    }
-
-    public void holdNextPlayerInput(KeyCode code) {
-        switch (code) {
-            case UP -> nextPlayerInput = PlayerInput.UP;
-            case DOWN -> nextPlayerInput = PlayerInput.DOWN;
-            case LEFT -> nextPlayerInput = PlayerInput.LEFT;
-            case RIGHT -> nextPlayerInput = PlayerInput.RIGHT;
-        }
-        isThereAPlayerInput = true;
-    }
-
+    /**
+     * Retrieves the Canvas object used for rendering the game.
+     *
+     * @return the Canvas object
+     */
     public Canvas getCanvas() {
         return canvas;
     }
 
+    /**
+     * Retrieves the GridManager responsible for managing the game grid.
+     *
+     * @return the GridManager object
+     */
     public GridManager getGridManager() {
         return gridManager;
+    }
+
+    /**
+     * Resets the player's location to the top-left corner of the grid (0, 0).
+     */
+    public void resetPlayerLocation() {
+        playerManager.movePlayer(0, 0, gridManager);
+    }
+
+    /**
+     * Moves the player to the center of the grid.
+     */
+    public void movePlayerToCenter() {
+        playerManager.movePlayer(
+                gridManager.getElementGrid().length / 2,
+                gridManager.getElementGrid()[0].length / 2,
+                gridManager
+        );
     }
 }

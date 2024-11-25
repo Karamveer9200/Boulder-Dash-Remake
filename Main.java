@@ -23,8 +23,8 @@ public class Main extends Application {
 	public static final int GRID_CELL_HEIGHT = 50;
 
 	// Timeline for periodic ticks
-	private Timeline tickTimeline;
-
+	private Timeline playerTickTimeline;
+	private Timeline boulderTickTimeline;
 	@Override
 	public void start(Stage primaryStage) {
 		// Load the initial grid from a file
@@ -45,17 +45,23 @@ public class Main extends Application {
 		// Create a scene and register key press events
 		Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
 		scene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-			gameController.holdNextPlayerInput(event.getCode());
+			gameController.registerInput(event.getCode());
 			event.consume();
 		});
 
-		// Set up the periodic tick timeline
-		tickTimeline = new Timeline(new KeyFrame(Duration.millis(50), event -> {
-			gameController.tick();
-			gameController.draw();
-		}));
-		tickTimeline.setCycleCount(Animation.INDEFINITE);
+		KeyFrame playerKeyFrame = new KeyFrame(Duration.millis(50), event -> {
+			gameController.playerTick();
+		});
 
+		KeyFrame boulderKeyFrame = new KeyFrame(Duration.millis(1000), event -> {
+			gameController.boulderTick();
+		});
+
+		// Set up the periodic tick timeline
+		playerTickTimeline = new Timeline(playerKeyFrame);
+		boulderTickTimeline = new Timeline( boulderKeyFrame);
+		playerTickTimeline.setCycleCount(Animation.INDEFINITE);
+		boulderTickTimeline.setCycleCount(Animation.INDEFINITE);
 		// Draw the initial grid
 		gameController.draw();
 
@@ -91,13 +97,15 @@ public class Main extends Application {
 		stopTickButton.setDisable(true);
 
 		startTickButton.setOnAction(e -> {
-			tickTimeline.play();
+			playerTickTimeline.play();
+			boulderTickTimeline.play();
 			startTickButton.setDisable(true);
 			stopTickButton.setDisable(false);
 		});
 
 		stopTickButton.setOnAction(e -> {
-			tickTimeline.stop();
+			playerTickTimeline.stop();
+			boulderTickTimeline.stop();
 			stopTickButton.setDisable(true);
 			startTickButton.setDisable(false);
 		});
