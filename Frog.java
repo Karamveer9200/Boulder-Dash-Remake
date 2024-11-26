@@ -75,15 +75,29 @@ public class Frog extends Element {
             }
         }
 
-        // Trace the path back from the player to the frog
+// Trace the path back from the player to the frog
         LinkedList<int[]> path = new LinkedList<>();
         int[] current = new int[]{playerRow, playerCol};
+
+// If the player is unreachable, distances[playerRow][playerCol] will remain Integer.MAX_VALUE
+        if (distances[playerRow][playerCol] == Integer.MAX_VALUE) {
+            System.out.println("Player is unreachable by the Frog!");
+            return;
+        }
+
+// Trace back the path
         while (!Arrays.equals(current, new int[]{frogRow, frogCol})) {
             path.addFirst(current);
             current = previous[current[0]][current[1]];
+
+            // Safeguard against invalid paths
+            if (current == null) {
+                System.err.println("Error: Path tracing failed. Aborting movement.");
+                return;
+            }
         }
 
-        // Move one step along the shortest path
+// Move one step along the shortest path
         if (!path.isEmpty()) {
             int[] nextStep = path.getFirst();
             int newRow = nextStep[0];
@@ -97,18 +111,15 @@ public class Frog extends Element {
                 gridManager.setElement(newRow, newCol, this); // Move to new position
                 this.setRow(newRow);
                 this.setColumn(newCol);
-                // Replace the Frog's current position with a Path
-                gridManager.setElement(frogRow, frogCol, new Path(frogRow, frogCol));
             } else if (target instanceof Player) {
                 gridManager.removeFromList(player); // Remove player from the game
                 gridManager.setElement(newRow, newCol, this); // Replace player with Frog
                 this.setRow(newRow);
                 this.setColumn(newCol);
-              // Replace the Frog's current position with a Path
-                gridManager.setElement(frogRow, frogCol, new Path(frogRow, frogCol));
                 System.out.println("Player has been killed by the Frog!");
             }
         }
+
     }
 
     @Override
