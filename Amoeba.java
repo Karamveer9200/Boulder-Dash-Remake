@@ -12,11 +12,6 @@ public class Amoeba extends Element {
         name = "Amoeba";
     }
 
-    /**
-     * Spreads the Amoeba to one adjacent position, consuming an element if possible.
-     *
-     * @param gridManager the grid manager to access and update the grid
-     */
     public void spread(GridManager gridManager) {
         Element[][] grid = gridManager.getElementGrid();
         int rows = grid.length;

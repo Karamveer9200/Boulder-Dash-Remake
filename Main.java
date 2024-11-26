@@ -124,6 +124,7 @@ public class Main extends Application {
 			playerTickTimeline.stop();
 			boulderTickTimeline.stop();
 			frogTickTimeline.stop();
+			aomeebaTickTimeline.stop();
 			stopTickButton.setDisable(true);
 			startTickButton.setDisable(false);
 		});

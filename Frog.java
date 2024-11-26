@@ -11,12 +11,7 @@ public class Frog extends Element {
         name = "Frog";
     }
 
-    /**
-     * Uses Dijkstra's algorithm to move the Frog one step closer to the player.
-     *
-     * @param gridManager the grid manager to access and update the grid
-     * @param player      the player to seek
-     */
+    // Uses Dijkstra's algorithm to move the Frog one step closer to the player.
     public void seekAndKill(GridManager gridManager, Player player) {
         if (player == null) {
             return; // No player to seek
