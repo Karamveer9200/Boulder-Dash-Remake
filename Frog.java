@@ -27,9 +27,14 @@ public class Frog extends Actor {
             int frogRow = this.getRow();
             int frogCol = this.getColumn();
 
-            // Determine movement direction
+            // Determine primary movement direction (prioritize row movement if both are possible)
             int deltaRow = Integer.compare(playerRow, frogRow); // -1, 0, or 1
             int deltaCol = Integer.compare(playerCol, frogCol); // -1, 0, or 1
+
+            // Prevent diagonal movement
+            if (deltaRow != 0 && deltaCol != 0) {
+                deltaCol = 0; // Prioritize vertical movement
+            }
 
             // Calculate new position
             int newRow = frogRow + deltaRow;
@@ -44,7 +49,6 @@ public class Frog extends Actor {
 
                 if (target instanceof Path) {
                     // Move to the new position
-                    gridManager.setElement(frogRow, frogCol, new Path(frogRow, frogCol)); // Replace current position with Path
                     gridManager.setElement(newRow, newCol, this); // Move Frog
                     this.setRow(newRow);
                     this.setColumn(newCol);
