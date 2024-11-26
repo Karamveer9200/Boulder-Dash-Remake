@@ -10,7 +10,7 @@ public class GameController {
     private final Canvas canvas;
     private final GridManager gridManager;
     private final Renderer renderer;
-    private final PlayerManager playerManager;
+    private final Player player;
     private final InputHandler inputHandler;
     private int tickCounter;
 
@@ -35,7 +35,7 @@ public class GameController {
         this.canvas = canvas;
         this.gridManager = new GridManager(gridTemplate);
         this.renderer = new Renderer();
-        this.playerManager = new PlayerManager(new Player(0, 0));
+        this.player = new Player(0,0);
         this.inputHandler = new InputHandler();
         initializePlayer(gridTemplate);
     }
@@ -51,8 +51,8 @@ public class GameController {
         for (int row = 0; row < gridTemplate.length; row++) {
             for (int col = 0; col < gridTemplate[row].length; col++) {
                 if (elementGrid[row][col] instanceof Player) {
-                    playerManager.getPlayer().setRow(row);
-                    playerManager.getPlayer().setColumn(col);
+                    player.setRow(row);
+                    player.setColumn(col);
                     break;
                 }
             }
@@ -71,7 +71,7 @@ public class GameController {
     }
     public void frogTick() {
         for (Frog frog : gridManager.getFrogs()) {
-            frog.seekAndKill(gridManager, playerManager.getPlayer());
+            frog.seekAndKill(gridManager, player);
         }
         draw();
     }
@@ -92,24 +92,24 @@ public class GameController {
             PlayerInput input = inputHandler.consumeInput();
             if (input != null) {
                 switch (input) {
-                    case UP -> playerManager.movePlayer(
-                            playerManager.getPlayer().getRow() - 1,
-                            playerManager.getPlayer().getColumn(),
+                    case UP -> player.movePlayer(
+                            player.getRow() - 1,
+                            player.getColumn(),
                             gridManager
                     );
-                    case DOWN -> playerManager.movePlayer(
-                            playerManager.getPlayer().getRow() + 1,
-                            playerManager.getPlayer().getColumn(),
+                    case DOWN -> player.movePlayer(
+                            player.getRow() + 1,
+                            player.getColumn(),
                             gridManager
                     );
-                    case LEFT -> playerManager.movePlayer(
-                            playerManager.getPlayer().getRow(),
-                            playerManager.getPlayer().getColumn() - 1,
+                    case LEFT -> player.movePlayer(
+                            player.getRow(),
+                            player.getColumn() - 1,
                             gridManager
                     );
-                    case RIGHT -> playerManager.movePlayer(
-                            playerManager.getPlayer().getRow(),
-                            playerManager.getPlayer().getColumn() + 1,
+                    case RIGHT -> player.movePlayer(
+                            player.getRow(),
+                            player.getColumn() + 1,
                             gridManager
                     );
                 }
@@ -156,14 +156,14 @@ public class GameController {
      * Resets the player's location to the top-left corner of the grid (0, 0).
      */
     public void resetPlayerLocation() {
-        playerManager.movePlayer(0, 0, gridManager);
+        player.movePlayer(0, 0, gridManager);
     }
 
     /**
      * Moves the player to the center of the grid.
      */
     public void movePlayerToCenter() {
-        playerManager.movePlayer(
+        player.movePlayer(
                 gridManager.getElementGrid().length / 2,
                 gridManager.getElementGrid()[0].length / 2,
                 gridManager

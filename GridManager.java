@@ -37,6 +37,8 @@ public class GridManager {
     public void initializeGrid(int[][] gridTemplate) {
         // Clear all memory of existing lists
         getBoulders().clear();
+        getFrogs().clear();
+        getAmoebas().clear();
 
         for (int row = 0; row < gridTemplate.length; row++) {
             for (int col = 0; col < gridTemplate[row].length; col++) {
@@ -180,4 +182,5 @@ public class GridManager {
     public ArrayList<Amoeba> getAmoebas() {
         return amoebas;
     }
+
 }
