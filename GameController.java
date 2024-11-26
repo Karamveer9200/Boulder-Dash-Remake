@@ -76,6 +76,13 @@ public class GameController {
         draw();
     }
 
+    public void amoebaTick() {
+        for (Amoeba amoeba : gridManager.getAmoebas()) {
+            amoeba.spread(gridManager);
+        }
+        draw();
+    }
+
     /**
      * Executes the player tick, handling input and updating the player's position on the grid.
      * Processes player movement and redraws the game.

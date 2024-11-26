@@ -13,6 +13,7 @@ public class GridManager {
     private final ArrayList<NormalWall> walls = new ArrayList<>();
     final ArrayList<Boulder> boulders = new ArrayList<>();
     final ArrayList<Frog> frogs = new ArrayList<>();
+    final ArrayList<Amoeba> amoebas = new ArrayList<>();
     private  Player player;
 
     /**
@@ -64,6 +65,7 @@ public class GridManager {
             case 3 -> new NormalWall(row, col);
             case 4 -> new Boulder(row, col);
             case 5 -> new Frog(row, col);
+            case 6 -> new Amoeba(row, col);
             default -> throw new IllegalArgumentException("Unknown element code: " + code);
         };
     }
@@ -86,6 +88,8 @@ public class GridManager {
             boulders.add(boulder);
         } else if (element instanceof Frog frog) {
             frogs.add(frog);
+        } else if (element instanceof Amoeba amoeba) {
+            amoebas.add(amoeba);
         }
     }
 
@@ -105,6 +109,10 @@ public class GridManager {
             walls.remove(wall);
         } else if (element instanceof Boulder boulder) {
             boulders.remove(boulder);
+        } else if (element instanceof Frog frog) {
+            frogs.remove(frog);
+        } else if (element instanceof Amoeba amoeba) {
+            amoebas.remove(amoeba);
         }
     }
 
@@ -167,5 +175,9 @@ public class GridManager {
 
     public Player getPlayer() {
         return player;
+    }
+
+    public ArrayList<Amoeba> getAmoebas() {
+        return amoebas;
     }
 }

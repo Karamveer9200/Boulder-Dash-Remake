@@ -26,6 +26,7 @@ public class Main extends Application {
 	private Timeline playerTickTimeline;
 	private Timeline boulderTickTimeline;
 	private Timeline frogTickTimeline;
+	private Timeline aomeebaTickTimeline;
 	public static Player player;
 	@Override
 	public void start(Stage primaryStage) {
@@ -63,13 +64,19 @@ public class Main extends Application {
 			gameController.frogTick();
 		});
 
+		KeyFrame aomeebaKeyFrame = new KeyFrame(Duration.millis(1000), event -> {
+			gameController.amoebaTick();
+		});
+
 		// Set up the periodic tick timeline
 		playerTickTimeline = new Timeline(playerKeyFrame);
 		boulderTickTimeline = new Timeline( boulderKeyFrame);
 		frogTickTimeline = new Timeline(frogKeyFrame);
+		aomeebaTickTimeline = new Timeline(aomeebaKeyFrame);
 		playerTickTimeline.setCycleCount(Animation.INDEFINITE);
 		boulderTickTimeline.setCycleCount(Animation.INDEFINITE);
 		frogTickTimeline.setCycleCount(Animation.INDEFINITE);
+		aomeebaTickTimeline.setCycleCount(Animation.INDEFINITE);
 		// Draw the initial grid
 		gameController.draw();
 
@@ -108,6 +115,7 @@ public class Main extends Application {
 			playerTickTimeline.play();
 			boulderTickTimeline.play();
 			frogTickTimeline.play();
+			aomeebaTickTimeline.play();
 			startTickButton.setDisable(true);
 			stopTickButton.setDisable(false);
 		});

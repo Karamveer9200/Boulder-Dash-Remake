@@ -44,14 +44,15 @@ public class Frog extends Actor {
             if (newRow >= 0 && newRow < grid.length && newCol >= 0 && newCol < grid[0].length) {
                 Element target = grid[newRow][newCol];
 
-                // Replace the Frog's current position with a Path
-                gridManager.setElement(frogRow, frogCol, new Path(frogRow, frogCol));
 
+                // Check if the new position is a Path
                 if (target instanceof Path) {
                     // Move to the new position
                     gridManager.setElement(newRow, newCol, this); // Move Frog
                     this.setRow(newRow);
                     this.setColumn(newCol);
+                    // Replace the Frog's current position with a Path
+                    gridManager.setElement(frogRow, frogCol, new Path(frogRow, frogCol));
 
                 } else if (target instanceof Player) {
                     // "Kill" the player
@@ -59,6 +60,8 @@ public class Frog extends Actor {
                     gridManager.setElement(newRow, newCol, this); // Replace player with Frog
                     this.setRow(newRow);
                     this.setColumn(newCol);
+                    // Replace the Frog's current position with a Path
+                    gridManager.setElement(frogRow, frogCol, new Path(frogRow, frogCol));
 
                     System.out.println("Player has been killed by the Frog!");
                 }
