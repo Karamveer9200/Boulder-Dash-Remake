@@ -69,6 +69,12 @@ public class GameController {
         }
         draw();
     }
+    public void frogTick() {
+        for (Frog frog : gridManager.getFrogs()) {
+            frog.seekAndKill(gridManager, playerManager.getPlayer());
+        }
+        draw();
+    }
 
     /**
      * Executes the player tick, handling input and updating the player's position on the grid.

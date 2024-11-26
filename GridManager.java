@@ -12,6 +12,7 @@ public class GridManager {
     private final ArrayList<Player> players = new ArrayList<>();
     private final ArrayList<NormalWall> walls = new ArrayList<>();
     final ArrayList<Boulder> boulders = new ArrayList<>();
+    final ArrayList<Frog> frogs = new ArrayList<>();
     private  Player player;
 
     /**
@@ -38,7 +39,7 @@ public class GridManager {
 
         for (int row = 0; row < gridTemplate.length; row++) {
             for (int col = 0; col < gridTemplate[row].length; col++) {
-                Element element = createElement(gridTemplate[row][col], row, col);
+                Element element = createElement(this,gridTemplate[row][col], row, col);
                 elementGrid[row][col] = element;
                 addToList(element);
             }
@@ -48,19 +49,21 @@ public class GridManager {
     /**
      * Creates an element based on the provided code and its position in the grid.
      *
-     * @param code the integer code representing the type of element
-     * @param row  the row position of the element
-     * @param col  the column position of the element
+     * @param gridManager
+     * @param code        the integer code representing the type of element
+     * @param row         the row position of the element
+     * @param col         the column position of the element
      * @return the created Element object
      * @throws IllegalArgumentException if the code does not correspond to a known element type
      */
-    private Element createElement(int code, int row, int col) {
+    private Element createElement(GridManager gridManager, int code, int row, int col) {
         return switch (code) {
             case 0 -> new Path(row, col);
             case 1 -> new Dirt(row, col);
             case 2 -> player = new Player(row, col);
             case 3 -> new NormalWall(row, col);
             case 4 -> new Boulder(row, col);
+            case 5 -> new Frog(row, col);
             default -> throw new IllegalArgumentException("Unknown element code: " + code);
         };
     }
@@ -81,6 +84,8 @@ public class GridManager {
             walls.add(wall);
         } else if (element instanceof Boulder boulder) {
             boulders.add(boulder);
+        } else if (element instanceof Frog frog) {
+            frogs.add(frog);
         }
     }
 
@@ -154,5 +159,13 @@ public class GridManager {
      */
     public ArrayList<Boulder> getBoulders() {
         return boulders;
+    }
+
+    public ArrayList<Frog> getFrogs() {
+        return frogs;
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 }

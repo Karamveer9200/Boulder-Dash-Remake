@@ -6,7 +6,7 @@ private boolean hasMomentum = false;
         canExplode = true;
         image = new Image("images/boulder.png");
         canBeEntered = false;
-        name = "Player";
+        name = "Boulder";
 
     }
     private void gainMomentum(){
@@ -43,7 +43,6 @@ private boolean hasMomentum = false;
         } else if (newRow < grid.length && grid[newRow][col] instanceof Player) {
             // If the position below is a Player and the boulder has momentum
             if (hasMomentum) {
-                // Replace the player with a Boulder
                 gridManager.removeFromList(grid[newRow][col]); // Remove the player from its list
                 gridManager.setElement(newRow, col, this); // Replace player with the boulder
                 Element p = new Path(this.getRow(), this.getColumn()); // Old location becomes a Path
@@ -51,8 +50,7 @@ private boolean hasMomentum = false;
                 gridManager.addToList(p); // Add the new Path to the list
 
                 // Update the boulder's position
-                this.setRow(newRow);
-            }
+                this.setRow(newRow);            }
 
             // Reset momentum after the interaction
             hasMomentum = false;
@@ -63,12 +61,19 @@ private boolean hasMomentum = false;
         }
     }
 
-
-
+    public Boolean canFall(GridManager gridManager) {
+        Element[][] grid = gridManager.getElementGrid();
+        int newRow = this.getRow() + 1;
+        int col = this.getColumn();
+        return newRow < grid.length && grid[newRow][col] instanceof Path;
+    }
 
     @Override
-    public void notified(){
+    public void notified() {
 
+        if (canFall(gridManager)) {
+            fall(gridManager);
+        }
     }
 
     @Override
@@ -76,3 +81,4 @@ private boolean hasMomentum = false;
         return "Player";
     }
 }
+

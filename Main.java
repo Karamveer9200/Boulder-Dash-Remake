@@ -25,6 +25,8 @@ public class Main extends Application {
 	// Timeline for periodic ticks
 	private Timeline playerTickTimeline;
 	private Timeline boulderTickTimeline;
+	private Timeline frogTickTimeline;
+	public static Player player;
 	@Override
 	public void start(Stage primaryStage) {
 		// Load the initial grid from a file
@@ -57,11 +59,17 @@ public class Main extends Application {
 			gameController.boulderTick();
 		});
 
+		KeyFrame frogKeyFrame = new KeyFrame(Duration.millis(1000), event -> {
+			gameController.frogTick();
+		});
+
 		// Set up the periodic tick timeline
 		playerTickTimeline = new Timeline(playerKeyFrame);
 		boulderTickTimeline = new Timeline( boulderKeyFrame);
+		frogTickTimeline = new Timeline(frogKeyFrame);
 		playerTickTimeline.setCycleCount(Animation.INDEFINITE);
 		boulderTickTimeline.setCycleCount(Animation.INDEFINITE);
+		frogTickTimeline.setCycleCount(Animation.INDEFINITE);
 		// Draw the initial grid
 		gameController.draw();
 
@@ -99,6 +107,7 @@ public class Main extends Application {
 		startTickButton.setOnAction(e -> {
 			playerTickTimeline.play();
 			boulderTickTimeline.play();
+			frogTickTimeline.play();
 			startTickButton.setDisable(true);
 			stopTickButton.setDisable(false);
 		});
@@ -106,6 +115,7 @@ public class Main extends Application {
 		stopTickButton.setOnAction(e -> {
 			playerTickTimeline.stop();
 			boulderTickTimeline.stop();
+			frogTickTimeline.stop();
 			stopTickButton.setDisable(true);
 			startTickButton.setDisable(false);
 		});

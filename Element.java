@@ -7,6 +7,7 @@ public abstract class Element {
     protected int row;
     protected boolean canExplode;
     protected boolean canBeEntered;
+    protected GridManager gridManager;
 
     public Element(int column, int row) {
         this.column = column;

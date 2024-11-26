@@ -1,7 +1,7 @@
 import javafx.scene.image.Image;
 public class Player extends Actor {
-    public Player(int column, int row){
-        super(column,row);
+    public Player(int column, int row) {
+        super(column, row);
         canExplode = true;
         image = new Image("images/player.png");
         canBeEntered = true;
@@ -9,7 +9,7 @@ public class Player extends Actor {
     }
 
     @Override
-    public void notified(){
+    public void notified() {
 
     }
 
@@ -17,4 +17,5 @@ public class Player extends Actor {
     public String toString() {
         return "Player";
     }
+
 }
