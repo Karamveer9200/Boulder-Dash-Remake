@@ -11,6 +11,7 @@ public class GameController {
     private final Renderer renderer;
     private int playerRow;
     private int playerColumn;
+    private Player player;
 
     public GameController(int[][] gridTemplate, Canvas canvas) {
         this.canvas = canvas;
@@ -24,9 +25,10 @@ public class GameController {
         Element[][] elementGrid = gridManager.getElementGrid();
         for (int row = 0; row < gridTemplate.length; row++) {
             for (int col = 0; col < gridTemplate[row].length; col++) {
-                if (elementGrid[row][col] instanceof Player) {
+                if (elementGrid[row][col] instanceof Player playerTile) {
                     playerRow = row;
                     playerColumn = col;
+                    player = playerTile;
                     break;
                 }
             }
@@ -45,6 +47,20 @@ public class GameController {
 
     public void movePlayerTo(int newRow, int newColumn) {
         if (isValidMove(newRow, newColumn)) {
+            Element wantedTile = gridManager.getElement(newRow, newColumn);
+            if (wantedTile instanceof Key key) {
+                player.collectKey(key);
+            }
+            else if (wantedTile instanceof LockedDoor lockedDoor) {
+                if (player.hasKey(lockedDoor.getColour())) {
+                    player.useKey(lockedDoor.getColour());
+                    lockedDoor.unlock();
+                } else {
+                    System.out.println("Player needs a " + lockedDoor.getColour() + " key to open this door.");
+                    return;
+                }
+            }
+
             gridManager.setElement(playerRow, playerColumn, new Path(playerRow, playerColumn)); //Put a path where the player just was
             gridManager.setElement(newRow, newColumn, new Player(newRow, newColumn)); //Put a player where the player is going to
             playerRow = newRow;
@@ -52,11 +68,20 @@ public class GameController {
         }
     }
 
+
+
     private boolean isValidMove(int row, int col) {
         Element[][] elementGrid = gridManager.getElementGrid();
-        return row >= 0 && row < elementGrid.length &&
-                col >= 0 && col < elementGrid[0].length && // returns true if player is moving to a co-ordinate in bounds
-                elementGrid[row][col].isCanBeEntered(); // and moving to a co-ordinate that canBeEntered == true
+        if (row >= 0 && row < elementGrid.length &&
+                col >= 0 && col < elementGrid[0].length) {
+            Element targetTile = elementGrid[row][col];
+            // Allow attempt to move to a LockedDoor to check if it can be unlocked
+            if (targetTile instanceof LockedDoor) {
+                return true; // Allows to check for key
+            }
+            return targetTile.isCanBeEntered();
+        }
+        return false;
     }
 
     public void draw() {

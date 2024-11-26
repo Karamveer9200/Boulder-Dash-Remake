@@ -26,6 +26,14 @@ public class GridManager {
             case 3 -> new NormalWall(row, col);
             case 4 -> new TitaniumWall(row, col);
             case 5 -> new MagicWall(row, col);
+            case 6 -> new LockedDoor(row, col, KeyColour.RED);
+            case 7 -> new Key(row, col, KeyColour.RED);
+            case 8 -> new LockedDoor(row, col, KeyColour.GREEN);
+            case 9 -> new Key(row, col, KeyColour.GREEN);
+            case 10 -> new LockedDoor(row, col, KeyColour.YELLOW);
+            case 11 -> new Key(row, col, KeyColour.YELLOW);
+            case 12 -> new LockedDoor(row, col, KeyColour.BLUE);
+            case 13 -> new Key(row, col, KeyColour.BLUE);
             default -> throw new IllegalArgumentException("Unknown element code: " + code);
         };
     }
