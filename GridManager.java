@@ -34,6 +34,8 @@ public class GridManager {
             case 11 -> new Key(row, col, KeyColour.YELLOW);
             case 12 -> new LockedDoor(row, col, KeyColour.BLUE);
             case 13 -> new Key(row, col, KeyColour.BLUE);
+            case 14 -> new Exit(row, col);
+            case 15 -> new Diamond(row, col);
             default -> throw new IllegalArgumentException("Unknown element code: " + code);
         };
     }

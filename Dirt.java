@@ -1,5 +1,5 @@
 import javafx.scene.image.Image;
-public class Dirt extends Element {
+public class Dirt extends Tile {
 
     public Dirt(int x, int y) {
         super(x, y);

@@ -48,9 +48,14 @@ public class GameController {
     public void movePlayerTo(int newRow, int newColumn) {
         if (isValidMove(newRow, newColumn)) {
             Element wantedTile = gridManager.getElement(newRow, newColumn);
+            // Collects key if player walks over it
             if (wantedTile instanceof Key key) {
                 player.collectKey(key);
             }
+            // Collects diamond if player walks over it
+            if (wantedTile instanceof Diamond diamond) {
+                player.collectDiamond(diamond);
+            } // If a player has the correct key, unlocks the door, tells them which key need if they don't have it
             else if (wantedTile instanceof LockedDoor lockedDoor) {
                 if (player.hasKey(lockedDoor.getColour())) {
                     player.useKey(lockedDoor.getColour());
@@ -61,12 +66,30 @@ public class GameController {
                 }
             }
 
+            // Check if player is on the Exit tile and if they have enough diamonds
+            if (wantedTile instanceof Exit exit) {
+                if (player.isHasEnoughDiamonds()) {
+                    // If the player has enough diamonds, unlock the Exit and announce level win
+                    exit.unlock();
+                    exit.announceLevelWin();
+                    gridManager.setElement(newRow, newColumn, new Player(newRow, newColumn)); //Place player onto the Exit
+                    gridManager.setElement(playerRow, playerColumn, new Path(playerRow, playerColumn)); //Put a path where the player just was
+                    playerRow = newRow;
+                    playerColumn = newColumn;
+                    return;
+                } else {
+                    System.out.println("Player needs more diamonds to enter the exit!");
+                    return;
+                }
+            }
+
             gridManager.setElement(playerRow, playerColumn, new Path(playerRow, playerColumn)); //Put a path where the player just was
-            gridManager.setElement(newRow, newColumn, new Player(newRow, newColumn)); //Put a player where the player is going to
+            gridManager.setElement(newRow, newColumn, new Player(newRow, newColumn)); // Place player on the new position
             playerRow = newRow;
             playerColumn = newColumn;
         }
     }
+
 
 
 
@@ -79,6 +102,11 @@ public class GameController {
             if (targetTile instanceof LockedDoor) {
                 return true; // Allows to check for key
             }
+            // Allows to check for required amount of diamonds when moving onto Exit
+            if (targetTile instanceof Exit) {
+                return true;
+            }
+
             return targetTile.isCanBeEntered();
         }
         return false;

@@ -6,6 +6,8 @@ import java.util.List;
 public class Player extends Element {
 
     private final List<KeyColour> keyInventory;
+    private int diamondCount = 0;
+    private boolean hasEnoughDiamonds;
 
 
     public Player(int x, int y){
@@ -15,6 +17,7 @@ public class Player extends Element {
         canBeEntered = true;
         name = "Player";
         this.keyInventory = new ArrayList<>();
+        hasEnoughDiamonds = false;
     }
 
     public void collectKey(Key key) {
@@ -29,8 +32,38 @@ public class Player extends Element {
         keyInventory.remove(colour);
     }
 
+    public int getDiamondCount() {
+        return diamondCount;
+    }
+
+    public void setDiamondCount(int diamondCount) {
+        this.diamondCount = diamondCount;
+    }
+    public boolean isHasEnoughDiamonds() {
+        return hasEnoughDiamonds;
+    }
+
+    public void setHasEnoughDiamonds(boolean hasEnoughDiamonds) {
+        this.hasEnoughDiamonds = hasEnoughDiamonds;
+    }
+    public void collectDiamond(Diamond diamond) {
+        setDiamondCount(getDiamondCount() + 1);
+        System.out.println("Diamonds collected: " + getDiamondCount());
+        checkDiamonds();
+    }
+    public void checkDiamonds() {
+        if (getDiamondCount() >= 1) {
+            setHasEnoughDiamonds(true);
+            System.out.println("You have enough Diamonds to finish the level!");
+        }
+    }
+
+
+
+
     @Override
     public String toString() {
         return "Player";
     }
+
 }
