@@ -9,7 +9,7 @@ public abstract class Element {
     protected boolean canBeEntered;
     protected GridManager gridManager;
 
-    public Element(int column, int row) {
+    public Element(int row, int column) {
         this.column = column;
         this.row = row;
     }

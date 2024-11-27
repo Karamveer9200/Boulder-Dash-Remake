@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class GridManager {
     private final Element[][] elementGrid;
     private final ArrayList<Path> paths = new ArrayList<>();
-    private final ArrayList<Dirt> dirts = new ArrayList<>();
+    final ArrayList<Dirt> dirts = new ArrayList<>();
     private final ArrayList<Player> players = new ArrayList<>();
     private final ArrayList<NormalWall> walls = new ArrayList<>();
     final ArrayList<Boulder> boulders = new ArrayList<>();

@@ -64,7 +64,7 @@ public class Main extends Application {
 			gameController.frogTick();
 		});
 
-		KeyFrame aomeebaKeyFrame = new KeyFrame(Duration.millis(5000), event -> {
+		KeyFrame aomeebaKeyFrame = new KeyFrame(Duration.millis(1000), event -> {
 			gameController.amoebaTick();
 		});
 

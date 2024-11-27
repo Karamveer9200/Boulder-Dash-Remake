@@ -1,8 +1,8 @@
 import javafx.scene.image.Image;
 public class NormalWall extends Element {
 
-    public NormalWall(int x, int y) {
-        super(x, y);
+    public NormalWall(int row, int column) {
+        super(row, column);
         image = new Image("images/normalwall.png");
         canBeEntered = false;
         canExplode = true;

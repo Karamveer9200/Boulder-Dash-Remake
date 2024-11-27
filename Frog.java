@@ -3,8 +3,8 @@ import java.util.*;
 
 public class Frog extends Element {
 
-    public Frog(int column, int row) {
-        super(column, row);
+    public Frog(int row, int column) {
+        super(row, column );
         image = new Image("images/frog.png");
         canBeEntered = false;
         canExplode = false;
