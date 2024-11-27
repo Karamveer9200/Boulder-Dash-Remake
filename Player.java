@@ -55,9 +55,10 @@ public class Player extends Element {
 
             // Ensure the adjacent cell (where the boulder would move) is within bounds and is a Path
             if (pushBoulderToColumn >= 0 && pushBoulderToColumn < grid[0].length &&
-                    grid[pushBoulderToRow][pushBoulderToColumn] instanceof Path) {
+                    gridManager.getElement(pushBoulderToRow,pushBoulderToColumn) instanceof Path) {
                 // Move the boulder to the new position
-                Boulder boulder = (Boulder) grid[targetRow][targetColumn];
+                Boulder boulder = (Boulder)gridManager.getElement(targetRow, targetColumn);
+
                 gridManager.setElement(pushBoulderToRow, pushBoulderToColumn, boulder);
                 gridManager.setElement(targetRow, targetColumn, new Path(targetRow, targetColumn));
                 boulder.setColumn(pushBoulderToColumn);
