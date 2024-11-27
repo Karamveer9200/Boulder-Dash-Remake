@@ -77,6 +77,7 @@ public class Main extends Application {
 		boulderTickTimeline.setCycleCount(Animation.INDEFINITE);
 		frogTickTimeline.setCycleCount(Animation.INDEFINITE);
 		aomeebaTickTimeline.setCycleCount(Animation.INDEFINITE);
+		
 		// Draw the initial grid
 		gameController.draw();
 

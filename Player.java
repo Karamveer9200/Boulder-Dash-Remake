@@ -1,6 +1,6 @@
 import javafx.scene.image.Image;
 
-public class Player extends Actor {
+public class Player extends Element {
     public Player(int column, int row) {
         super(column, row);
         canExplode = true;
@@ -29,25 +29,49 @@ public class Player extends Actor {
         }
     }
 
-    /**
-     * Checks whether the specified move is valid based on the grid boundaries and the target cell's properties.
-     *
-     * @param row         the row of the desired move
-     * @param col         the column of the desired move
-     * @param gridManager the grid manager to access the grid's properties
-     * @return true if the move is valid, false otherwise
-     */
-    private boolean isValidMove(int row, int col, GridManager gridManager) {
+    private boolean isValidMove(int targetRow, int targetColumn, GridManager gridManager) {
         Element[][] grid = gridManager.getElementGrid();
-        return row >= 0 && row < grid.length &&
-                col >= 0 && col < grid[0].length &&
-                grid[row][col].isCanBeEntered();
+        // Ensure the move is within bounds
+        if (targetRow < 0 || targetRow >= grid.length || targetColumn < 0 || targetColumn >= grid[0].length) {
+            return false;
+        }
+
+        // Check if the target cell is enterable (e.g., a Path)
+        if (grid[targetRow][targetColumn].isCanBeEntered()) {
+            return true;
+        }
+
+        // Check if the target cell contains a Boulder
+        if (targetRow == this.getRow() && grid[targetRow][targetColumn] instanceof Boulder) {
+            // Determine the direction of the push
+            int pushBoulderToRow = targetRow;
+            int pushBoulderToColumn;
+            //right or left depending on
+            if(targetColumn > this.getColumn()){
+                pushBoulderToColumn = targetColumn + 1;
+            }else {
+                pushBoulderToColumn = targetColumn - 1;
+            }
+
+            // Ensure the adjacent cell (where the boulder would move) is within bounds and is a Path
+            if (pushBoulderToColumn >= 0 && pushBoulderToColumn < grid[0].length &&
+                    grid[pushBoulderToRow][pushBoulderToColumn] instanceof Path) {
+                // Move the boulder to the new position
+                Boulder boulder = (Boulder) grid[targetRow][targetColumn];
+                gridManager.setElement(pushBoulderToRow, pushBoulderToColumn, boulder);
+                gridManager.setElement(targetRow, targetColumn, new Path(targetRow, targetColumn));
+                boulder.setColumn(pushBoulderToColumn);
+                return true;
+            }
+        }
+
+        // Otherwise, the move is invalid
+        return false;
     }
 
-    @Override
-    public void notified() {
-        // Custom behavior for when the player is notified
-    }
+
+
+
 
     @Override
     public String toString() {
