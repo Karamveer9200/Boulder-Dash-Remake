@@ -75,17 +75,43 @@ public class Frog extends Element {
             }
         }
 
-// Trace the path back from the player to the frog
-        LinkedList<int[]> path = new LinkedList<>();
-        int[] current = new int[]{playerRow, playerCol};
-
-// If the player is unreachable, distances[playerRow][playerCol] will remain Integer.MAX_VALUE
+        // Check if the player is unreachable
         if (distances[playerRow][playerCol] == Integer.MAX_VALUE) {
             System.out.println("Player is unreachable by the Frog!");
+
+            // Random movement
+            List<int[]> validMoves = new ArrayList<>();
+            for (int[] dir : directions) {
+                int newRow = frogRow + dir[0];
+                int newCol = frogCol + dir[1];
+
+                // Check bounds and if the position can be entered
+                if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < cols &&
+                        grid[newRow][newCol] instanceof Path) {
+                    validMoves.add(new int[]{newRow, newCol});
+                }
+            }
+
+            if (!validMoves.isEmpty()) {
+                // Choose a random valid move
+                Random random = new Random();
+                int[] randomMove = validMoves.get(random.nextInt(validMoves.size()));
+                int newRow = randomMove[0];
+                int newCol = randomMove[1];
+
+                // Move the Frog
+                gridManager.setElement(frogRow, frogCol, new Path(frogRow, frogCol)); // Replace current position
+                gridManager.setElement(newRow, newCol, this); // Move to the new position
+                this.setRow(newRow);
+                this.setColumn(newCol);
+                System.out.println("Frog is moving randomly.");
+            }
             return;
         }
 
-// Trace back the path
+        // Trace the path back from the player to the frog
+        LinkedList<int[]> path = new LinkedList<>();
+        int[] current = new int[]{playerRow, playerCol};
         while (!Arrays.equals(current, new int[]{frogRow, frogCol})) {
             path.addFirst(current);
             current = previous[current[0]][current[1]];
@@ -97,7 +123,7 @@ public class Frog extends Element {
             }
         }
 
-// Move one step along the shortest path
+        // Move one step along the shortest path
         if (!path.isEmpty()) {
             int[] nextStep = path.getFirst();
             int newRow = nextStep[0];
@@ -119,8 +145,8 @@ public class Frog extends Element {
                 System.out.println("Player has been killed by the Frog!");
             }
         }
-
     }
+
 
     @Override
     public String toString() {
