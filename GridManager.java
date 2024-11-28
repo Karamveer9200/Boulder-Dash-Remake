@@ -12,6 +12,7 @@ public class GridManager {
     private final ArrayList<Player> players = new ArrayList<>();
     private final ArrayList<NormalWall> walls = new ArrayList<>();
     final ArrayList<Boulder> boulders = new ArrayList<>();
+    final ArrayList<Diamond> diamonds = new ArrayList<>();
     final ArrayList<Frog> frogs = new ArrayList<>();
     final ArrayList<Amoeba> amoebas = new ArrayList<>();
     private  Player player;
@@ -37,6 +38,7 @@ public class GridManager {
     public void initializeGrid(int[][] gridTemplate) {
         // Clear all memory of existing lists
         getBoulders().clear();
+        getDiamonds().clear();
         getFrogs().clear();
         getAmoebas().clear();
 
@@ -68,6 +70,7 @@ public class GridManager {
             case 4 -> new Boulder(row, col);
             case 5 -> new Frog(row, col);
             case 6 -> new Amoeba(row, col);
+            case 7 -> new Diamond(row, col);
             default -> throw new IllegalArgumentException("Unknown element code: " + code);
         };
     }
@@ -92,6 +95,8 @@ public class GridManager {
             frogs.add(frog);
         } else if (element instanceof Amoeba amoeba) {
             amoebas.add(amoeba);
+        } else if (element instanceof Diamond diamond) {
+            diamonds.add(diamond);
         }
     }
 
@@ -170,6 +175,17 @@ public class GridManager {
     public ArrayList<Boulder> getBoulders() {
         return boulders;
     }
+
+    /**
+     * Retrieves the list of Diamond elements in the grid.
+     *
+     * @return the ArrayList of Boulder elements
+     */
+    public ArrayList<Diamond> getDiamonds() {
+        return diamonds;
+    }
+
+
 
     public ArrayList<Frog> getFrogs() {
         return frogs;

@@ -56,8 +56,9 @@ public class Main extends Application {
 			gameController.playerTick();
 		});
 
-		KeyFrame boulderKeyFrame = new KeyFrame(Duration.millis(1000), event -> {
+		KeyFrame dangerousRocksKeyFrame = new KeyFrame(Duration.millis(1000), event -> {
 			gameController.boulderTick();
+			gameController.diamondTick();
 		});
 
 		KeyFrame frogKeyFrame = new KeyFrame(Duration.millis(1000), event -> {
@@ -70,7 +71,7 @@ public class Main extends Application {
 
 		// Set up the periodic tick timeline
 		playerTickTimeline = new Timeline(playerKeyFrame);
-		boulderTickTimeline = new Timeline( boulderKeyFrame);
+		boulderTickTimeline = new Timeline( dangerousRocksKeyFrame);
 		frogTickTimeline = new Timeline(frogKeyFrame);
 		aomeebaTickTimeline = new Timeline(aomeebaKeyFrame);
 		playerTickTimeline.setCycleCount(Animation.INDEFINITE);

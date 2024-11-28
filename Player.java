@@ -1,6 +1,7 @@
 import javafx.scene.image.Image;
 
 public class Player extends Element {
+    int diamondsCollected = 0;
     public Player(int row, int column) {
         super(row, column);
         canExplode = true;

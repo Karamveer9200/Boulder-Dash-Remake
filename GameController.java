@@ -66,9 +66,24 @@ public class GameController {
     public void boulderTick() {
         for (Boulder boulder : gridManager.getBoulders()) {
             boulder.fall(gridManager);
+            boulder.roll(gridManager);
         }
         draw();
     }
+
+
+    /**
+     * Executes the boulder tick, triggering all boulders to perform their movement logic.
+     * Updates the grid and redraws the game.
+     */
+    public void diamondTick() {
+        for (Diamond diamond : gridManager.getDiamonds()) {
+            diamond.fall(gridManager);
+            diamond.roll(gridManager);
+        }
+        draw();
+    }
+
     public void frogTick() {
         for (Frog frog : gridManager.getFrogs()) {
             frog.seekAndKill(gridManager, player);
