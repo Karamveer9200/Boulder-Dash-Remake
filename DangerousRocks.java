@@ -1,10 +1,8 @@
-import javafx.scene.image.Image;
-
 public abstract class DangerousRocks extends Element {
     protected boolean hasMomentum = false;
 
-    public DangerousRocks(int column, int row) {
-        super(column, row);
+    public DangerousRocks(int row, int column) {
+        super(row, column);
     }
 
     /**

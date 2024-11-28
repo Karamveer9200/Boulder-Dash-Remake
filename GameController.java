@@ -77,9 +77,7 @@ public class GameController {
     }
 
     public void amoebaTick() {
-        for (Amoeba amoeba : gridManager.getAmoebas()) {
-            amoeba.spread(gridManager);
-        }
+            AmoebaManager.spreadAll(gridManager);
         draw();
     }
 

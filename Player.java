@@ -1,8 +1,8 @@
 import javafx.scene.image.Image;
 
 public class Player extends Element {
-    public Player(int column, int row) {
-        super(column, row);
+    public Player(int row, int column) {
+        super(row, column);
         canExplode = true;
         image = new Image("images/player.png");
         canBeEntered = true;
