@@ -14,13 +14,20 @@ public class InputHandler {
      * @param code the KeyCode representing the player's input
      */
     public void registerInput(KeyCode code) {
+
         switch (code) {
             case UP -> currentInput = GameController.PlayerInput.UP;
             case DOWN -> currentInput = GameController.PlayerInput.DOWN;
             case LEFT -> currentInput = GameController.PlayerInput.LEFT;
             case RIGHT -> currentInput = GameController.PlayerInput.RIGHT;
+            default -> {
+                currentInput = null; // Reset or handle invalid input
+                isInputPending = false; // No valid input is pending
+            }
         }
-        isInputPending = true;
+        if (currentInput != null) {
+            isInputPending = true;
+        }
     }
 
     /**

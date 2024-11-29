@@ -8,6 +8,7 @@ public class AmoebaManager {
      //Spreads all amoebas as a single unit, one cell at a time.
      //If no valid dirt cells remain, all amoebas transform into diamonds.
     public static void spreadAll(GridManager gridManager) {
+
         Element[][] grid = gridManager.getElementGrid();
         int rows = grid.length;
         int cols = grid[0].length;

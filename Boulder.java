@@ -32,7 +32,7 @@ public class Boulder extends Element implements DangerousRock {
 
         if (newRow < grid.length && grid[newRow][col] instanceof Path) {
             // Update the grid to move the boulder
-            gridManager.removeFromList(grid[newRow][col]); // remove path from list , to create new path somewhere else
+//            gridManager.removeFromList(grid[newRow][col]); // remove path from list , to create new path somewhere else
             Element p = new Path(this.getRow(), this.getColumn());
             gridManager.setElement(this.getRow(), this.getColumn(), p);
             gridManager.addToList(p);
@@ -74,43 +74,46 @@ public class Boulder extends Element implements DangerousRock {
         int newRow = this.getRow() + 1; // Row below the current position
         int col = this.getColumn();
 
-        // Check if rolling is possible to the right
-        if (newRow < grid.length && col + 1 < grid[0].length &&
-                (grid[newRow][col] instanceof Boulder || grid[newRow][col] instanceof Diamond || grid[newRow][col] instanceof NormalWall) &&
-                grid[newRow][col + 1] instanceof Path) {
+        // Check if below is a Boulder, Diamond, or NormalWall
+        if (newRow < grid.length &&
+                (grid[newRow][col] instanceof Boulder ||
+                        grid[newRow][col] instanceof Diamond ||
+                        grid[newRow][col] instanceof NormalWall)) {
 
-            // Move to the diagonal right
-//            gridManager.removeFromList(grid[newRow][col + 1]);
-            Element p = new Path(this.getRow(), this.getColumn());
-            gridManager.setElement(this.getRow(), this.getColumn(), p);
-            gridManager.addToList(p);
+            // Check if rolling to the right is possible
+            if (col + 1 < grid[0].length &&
+                    grid[newRow][col + 1] instanceof Path &&
+                    grid[this.getRow()][col + 1] instanceof Path) {
 
-            gridManager.setElement(this.getRow(), this.getColumn() + 1, this);
-//            this.setRow(newRow);
+                // Move to the diagonal right
+                Element p = new Path(this.getRow(), this.getColumn());
+                gridManager.setElement(this.getRow(), this.getColumn(), p);
+                gridManager.addToList(p);
 
-            this.setColumn(col + 1);
+                gridManager.setElement(newRow, col + 1, this);
+                this.setRow(newRow);
+                this.setColumn(col + 1);
 
-            return;
-        }
+                return;
+            }
 
-        // Check if rolling is possible to the left
-        if (newRow < grid.length && col - 1 >= 0 &&
-                (grid[newRow][col] instanceof Boulder || grid[newRow][col] instanceof Diamond || grid[newRow][col] instanceof NormalWall) &&
-                grid[newRow][col - 1] instanceof Path) {
+            // Check if rolling to the left is possible
+            if (col - 1 >= 0 &&
+                    grid[newRow][col - 1] instanceof Path &&
+                    grid[this.getRow()][col - 1] instanceof Path) {
 
-            // Move to the diagonal left
-            gridManager.removeFromList(grid[this.getRow()][this.getColumn() - 1]);
-            Element p = new Path(this.getRow(), this.getColumn());
-            gridManager.setElement(this.getRow(), this.getColumn(), p);
-            gridManager.addToList(p);
+                // Move to the diagonal left
+                Element p = new Path(this.getRow(), this.getColumn());
+                gridManager.setElement(this.getRow(), this.getColumn(), p);
+                gridManager.addToList(p);
 
-            gridManager.setElement(newRow, col - 1, this);
-//            this.setRow(newRow);
-            this.setColumn(col - 1);
-
-
+                gridManager.setElement(newRow, col - 1, this);
+                this.setRow(newRow);
+                this.setColumn(col - 1);
+            }
         }
     }
+
 
     /**
      * Determines if the boulder can fall.

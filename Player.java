@@ -21,8 +21,8 @@ public class Player extends Element {
     public void movePlayer(int newRow, int newColumn, GridManager gridManager) {
         if (isValidMove(newRow, newColumn, gridManager)) {
             // Replace the player's current position with a Path
-            gridManager.setElement(this.getRow(), this.getColumn(), new Path(this.getRow(), this.getColumn()));
-
+//            gridManager.setElement(this.getRow(), this.getColumn(), new Path(this.getRow(), this.getColumn()));
+            gridManager.removeElement(this.getRow(),this.getColumn());
             // Update the grid and the player's position
             gridManager.setElement(newRow, newColumn, this);
             this.setRow(newRow);
@@ -65,6 +65,16 @@ public class Player extends Element {
                 boulder.setColumn(pushBoulderToColumn);
                 return true;
             }
+        }
+
+        if(grid[targetRow][targetColumn] instanceof Diamond) {
+            diamondsCollected++;
+            gridManager.removeFromList(gridManager.getElement(targetRow, targetColumn)); //remove from diamonds list to stop falling
+            gridManager.removeElement(targetRow, targetColumn);
+//            gridManager.setElement(targetRow, targetColumn, null);
+            grid[targetRow][targetColumn] = null;
+            System.out.println("Diamond removed");
+            return true;
         }
 
         // Otherwise, the move is invalid

@@ -120,6 +120,8 @@ public class GridManager {
             frogs.remove(frog);
         } else if (element instanceof Amoeba amoeba) {
             amoebas.remove(amoeba);
+        } else if (element instanceof Diamond diamond) {
+            diamonds.remove(diamond);
         }
     }
 

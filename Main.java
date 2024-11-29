@@ -56,8 +56,9 @@ public class Main extends Application {
 			gameController.playerTick();
 		});
 
-		KeyFrame dangerousRocksKeyFrame = new KeyFrame(Duration.millis(1000), event -> {
+		KeyFrame dangerousRocksKeyFrame = new KeyFrame(Duration.millis(500), event -> {
 			gameController.boulderTick();
+
 			gameController.diamondTick();
 		});
 

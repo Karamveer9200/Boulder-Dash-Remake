@@ -71,7 +71,6 @@ public class GameController {
         draw();
     }
 
-
     /**
      * Executes the boulder tick, triggering all boulders to perform their movement logic.
      * Updates the grid and redraws the game.

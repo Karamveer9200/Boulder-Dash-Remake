@@ -77,7 +77,7 @@ public class Frog extends Element {
 
         // Check if the player is unreachable
         if (distances[playerRow][playerCol] == Integer.MAX_VALUE) {
-            System.out.println("Player is unreachable by the Frog!");
+//            System.out.println("Player is unreachable by the Frog!");
 
             // Random movement
             List<int[]> validMoves = new ArrayList<>();
@@ -104,7 +104,7 @@ public class Frog extends Element {
                 gridManager.setElement(newRow, newCol, this); // Move to the new position
                 this.setRow(newRow);
                 this.setColumn(newCol);
-                System.out.println("Frog is moving randomly.");
+//                System.out.println("Frog is moving randomly.");
             }
             return;
         }
@@ -118,7 +118,7 @@ public class Frog extends Element {
 
             // Safeguard against invalid paths
             if (current == null) {
-                System.err.println("Error: Path tracing failed. Aborting movement.");
+//                System.err.println("Error: Path tracing failed. Aborting movement.");
                 return;
             }
         }
@@ -138,11 +138,11 @@ public class Frog extends Element {
                 this.setRow(newRow);
                 this.setColumn(newCol);
             } else if (target instanceof Player) {
-                gridManager.removeFromList(player); // Remove player from the game
                 gridManager.setElement(newRow, newCol, this); // Replace player with Frog
+                gridManager.removeFromList(player); // Remove player from the game
                 this.setRow(newRow);
                 this.setColumn(newCol);
-                System.out.println("Player has been killed by the Frog!");
+//                System.out.println("Player has been killed by the Frog!");
             }
         }
     }
