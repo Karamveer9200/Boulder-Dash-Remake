@@ -12,6 +12,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javafx.scene.control.ChoiceDialog;
+import javafx.scene.layout.VBox;
+import java.util.List;
+import java.util.Optional;
+
 
 /**
  * Main sets up the GUI and initialises everything for a game to take place
@@ -33,6 +38,64 @@ public class Main extends Application {
 	public static Player player;
 	@Override
 	public void start(Stage primaryStage) {
+		primaryStage.setUserData(this); // Store reference to Main in primaryStage for later use
+		primaryStage.setTitle("Game Menu");
+
+		VBox menuBox = new VBox(10);
+
+		Scene menuScene = new Scene(menuBox, WINDOW_WIDTH, WINDOW_HEIGHT);
+		primaryStage.setScene(menuScene);
+
+		// Set up menu buttons
+		Button newGameButton = new Button("Start New Game");
+		newGameButton.setOnAction(e -> {
+			PlayerProfile newProfile = PlayerProfile.promptForProfile(primaryStage);
+			setupGame(primaryStage, newProfile);
+		});
+
+		Button loadGameButton = new Button("Load Game");
+		loadGameButton.setOnAction(e -> {
+			List<String> profileNames = PlayerProfile.getAllProfiles().stream().map(PlayerProfile::getName).toList();
+			ChoiceDialog<String> dialog = new ChoiceDialog<>(profileNames.isEmpty() ? null : profileNames.getFirst(), profileNames);
+			dialog.setTitle("Load Game");
+			dialog.setHeaderText("Select a profile to load the game");
+			dialog.setContentText("Profile:");
+
+			Optional<String> result = dialog.showAndWait();
+			result.flatMap(PlayerProfile::loadProfile).ifPresent(selectedProfile -> setupGame(primaryStage, selectedProfile));
+		});
+
+		Button profileButton = new Button("Profile");
+		profileButton.setOnAction(e -> {
+			PlayerProfile.getAllProfiles().stream().findFirst().ifPresent(profile -> profile.showProfileWindow(primaryStage)); // Show the first profile for testing
+		});
+
+		Button highScoresButton = new Button("High Scores");
+		highScoresButton.setOnAction(e -> {
+			// Show high scores logic here
+		});
+
+		Button quitButton = new Button("Quit Game");
+		quitButton.setOnAction(e -> closeGame());
+
+		menuBox.getChildren().addAll(newGameButton, loadGameButton, profileButton, highScoresButton, quitButton);
+		menuBox.setStyle("-fx-padding: 20; -fx-alignment: center;");
+
+
+
+		// Show the menu
+		primaryStage.show();
+	}
+
+
+
+	/**
+ 	  * Sets up the game interface and initializes everything for a game to take place.
+      *
+      * @param primaryStage the primary stage for the game
+      * @param profile the player's profile
+      */
+	public void setupGame(Stage primaryStage, PlayerProfile profile) {
 		// Load the initial grid from a file
 		int[][] initialGrid = FileHandler.readFile("PlaceHolder.txt");
 
@@ -156,6 +219,13 @@ public class Main extends Application {
 		root.setTop(toolbar);
 
 		return root;
+	}
+
+	/**
+	 * Closes the game.
+	 */
+	private void closeGame() {
+		System.exit(0);
 	}
 
 	public static void main(String[] args) {
