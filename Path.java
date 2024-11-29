@@ -1,4 +1,4 @@
-public class Path extends Element {
+public class Path extends Tile {
 
     public Path(int row, int column) {
         super(row, column);

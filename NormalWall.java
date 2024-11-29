@@ -1,5 +1,5 @@
 import javafx.scene.image.Image;
-public class NormalWall extends Element {
+public class NormalWall extends Tile {
 
     public NormalWall(int row, int column) {
         super(row, column);
