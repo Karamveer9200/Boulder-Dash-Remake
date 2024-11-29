@@ -63,9 +63,19 @@ public class GameController {
      * Executes the boulder tick, triggering all boulders to perform their movement logic.
      * Updates the grid and redraws the game.
      */
-    public void boulderTick() {
+    public void boulderFallTick() {
         for (Boulder boulder : gridManager.getBoulders()) {
             boulder.fall(gridManager);
+        }
+        draw();
+    }
+
+    /**
+     * Executes the boulder tick, triggering all boulders to perform their movement logic.
+     * Updates the grid and redraws the game.
+     */
+    public void boulderRollTick() {
+        for (Boulder boulder : gridManager.getBoulders()) {
             boulder.roll(gridManager);
         }
         draw();
@@ -75,9 +85,20 @@ public class GameController {
      * Executes the boulder tick, triggering all boulders to perform their movement logic.
      * Updates the grid and redraws the game.
      */
-    public void diamondTick() {
+    public void diamondFallTick() {
         for (Diamond diamond : gridManager.getDiamonds()) {
             diamond.fall(gridManager);
+        }
+        draw();
+    }
+
+
+    /**
+     * Executes the boulder tick, triggering all boulders to perform their movement logic.
+     * Updates the grid and redraws the game.
+     */
+    public void diamondRollTick() {
+        for (Diamond diamond : gridManager.getDiamonds()) {
             diamond.roll(gridManager);
         }
         draw();

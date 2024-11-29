@@ -24,7 +24,10 @@ public class Main extends Application {
 
 	// Timeline for periodic ticks
 	private Timeline playerTickTimeline;
-	private Timeline boulderTickTimeline;
+	private Timeline dangerousRockFallTickTimeline;
+	private Timeline dangerousRockRollTimeline;
+	private Timeline diamondFallTickTimeline;
+	private Timeline diamondRollTimeline;
 	private Timeline frogTickTimeline;
 	private Timeline aomeebaTickTimeline;
 	public static Player player;
@@ -56,10 +59,15 @@ public class Main extends Application {
 			gameController.playerTick();
 		});
 
-		KeyFrame dangerousRocksKeyFrame = new KeyFrame(Duration.millis(500), event -> {
-			gameController.boulderTick();
+		KeyFrame dangerousRocksRollKeyFrame = new KeyFrame(Duration.millis(1500), event -> {
+			gameController.boulderRollTick();
+			gameController.diamondRollTick();
+		});
 
-			gameController.diamondTick();
+		KeyFrame dangerousRocksFallKeyFrame = new KeyFrame(Duration.millis(500), event -> {
+			gameController.boulderFallTick();
+			gameController.diamondFallTick();
+
 		});
 
 		KeyFrame frogKeyFrame = new KeyFrame(Duration.millis(1000), event -> {
@@ -72,11 +80,13 @@ public class Main extends Application {
 
 		// Set up the periodic tick timeline
 		playerTickTimeline = new Timeline(playerKeyFrame);
-		boulderTickTimeline = new Timeline( dangerousRocksKeyFrame);
+		dangerousRockFallTickTimeline = new Timeline( dangerousRocksFallKeyFrame);
+		dangerousRockRollTimeline = new Timeline( dangerousRocksRollKeyFrame);
 		frogTickTimeline = new Timeline(frogKeyFrame);
 		aomeebaTickTimeline = new Timeline(aomeebaKeyFrame);
 		playerTickTimeline.setCycleCount(Animation.INDEFINITE);
-		boulderTickTimeline.setCycleCount(Animation.INDEFINITE);
+		dangerousRockFallTickTimeline.setCycleCount(Animation.INDEFINITE);
+		dangerousRockRollTimeline.setCycleCount(Animation.INDEFINITE);
 		frogTickTimeline.setCycleCount(Animation.INDEFINITE);
 		aomeebaTickTimeline.setCycleCount(Animation.INDEFINITE);
 		
@@ -116,7 +126,8 @@ public class Main extends Application {
 
 		startTickButton.setOnAction(e -> {
 			playerTickTimeline.play();
-			boulderTickTimeline.play();
+			dangerousRockFallTickTimeline.play();
+			dangerousRockRollTimeline.play();
 			frogTickTimeline.play();
 			aomeebaTickTimeline.play();
 			startTickButton.setDisable(true);
@@ -125,7 +136,8 @@ public class Main extends Application {
 
 		stopTickButton.setOnAction(e -> {
 			playerTickTimeline.stop();
-			boulderTickTimeline.stop();
+			dangerousRockRollTimeline.stop();
+			dangerousRockFallTickTimeline.stop();
 			frogTickTimeline.stop();
 			aomeebaTickTimeline.stop();
 			stopTickButton.setDisable(true);
