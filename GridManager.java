@@ -71,6 +71,18 @@ public class GridManager {
             case 5 -> new Frog(row, col);
             case 6 -> new Amoeba(row, col);
             case 7 -> new Diamond(row, col);
+            case 8 -> new TitaniumWall(row, col);
+            case 9 -> new MagicWall(row, col);
+            case 10 -> new LockedDoor(row, col, KeyColour.RED);
+            case 11 -> new Key(row, col, KeyColour.RED);
+            case 12 -> new LockedDoor(row, col, KeyColour.GREEN);
+            case 13 -> new Key(row, col, KeyColour.GREEN);
+            case 14 -> new LockedDoor(row, col, KeyColour.YELLOW);
+            case 15 -> new Key(row, col, KeyColour.YELLOW);
+            case 16 -> new LockedDoor(row, col, KeyColour.BLUE);
+            case 17 -> new Key(row, col, KeyColour.BLUE);
+            case 18 -> new Exit(row, col);
+
             default -> throw new IllegalArgumentException("Unknown element code: " + code);
         };
     }

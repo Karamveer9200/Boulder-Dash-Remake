@@ -45,11 +45,6 @@ public class Player extends Element {
     public void setHasEnoughDiamonds(boolean hasEnoughDiamonds) {
         this.hasEnoughDiamonds = hasEnoughDiamonds;
     }
-    public void collectDiamond(Diamond diamond) {
-        setDiamondCount(getDiamondCount() + 1);
-        System.out.println("Diamonds collected: " + getDiamondCount());
-        checkDiamonds();
-    }
     public void checkDiamonds() {
         if (getDiamondCount() >= 1) {
             setHasEnoughDiamonds(true);
@@ -113,28 +108,44 @@ public class Player extends Element {
                 return true;
             }
         }
-
         if(grid[targetRow][targetColumn] instanceof Diamond) {
             diamondCount++;
             gridManager.removeFromList(gridManager.getElement(targetRow, targetColumn)); //remove from diamonds list to stop falling
             gridManager.removeElement(targetRow, targetColumn);
-//            gridManager.setElement(targetRow, targetColumn, null);
             grid[targetRow][targetColumn] = null;
             System.out.println("Diamond removed");
+            checkDiamonds();
             return true;
         }
+        if (grid[targetRow][targetColumn] instanceof Key key) {
+            collectKey(key);
+            return true;
+        }
+        if (grid[targetRow][targetColumn] instanceof LockedDoor lockedDoor) {
+            System.out.println(hasKey(KeyColour.RED));
+            if (hasKey(lockedDoor.getColour())) {
+                useKey(lockedDoor.getColour());
+                lockedDoor.unlock();
+                return true;
+            } else {
+                System.out.println("Player needs a " + lockedDoor.getColour() + " key to open this door.");
+                return false;
+            }
+        }
+        if (grid[targetRow][targetColumn] instanceof Exit exit) {
+            if (isHasEnoughDiamonds()) {
+                // If the player has enough diamonds, unlock the Exit and announce level win
+                exit.announceLevelWin();
+                return true;
+            } else {
+                System.out.println("Player needs more diamonds to enter the exit!");
+                return false;
+            }
 
-        // Otherwise, the move is invalid
+            // Otherwise, the move is invalid
+        }
         return false;
     }
-
-
-
-
-
-
-
-
 
 
 
@@ -145,4 +156,5 @@ public class Player extends Element {
     public String toString() {
         return "Player";
     }
+
 }
