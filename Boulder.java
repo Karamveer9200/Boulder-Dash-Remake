@@ -19,8 +19,9 @@ public class Boulder extends Element implements DangerousRock {
         hasMomentum = true;
     }
 
+
     /**
-     * Handles the falling logic for the boulder.
+     * Handles the falling logic for the diamond.
      *
      * @param gridManager the grid manager to access and update the grid
      */
@@ -31,8 +32,8 @@ public class Boulder extends Element implements DangerousRock {
         int col = this.getColumn();
 
         if (newRow < grid.length && grid[newRow][col] instanceof Path) {
-            // Update the grid to move the boulder
-//            gridManager.removeFromList(grid[newRow][col]); // remove path from list , to create new path somewhere else
+            // Update the grid to move the diamond
+            gridManager.removeFromList(grid[newRow][col]);
             Element p = new Path(this.getRow(), this.getColumn());
             gridManager.setElement(this.getRow(), this.getColumn(), p);
             gridManager.addToList(p);
@@ -44,11 +45,11 @@ public class Boulder extends Element implements DangerousRock {
             gainMomentum();
 
         } else if (newRow < grid.length && grid[newRow][col] instanceof Player) {
-            // If the boulder lands on a player and has momentum
+            // If the diamond lands on a player and has momentum
             if (hasMomentum) {
                 gridManager.removeFromList(grid[newRow][col]); // Remove the player
-                gridManager.setElement(newRow, col, this);     // Replace player with the boulder
-                System.out.println("Boulder has crushed Player. GAME OVER");
+                gridManager.setElement(newRow, col, this);     // Replace player with the diamond
+                System.out.println("Diamond has crushed Player. GAME OVER");
 
                 Element p = new Path(this.getRow(), this.getColumn());
                 gridManager.setElement(this.getRow(), this.getColumn(), p);
@@ -58,11 +59,16 @@ public class Boulder extends Element implements DangerousRock {
             }
             hasMomentum = false;
 
-        } else {
-            hasMomentum = false; // Reset momentum if the boulder stops
+        } else if(newRow < grid.length && grid[newRow][col] instanceof MagicWall && grid[newRow+1][col] instanceof Path ) {
+            MagicWall magicWall = (MagicWall) grid[newRow][col];
+            magicWall.transformRock(this,gridManager);
+            //row under magic wall is within range , and is a path ,
+            // anything else it stays over the  magic wall until its clear beneath the magic wall
+            //turn into diamond and vice versa
+        }else {
+            hasMomentum = false; // Reset momentum if the diamond stops
         }
     }
-
     /**
      * Handles the rolling logic for the diamond.
      *

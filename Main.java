@@ -26,8 +26,6 @@ public class Main extends Application {
 	private Timeline playerTickTimeline;
 	private Timeline dangerousRockFallTickTimeline;
 	private Timeline dangerousRockRollTimeline;
-	private Timeline diamondFallTickTimeline;
-	private Timeline diamondRollTimeline;
 	private Timeline frogTickTimeline;
 	private Timeline aomeebaTickTimeline;
 	public static Player player;

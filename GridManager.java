@@ -37,6 +37,7 @@ public class GridManager {
      */
     public void initializeGrid(int[][] gridTemplate) {
         // Clear all memory of existing lists
+        Exit.toggleFalseExitExists();
         getBoulders().clear();
         getDiamonds().clear();
         getFrogs().clear();

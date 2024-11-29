@@ -14,6 +14,9 @@ public class Exit extends Tile {
         name = "Exit";
         exitExists = true;
     }
+    public static void toggleFalseExitExists() {
+        exitExists = false;
+    }
     // Notifies the player that they have completed the level
     public void announceLevelWin() {
         System.out.println("Level Completed!");
