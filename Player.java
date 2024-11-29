@@ -20,6 +20,7 @@ public class Player extends Element {
     }
 
     public void collectKey(Key key) {
+        System.out.println(key);
         keyInventory.add(key.getColour());
     }
 
@@ -35,9 +36,6 @@ public class Player extends Element {
         return diamondCount;
     }
 
-    public void setDiamondCount(int diamondCount) {
-        this.diamondCount = diamondCount;
-    }
     public boolean isHasEnoughDiamonds() {
         return hasEnoughDiamonds;
     }
@@ -80,7 +78,7 @@ public class Player extends Element {
         }
 
         // Check if the target cell is enterable (e.g., a Path)
-        if (grid[targetRow][targetColumn].isCanBeEntered()) {
+        if (grid[targetRow][targetColumn] instanceof Dirt || grid[targetRow][targetColumn] instanceof Path) {
             return true;
         }
 
@@ -135,6 +133,7 @@ public class Player extends Element {
         if (grid[targetRow][targetColumn] instanceof Exit exit) {
             if (isHasEnoughDiamonds()) {
                 // If the player has enough diamonds, unlock the Exit and announce level win
+                exit.unlock();
                 exit.announceLevelWin();
                 return true;
             } else {
