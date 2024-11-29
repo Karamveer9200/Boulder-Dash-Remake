@@ -67,7 +67,9 @@ public class AmoebaManager {
         for (Amoeba amoeba : amoebas) {
             int row = amoeba.getRow();
             int col = amoeba.getColumn();
-            gridManager.setElement(row, col, new Diamond(row, col)); // Replace amoeba with a diamond
+            Diamond  newDiamond = new Diamond(row, col);
+            gridManager.setElement(row, col,newDiamond ); // Replace amoeba with a diamond
+            gridManager.addToList(newDiamond);
         }
     }
 }
