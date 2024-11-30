@@ -3,8 +3,8 @@ import javafx.scene.image.Image;
 public class LockedDoor extends Tile {
     private final KeyColour colour;
 
-    public LockedDoor(int x, int y, KeyColour colour) {
-        super(x, y);
+    public LockedDoor(int row, int column, KeyColour colour) {
+        super(row, column);
         this.colour = colour;
         canBeEntered = false;
         name = "LockedDoor";

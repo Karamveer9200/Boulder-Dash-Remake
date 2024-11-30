@@ -3,8 +3,8 @@ import javafx.scene.image.Image;
 public class Boulder extends Element implements DangerousRock {
     private boolean hasMomentum = false;
 
-    public Boulder(int column, int row) {
-        super(column, row);
+    public Boulder(int row , int column) {
+        super(row, column);
         canExplode = true;
         image = new Image("images/boulder.png");
         canBeEntered = false;
@@ -49,7 +49,7 @@ public class Boulder extends Element implements DangerousRock {
             if (hasMomentum) {
                 gridManager.removeFromList(grid[newRow][col]); // Remove the player
                 gridManager.setElement(newRow, col, this);     // Replace player with the diamond
-                System.out.println("Diamond has crushed Player. GAME OVER");
+                System.out.println("Boulder has crushed Player. GAME OVER");
 
                 Element p = new Path(this.getRow(), this.getColumn());
                 gridManager.setElement(this.getRow(), this.getColumn(), p);

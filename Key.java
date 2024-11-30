@@ -3,8 +3,8 @@ import javafx.scene.image.Image;
 public class Key extends Tile {
     private final KeyColour colour;
 
-    public Key(int x, int y, KeyColour colour) {
-        super(x, y);
+    public Key(int row, int column, KeyColour colour) {
+        super(row, column);
         this.colour = colour;
         canBeEntered = true;
         name = "Key";
