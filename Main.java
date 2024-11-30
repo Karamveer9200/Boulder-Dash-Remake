@@ -145,7 +145,7 @@ public class Main extends Application {
 		Button resetGridButton = new Button("Reset Grid");
 		resetGridButton.setOnAction(e -> {
 			int[][] initialGrid = FileHandler.readFile("PlaceHolder.txt");
-			gameController.getGridManager().initializeGrid(initialGrid);
+			gameController.getGridManager().reinitializeGrid(initialGrid);
 			gameController.initializePlayer(initialGrid);
 			gameController.draw();
 		});

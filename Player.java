@@ -24,6 +24,11 @@ public class Player extends Element {
         keyInventory.add(key.getColour());
     }
 
+    public void resetKeyInventory(){
+        System.out.println("Key inventory reset");
+        keyInventory.clear();
+    }
+
     public boolean hasKey(KeyColour colour) {
         return keyInventory.contains(colour);
     }
@@ -61,7 +66,7 @@ public class Player extends Element {
     public void movePlayer(int newRow, int newColumn, GridManager gridManager) {
         if (isValidMove(newRow, newColumn, gridManager)) {
             // Replace the player's current position with a Path
-//            gridManager.setElement(this.getRow(), this.getColumn(), new Path(this.getRow(), this.getColumn()));
+            gridManager.setElement(this.getRow(), this.getColumn(), new Path(this.getRow(), this.getColumn()));
             gridManager.removeElement(this.getRow(),this.getColumn());
             // Update the grid and the player's position
             gridManager.setElement(newRow, newColumn, this);
@@ -147,8 +152,11 @@ public class Player extends Element {
     }
 
 
-
-
+    public void resetDiamondCountStatus() {
+        this.diamondCount = 0;
+        this.hasEnoughDiamonds = false;
+        System.out.println("Diamond count reset");
+    }
 
 
     @Override

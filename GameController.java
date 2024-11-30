@@ -72,8 +72,8 @@ public class GameController {
         ArrayList<Boulder> boulders = new ArrayList<>(gridManager.getBoulders());
         for (Boulder boulder : boulders) {
             boulder.fall(gridManager);
-            System.out.println("Processing Boulder at (" + boulder.getRow() + ", " + boulder.getColumn() + ")");
-            System.out.println("Element below boulder: "+ gridManager.getElement(boulder.getRow()+1, boulder.getColumn()));
+//            System.out.println("Processing Boulder at (" + boulder.getRow() + ", " + boulder.getColumn() + ")");
+//            System.out.println("Element below boulder: "+ gridManager.getElement(boulder.getRow()+1, boulder.getColumn()));
 
         }
         draw();
@@ -103,8 +103,8 @@ public class GameController {
         ArrayList<Diamond> diamonds = new ArrayList<>(gridManager.getDiamonds());
         for (Diamond diamond : diamonds) {
             diamond.fall(gridManager);
-            System.out.println("Processing Diamond at (" + diamond.getRow() + ", " + diamond.getColumn() + ")");
-            System.out.println("Element below Diamond: "+ gridManager.getElement(diamond.getRow()+1, diamond.getColumn()));
+//            System.out.println("Processing Diamond at (" + diamond.getRow() + ", " + diamond.getColumn() + ")");
+//            System.out.println("Element below Diamond: "+ gridManager.getElement(diamond.getRow()+1, diamond.getColumn()));
         }
         draw();
     }

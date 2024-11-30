@@ -2,8 +2,7 @@ public abstract class Tile extends Element {
 
     public Tile(int row, int column) {
         super(row, column);
-        this.canBeEntered = true;
-        this.canExplode = true;
+
         this.name = "Tile";
     }
 
