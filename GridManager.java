@@ -51,7 +51,6 @@ public class GridManager {
             }
         }
     }
-
     /**
      * Creates an element based on the provided code and its position in the grid.
      *
@@ -214,4 +213,14 @@ public class GridManager {
         return amoebas;
     }
 
+
+    // built for debuging purpuse
+    public void printGridState() {
+        for (int row = 0; row < elementGrid.length; row++) {
+            for (int col = 0; col < elementGrid[row].length; col++) {
+                System.out.print(elementGrid[row][col] + " ");
+            }
+            System.out.println();
+        }
+    }
 }

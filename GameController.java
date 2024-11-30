@@ -1,6 +1,9 @@
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.KeyCode;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 /**
  * GameController manages the player's movements, interactions, and rendering of the grid-based game.
  * It handles key inputs, updates the player's position, manages boulder interactions, and coordinates
@@ -64,8 +67,14 @@ public class GameController {
      * Updates the grid and redraws the game.
      */
     public void boulderFallTick() {
-        for (Boulder boulder : gridManager.getBoulders()) {
+        // Making a copy of the boulders Arraylist,
+        // avoids problems with concurrently changing the arraylist when a boulder passes through magic wall
+        ArrayList<Boulder> boulders = new ArrayList<>(gridManager.getBoulders());
+        for (Boulder boulder : boulders) {
             boulder.fall(gridManager);
+            System.out.println("Processing Boulder at (" + boulder.getRow() + ", " + boulder.getColumn() + ")");
+            System.out.println("Element below boulder: "+ gridManager.getElement(boulder.getRow()+1, boulder.getColumn()));
+
         }
         draw();
     }
@@ -75,7 +84,10 @@ public class GameController {
      * Updates the grid and redraws the game.
      */
     public void boulderRollTick() {
-        for (Boulder boulder : gridManager.getBoulders()) {
+        // Making a copy of the boulders Arraylist,
+        // avoids problems with concurrently changing the arraylist when a diamond passes through magic wall
+        ArrayList<Boulder> boulders = new ArrayList<>(gridManager.getBoulders());
+        for (Boulder boulder : boulders) {
             boulder.roll(gridManager);
         }
         draw();
@@ -86,8 +98,13 @@ public class GameController {
      * Updates the grid and redraws the game.
      */
     public void diamondFallTick() {
-        for (Diamond diamond : gridManager.getDiamonds()) {
+        // Making a copy of the boulders Arraylist,
+        // avoids problems with concurrently changing the arraylist when a boulder passes through magic wall
+        ArrayList<Diamond> diamonds = new ArrayList<>(gridManager.getDiamonds());
+        for (Diamond diamond : diamonds) {
             diamond.fall(gridManager);
+            System.out.println("Processing Diamond at (" + diamond.getRow() + ", " + diamond.getColumn() + ")");
+            System.out.println("Element below Diamond: "+ gridManager.getElement(diamond.getRow()+1, diamond.getColumn()));
         }
         draw();
     }
@@ -98,14 +115,20 @@ public class GameController {
      * Updates the grid and redraws the game.
      */
     public void diamondRollTick() {
-        for (Diamond diamond : gridManager.getDiamonds()) {
+        // Making a copy of the boulders Arraylist,
+        // avoids problems with concurrency
+        ArrayList<Diamond> diamonds = new ArrayList<>(gridManager.getDiamonds());
+        for (Diamond diamond : diamonds) {
             diamond.roll(gridManager);
         }
         draw();
     }
 
     public void frogTick() {
-        for (Frog frog : gridManager.getFrogs()) {
+        // Making a copy of the boulders Arraylist,
+        // avoids problems with concurrency
+        ArrayList<Frog> frogs = new ArrayList<>(gridManager.getFrogs());
+        for (Frog frog : frogs) {
             frog.seekAndKill(gridManager, player);
         }
         draw();
