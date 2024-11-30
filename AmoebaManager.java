@@ -63,7 +63,7 @@ public class AmoebaManager {
 
     //Transforms all amoebas into diamonds.
     private static void transformAllToDiamonds(GridManager gridManager, List<Amoeba> amoebas) {
-        System.out.println("All Amoebas transformed into a Diamond!");
+//        System.out.println("All Amoebas transformed into a Diamond!");
         for (Amoeba amoeba : amoebas) {
             int row = amoeba.getRow();
             int col = amoeba.getColumn();

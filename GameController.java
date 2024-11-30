@@ -135,9 +135,28 @@ public class GameController {
     }
 
     public void amoebaTick() {
+        if (gridManager.getAmoebas().size() > 0) {
             AmoebaManager.spreadAll(gridManager);
+        }
         draw();
     }
+
+    public void butterflyTick() {
+        ArrayList<Butterfly> butterflies = new ArrayList<>(gridManager.getButterflies());
+        for (Butterfly butterfly : butterflies) {
+            butterfly.move(gridManager, player);
+        }
+        draw();
+    }
+
+    public void fireflyTick() {
+        ArrayList<Firefly> fireflies = new ArrayList<>(gridManager.getFireflies());
+        for (Firefly firefly : fireflies) {
+            firefly.move(gridManager, player);
+        }
+        draw();
+    }
+
 
     /**
      * Executes the player tick, handling input and updating the player's position on the grid.
