@@ -135,14 +135,16 @@ public class GameController {
     }
 
     public void amoebaTick() {
+        if (gridManager.getAmoebas().size() > 0) {
             AmoebaManager.spreadAll(gridManager);
+        }
         draw();
     }
 
     public void butterflyTick() {
         ArrayList<Butterfly> butterflies = new ArrayList<>(gridManager.getButterflies());
         for (Butterfly butterfly : butterflies) {
-            butterfly.move(gridManager);
+            butterfly.move(gridManager, player);
         }
         draw();
     }
@@ -150,7 +152,7 @@ public class GameController {
     public void fireflyTick() {
         ArrayList<Firefly> fireflies = new ArrayList<>(gridManager.getFireflies());
         for (Firefly firefly : fireflies) {
-            firefly.move(gridManager);
+            firefly.move(gridManager, player);
         }
         draw();
     }

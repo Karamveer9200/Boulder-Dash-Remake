@@ -137,6 +137,7 @@ public class Frog extends Element {
                 gridManager.setElement(newRow, newCol, this); // Move to new position
                 this.setRow(newRow);
                 this.setColumn(newCol);
+
             } else if (target instanceof Player) {
                 gridManager.setElement(newRow, newCol, this); // Replace player with Frog
                 gridManager.removeFromList(player); // Remove player from the game

@@ -23,7 +23,7 @@ public class Fly extends Element {
         this.currentDirection = 0; // Start with "Up" direction
     }
 
-    public void move(GridManager gridManager) {
+    public void move(GridManager gridManager, Player player) {
         Element[][] grid = gridManager.getElementGrid();
 
         // Determine the next valid direction
@@ -33,14 +33,31 @@ public class Fly extends Element {
             int newRow = this.getRow() + DIRECTIONS[nextDirection][0];
             int newCol = this.getColumn() + DIRECTIONS[nextDirection][1];
 
-            // Move to the new position
-            gridManager.setElement(this.getRow(), this.getColumn(), new Path(this.getRow(), this.getColumn())); // Replace current position with Path
-            gridManager.setElement(newRow, newCol, this); // Set the butterfly in the new position
-            this.setRow(newRow);
-            this.setColumn(newCol);
 
-            // Update the current direction
-            this.currentDirection = nextDirection;
+            Element target = grid[newRow][newCol];
+            // Move to new position if the target is a Path
+            if (target instanceof Path) {
+                gridManager.setElement(this.getRow(), this.getColumn(), new Path(this.getRow(), this.getColumn()));
+                gridManager.setElement(newRow, newCol, this); // Move to new position
+                this.setRow(newRow);
+                this.setColumn(newCol);
+                // Update the current direction
+                this.currentDirection = nextDirection;
+
+                // If the target is a Player, kill the player
+            } else if (target instanceof Player) {
+                gridManager.setElement(this.getRow(), this.getColumn(), new Path(this.getRow(), this.getColumn()));
+                gridManager.setElement(newRow, newCol, this); // Replace player with Frog
+                gridManager.removeFromList(player); // Remove player from the game
+                this.setRow(newRow);
+                this.setColumn(newCol);
+                System.out.println("Player has been killed by the fly!");
+
+
+
+            } else if (target instanceof Amoeba) {
+                // explode!!!!!
+            }
         }
     }
 
