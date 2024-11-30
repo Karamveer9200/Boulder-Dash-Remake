@@ -1,24 +1,10 @@
-
-import javafx.application.Application;
-import javafx.geometry.Insets;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 /**
- * Represents a player's profile in the game, storing the player's name, maximum level reached, and high score.
+ * Represents a player's profile in the game, storing the player's name, maximum level reached, high score, and current score.
  */
-public class PlayerProfile extends Application {
+public class PlayerProfile {
 
     private static int idCounter = 1;
     private static final Map<Integer, PlayerProfile> profiles = new HashMap<>();
@@ -26,7 +12,8 @@ public class PlayerProfile extends Application {
     private final int playerId;
     private String name;
     private int maxLevelReached;
-    private static int highScore;
+    private int highScore;
+    private int currentScore;
 
     /**
      * Constructs a new PlayerProfile with the specified name, maximum level reached, and high score.
@@ -41,7 +28,7 @@ public class PlayerProfile extends Application {
         this.name = name;
         this.maxLevelReached = maxLevelReached;
         this.highScore = highScore;
-        profiles.put(this.playerId, this); // Add the new profile to the profiles map
+        this.currentScore = 0;
     }
 
     /**
@@ -94,7 +81,7 @@ public class PlayerProfile extends Application {
      *
      * @return the high score
      */
-    public static int getHighScore() {
+    public int getHighScore() {
         return highScore;
     }
 
@@ -108,98 +95,33 @@ public class PlayerProfile extends Application {
     }
 
     /**
-     * Displays the profile window with the player's information.
+     * Gets the player's current score.
      *
-     * @param mainStage the main stage to return to the menu
+     * @return the current score
      */
-    public void showProfileWindow(Stage mainStage) {
-        Stage profileStage = new Stage();
-        profileStage.setTitle("Profile Details");
-
-        Label profileNumberLabel = new Label("#" + playerId + " " + name);
-        profileNumberLabel.setStyle("-fx-font-size: 24; -fx-font-weight: bold;");
-
-        Label maxLevelLabel = new Label("Highest Level Reached: " + maxLevelReached);
-        Label highScoreLabel = new Label("High Score: " + highScore);
-
-        // Back Button
-        Button backButton = new Button("Back");
-        backButton.setOnAction(e -> {
-            profileStage.close();
-            mainStage.show();
-        });
-
-        BorderPane root = new BorderPane();
-        VBox profileBox = new VBox(10, profileNumberLabel, maxLevelLabel, highScoreLabel);
-        profileBox.setStyle("-fx-padding: 20; -fx-alignment: top;");
-        root.setCenter(profileBox);
-        root.setBottom(backButton);
-        BorderPane.setMargin(backButton, new Insets(10));
-
-        Scene profileScene = new Scene(root, 400, 300);
-        profileStage.setScene(profileScene);
-        profileStage.show();
+    public int getCurrentScore() {
+        return currentScore;
     }
 
     /**
-     * Prompts the user to enter a player name and creates a new profile.
+     * Sets the player's current score.
      *
-     * @param primaryStage the primary stage for the application
-     * @return the created PlayerProfile
+     * @param currentScore the new current score
      */
-    public static PlayerProfile promptForProfile(Stage primaryStage) {
-        Stage dialog = new Stage();
-        dialog.setTitle("Create Profile");
-        dialog.initModality(Modality.APPLICATION_MODAL);
-
-        Label nameLabel = new Label("Enter Name:");
-        TextField nameField = new TextField();
-
-        final PlayerProfile[] newProfile = new PlayerProfile[1];
-
-        Button saveButton = new Button("Save");
-        saveButton.setOnAction(e -> {
-            String name = nameField.getText();
-            newProfile[0] = new PlayerProfile(name, 0, 0); // Create new profile with default values
-            dialog.close();
-        });
-
-        VBox dialogBox = new VBox(10, nameLabel, nameField, saveButton);
-        dialogBox.setStyle("-fx-padding: 20; -fx-alignment: center;");
-
-        Scene dialogScene = new Scene(dialogBox, 300, 150);
-        dialog.setScene(dialogScene);
-        dialog.showAndWait();
-
-        return newProfile[0];
+    public void setCurrentScore(int currentScore) {
+        this.currentScore = currentScore;
     }
 
     /**
-     * Loads an existing profile by name.
+     * Increments the player's current score by the specified number of points.
+     * Updates the player's high score if the current score exceeds the high score.
      *
-     * @param name the name of the profile to load
-     * @return the loaded profile, or null if not found
+     * @param points the number of points to add to the current score
      */
-    public static Optional<PlayerProfile> loadProfile(String name) {
-        return profiles.values().stream().filter(profile -> profile.getName().equals(name)).findFirst();
-    }
-
-    /**
-     * Returns all profiles.
-     *
-     * @return the collection of all profiles
-     */
-    public static Collection<PlayerProfile> getAllProfiles() {
-        return profiles.values();
-    }
-
-    @Override
-    public void start(Stage primaryStage) {
-        // For testing purposes only, you can run this class standalone.
-        showProfileWindow(primaryStage);
-    }
-
-    public static void main(String[] args) {
-        launch(args);
+    public void incrementScore(int points) {
+        this.currentScore += points;
+        if (this.currentScore > this.highScore) {
+            this.highScore = this.currentScore;
+        }
     }
 }

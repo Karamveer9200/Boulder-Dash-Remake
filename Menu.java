@@ -2,14 +2,13 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.Modality;
 
-
-
-
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,13 +17,19 @@ import java.util.Map;
 public class Menu extends Application {
     private final Map<Integer, PlayerProfile> profiles;
     private final HighScoreTable highScoreTable;
+    private final ProfileManager profileManager;
+    private List<PlayerProfile> profileList;
+    private int currentIndex;
 
     /**
      * Constructs a new Menu with an empty profiles map and a new HighScoreTable.
      */
     public Menu() {
-        this.profiles = new HashMap<>();
+        this.profiles = ProfileManager.getProfiles();
         this.highScoreTable = new HighScoreTable();
+        this.profileManager = new ProfileManager();
+        this.profileList = new ArrayList<>(profiles.values());
+        this.currentIndex = 0;
     }
 
     /**
@@ -47,8 +52,10 @@ public class Menu extends Application {
 
         Button newGameButton = new Button("Start New Game");
         newGameButton.setOnAction(e -> {
-            PlayerProfile newProfile = PlayerProfile.promptForProfile(primaryStage);
+            PlayerProfile newProfile = profileManager.promptForProfile(primaryStage);
             profiles.put(newProfile.getPlayerId(), newProfile);
+            profileList = new ArrayList<>(profiles.values());
+            currentIndex = profileList.size() - 1; // Set current index to the newly added profile
             ((Main) primaryStage.getUserData()).setupGame(primaryStage, newProfile);
         });
 
@@ -56,11 +63,7 @@ public class Menu extends Application {
         loadGameButton.setOnAction(e -> loadGame(primaryStage));
 
         Button profileButton = new Button("Profile");
-        profileButton.setOnAction(e -> {
-            if (!profiles.isEmpty()) {
-                profiles.values().iterator().next().showProfileWindow(primaryStage); // Show the first profile for testing
-            }
-        });
+        profileButton.setOnAction(e -> showProfileWindow(primaryStage));
 
         Button highScoresButton = new Button("High Scores");
         highScoresButton.setOnAction(e -> showHighScores(primaryStage));
@@ -104,6 +107,67 @@ public class Menu extends Application {
     }
 
     /**
+     * Displays the profile window with the ability to navigate through profiles.
+     *
+     * @param primaryStage the primary stage for this application
+     */
+    private void showProfileWindow(Stage primaryStage) {
+        if (profileList.isEmpty()) {
+            return;
+        }
+
+        Stage profileStage = new Stage();
+        profileStage.setTitle("Profile Details");
+
+        Label profileLabel = new Label();
+        updateProfileLabel(profileLabel);
+
+        Button previousButton = new Button("<");
+        previousButton.setOnAction(e -> {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateProfileLabel(profileLabel);
+            }
+        });
+
+        Button nextButton = new Button(">");
+        nextButton.setOnAction(e -> {
+            if (currentIndex < profileList.size() - 1) {
+                currentIndex++;
+                updateProfileLabel(profileLabel);
+            }
+        });
+
+        Button backButton = new Button("Back");
+        backButton.setOnAction(e -> {
+            profileStage.close();
+            primaryStage.show();
+        });
+
+        HBox navigationBox = new HBox(10, previousButton, profileLabel, nextButton);
+        navigationBox.setStyle("-fx-alignment: center;");
+
+        VBox profileBox = new VBox(10, navigationBox, backButton);
+        profileBox.setStyle("-fx-padding: 20; -fx-alignment: center;");
+
+        Scene profileScene = new Scene(profileBox, 400, 200);
+        profileStage.setScene(profileScene);
+        profileStage.show();
+    }
+
+    /**
+     * Updates the profile label with the current profile information.
+     *
+     * @param profileLabel the label to update
+     */
+    private void updateProfileLabel(Label profileLabel) {
+        PlayerProfile currentProfile = profileList.get(currentIndex);
+        profileLabel.setText("#" + currentProfile.getPlayerId() + " " + currentProfile.getName() +
+                "\nMax Level: " + currentProfile.getMaxLevelReached() +
+                "\nHigh Score: " + currentProfile.getHighScore());
+    }
+
+    /**
      * Displays the high scores table.
      *
      * @param primaryStage the primary stage for this application
@@ -123,7 +187,6 @@ public class Menu extends Application {
         primaryStage.setTitle("High Scores");
         primaryStage.show();
     }
-
 
     /**
      * Closes the game.

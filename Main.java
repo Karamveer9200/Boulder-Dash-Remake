@@ -6,20 +6,21 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceDialog;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import javafx.scene.control.ChoiceDialog;
-import javafx.scene.layout.VBox;
+
 import java.util.List;
 import java.util.Optional;
 
-
 /**
- * Main sets up the GUI and initialises everything for a game to take place
+ * Main sets up the GUI and initializes everything for a game to take place.
  */
 public class Main extends Application {
 	public static final int WINDOW_WIDTH = 800;
@@ -34,12 +35,15 @@ public class Main extends Application {
 	private Timeline diamondFallTickTimeline;
 	private Timeline diamondRollTimeline;
 	private Timeline frogTickTimeline;
-	private Timeline aomeebaTickTimeline;
-	public static Player player;
+	private Timeline amoebaTickTimeline;
+
+	private ProfileManager profileManager;
+
 	@Override
 	public void start(Stage primaryStage) {
-		primaryStage.setUserData(this); // Store reference to Main in primaryStage for later use
 		primaryStage.setTitle("Game Menu");
+
+		profileManager = new ProfileManager();
 
 		VBox menuBox = new VBox(10);
 
@@ -49,25 +53,36 @@ public class Main extends Application {
 		// Set up menu buttons
 		Button newGameButton = new Button("Start New Game");
 		newGameButton.setOnAction(e -> {
-			PlayerProfile newProfile = PlayerProfile.promptForProfile(primaryStage);
+			PlayerProfile newProfile = profileManager.promptForProfile(primaryStage);
 			setupGame(primaryStage, newProfile);
 		});
 
 		Button loadGameButton = new Button("Load Game");
 		loadGameButton.setOnAction(e -> {
-			List<String> profileNames = PlayerProfile.getAllProfiles().stream().map(PlayerProfile::getName).toList();
-			ChoiceDialog<String> dialog = new ChoiceDialog<>(profileNames.isEmpty() ? null : profileNames.getFirst(), profileNames);
+			List<String> profileFiles = profileManager.getAvailableProfiles();
+			ChoiceDialog<String> dialog = new ChoiceDialog<>(profileFiles.isEmpty() ? null : profileFiles.get(0), profileFiles);
 			dialog.setTitle("Load Game");
 			dialog.setHeaderText("Select a profile to load the game");
 			dialog.setContentText("Profile:");
 
 			Optional<String> result = dialog.showAndWait();
-			result.flatMap(PlayerProfile::loadProfile).ifPresent(selectedProfile -> setupGame(primaryStage, selectedProfile));
+			result.ifPresent(fileName -> {
+				PlayerProfile selectedProfile = profileManager.loadProfileFromFile(fileName);
+				if (selectedProfile != null) {
+					setupGame(primaryStage, selectedProfile);
+				}
+			});
 		});
 
 		Button profileButton = new Button("Profile");
 		profileButton.setOnAction(e -> {
-			PlayerProfile.getAllProfiles().stream().findFirst().ifPresent(profile -> profile.showProfileWindow(primaryStage)); // Show the first profile for testing
+			List<String> profileFiles = profileManager.getAvailableProfiles();
+			if (!profileFiles.isEmpty()) {
+				PlayerProfile profile = profileManager.loadProfileFromFile(profileFiles.get(0));
+				if (profile != null) {
+					showProfileWindow(primaryStage, profile);
+				}
+			}
 		});
 
 		Button highScoresButton = new Button("High Scores");
@@ -81,20 +96,16 @@ public class Main extends Application {
 		menuBox.getChildren().addAll(newGameButton, loadGameButton, profileButton, highScoresButton, quitButton);
 		menuBox.setStyle("-fx-padding: 20; -fx-alignment: center;");
 
-
-
 		// Show the menu
 		primaryStage.show();
 	}
 
-
-
 	/**
- 	  * Sets up the game interface and initializes everything for a game to take place.
-      *
-      * @param primaryStage the primary stage for the game
-      * @param profile the player's profile
-      */
+	 * Sets up the game interface and initializes everything for a game to take place.
+	 *
+	 * @param primaryStage the primary stage for the game
+	 * @param profile the player's profile
+	 */
 	public void setupGame(Stage primaryStage, PlayerProfile profile) {
 		// Load the initial grid from a file
 		int[][] initialGrid = FileHandler.readFile("PlaceHolder.txt");
@@ -130,29 +141,28 @@ public class Main extends Application {
 		KeyFrame dangerousRocksFallKeyFrame = new KeyFrame(Duration.millis(500), event -> {
 			gameController.boulderFallTick();
 			gameController.diamondFallTick();
-
 		});
 
 		KeyFrame frogKeyFrame = new KeyFrame(Duration.millis(1000), event -> {
 			gameController.frogTick();
 		});
 
-		KeyFrame aomeebaKeyFrame = new KeyFrame(Duration.millis(1000), event -> {
+		KeyFrame amoebaKeyFrame = new KeyFrame(Duration.millis(1000), event -> {
 			gameController.amoebaTick();
 		});
 
 		// Set up the periodic tick timeline
 		playerTickTimeline = new Timeline(playerKeyFrame);
-		dangerousRockFallTickTimeline = new Timeline( dangerousRocksFallKeyFrame);
-		dangerousRockRollTimeline = new Timeline( dangerousRocksRollKeyFrame);
+		dangerousRockFallTickTimeline = new Timeline(dangerousRocksFallKeyFrame);
+		dangerousRockRollTimeline = new Timeline(dangerousRocksRollKeyFrame);
 		frogTickTimeline = new Timeline(frogKeyFrame);
-		aomeebaTickTimeline = new Timeline(aomeebaKeyFrame);
+		amoebaTickTimeline = new Timeline(amoebaKeyFrame);
 		playerTickTimeline.setCycleCount(Animation.INDEFINITE);
 		dangerousRockFallTickTimeline.setCycleCount(Animation.INDEFINITE);
 		dangerousRockRollTimeline.setCycleCount(Animation.INDEFINITE);
 		frogTickTimeline.setCycleCount(Animation.INDEFINITE);
-		aomeebaTickTimeline.setCycleCount(Animation.INDEFINITE);
-		
+		amoebaTickTimeline.setCycleCount(Animation.INDEFINITE);
+
 		// Draw the initial grid
 		gameController.draw();
 
@@ -192,7 +202,7 @@ public class Main extends Application {
 			dangerousRockFallTickTimeline.play();
 			dangerousRockRollTimeline.play();
 			frogTickTimeline.play();
-			aomeebaTickTimeline.play();
+			amoebaTickTimeline.play();
 			startTickButton.setDisable(true);
 			stopTickButton.setDisable(false);
 		});
@@ -202,7 +212,7 @@ public class Main extends Application {
 			dangerousRockRollTimeline.stop();
 			dangerousRockFallTickTimeline.stop();
 			frogTickTimeline.stop();
-			aomeebaTickTimeline.stop();
+			amoebaTickTimeline.stop();
 			stopTickButton.setDisable(true);
 			startTickButton.setDisable(false);
 		});
@@ -215,7 +225,7 @@ public class Main extends Application {
 			gameController.draw();
 		});
 
-		toolbar.getChildren().addAll(resetButton, centerButton, startTickButton, stopTickButton,resetGridButton);
+		toolbar.getChildren().addAll(resetButton, centerButton, startTickButton, stopTickButton, resetGridButton);
 		root.setTop(toolbar);
 
 		return root;
@@ -226,6 +236,40 @@ public class Main extends Application {
 	 */
 	private void closeGame() {
 		System.exit(0);
+	}
+
+	/**
+	 * Displays the profile details in a new window.
+	 *
+	 * @param mainStage the main stage of the application
+	 * @param profile the player profile to display
+	 */
+	public void showProfileWindow(Stage mainStage, PlayerProfile profile) {
+		Stage profileStage = new Stage();
+		profileStage.setTitle("Profile Details");
+
+		Label profileNumberLabel = new Label("#" + profile.getPlayerId() + " " + profile.getName());
+		profileNumberLabel.setStyle("-fx-font-size: 24; -fx-font-weight: bold;");
+
+		Label maxLevelLabel = new Label("Highest Level Reached: " + profile.getMaxLevelReached());
+		Label highScoreLabel = new Label("High Score: " + profile.getHighScore());
+
+		Button backButton = new Button("Back");
+		backButton.setOnAction(e -> {
+			profileStage.close();
+			mainStage.show();
+		});
+
+		BorderPane root = new BorderPane();
+		VBox profileBox = new VBox(10, profileNumberLabel, maxLevelLabel, highScoreLabel);
+		profileBox.setStyle("-fx-padding: 20; -fx-alignment: center;");
+		root.setCenter(profileBox);
+		root.setBottom(backButton);
+		BorderPane.setMargin(backButton, new Insets(10));
+
+		Scene profileScene = new Scene(root, 400, 300);
+		profileStage.setScene(profileScene);
+		profileStage.show();
 	}
 
 	public static void main(String[] args) {
