@@ -28,6 +28,7 @@ public class Main extends Application {
 	private Timeline dangerousRockRollTimeline;
 	private Timeline frogTickTimeline;
 	private Timeline aomeebaTickTimeline;
+	private Timeline flyTickTimeline;
 	public static Player player;
 	@Override
 	public void start(Stage primaryStage) {
@@ -68,6 +69,11 @@ public class Main extends Application {
 
 		});
 
+		KeyFrame flyKeyFrame = new KeyFrame(Duration.millis(1000), event -> {
+			gameController.butterflyTick();
+			gameController.fireflyTick();
+		});
+
 		KeyFrame frogKeyFrame = new KeyFrame(Duration.millis(1000), event -> {
 			gameController.frogTick();
 		});
@@ -80,11 +86,15 @@ public class Main extends Application {
 		playerTickTimeline = new Timeline(playerKeyFrame);
 		dangerousRockFallTickTimeline = new Timeline( dangerousRocksFallKeyFrame);
 		dangerousRockRollTimeline = new Timeline( dangerousRocksRollKeyFrame);
+		flyTickTimeline = new Timeline(flyKeyFrame);
 		frogTickTimeline = new Timeline(frogKeyFrame);
 		aomeebaTickTimeline = new Timeline(aomeebaKeyFrame);
+
+		// Set the cycle count to Animation.INDEFINITE
 		playerTickTimeline.setCycleCount(Animation.INDEFINITE);
 		dangerousRockFallTickTimeline.setCycleCount(Animation.INDEFINITE);
 		dangerousRockRollTimeline.setCycleCount(Animation.INDEFINITE);
+		flyTickTimeline.setCycleCount(Animation.INDEFINITE);
 		frogTickTimeline.setCycleCount(Animation.INDEFINITE);
 		aomeebaTickTimeline.setCycleCount(Animation.INDEFINITE);
 		
@@ -126,6 +136,7 @@ public class Main extends Application {
 			playerTickTimeline.play();
 			dangerousRockFallTickTimeline.play();
 			dangerousRockRollTimeline.play();
+			flyTickTimeline.play();
 			frogTickTimeline.play();
 			aomeebaTickTimeline.play();
 			startTickButton.setDisable(true);
@@ -136,6 +147,7 @@ public class Main extends Application {
 			playerTickTimeline.stop();
 			dangerousRockRollTimeline.stop();
 			dangerousRockFallTickTimeline.stop();
+			flyTickTimeline.stop();
 			frogTickTimeline.stop();
 			aomeebaTickTimeline.stop();
 			stopTickButton.setDisable(true);

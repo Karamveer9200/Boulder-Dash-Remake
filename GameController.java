@@ -139,6 +139,23 @@ public class GameController {
         draw();
     }
 
+    public void butterflyTick() {
+        ArrayList<Butterfly> butterflies = new ArrayList<>(gridManager.getButterflies());
+        for (Butterfly butterfly : butterflies) {
+            butterfly.move(gridManager);
+        }
+        draw();
+    }
+
+    public void fireflyTick() {
+        ArrayList<Firefly> fireflies = new ArrayList<>(gridManager.getFireflies());
+        for (Firefly firefly : fireflies) {
+            firefly.move(gridManager);
+        }
+        draw();
+    }
+
+
     /**
      * Executes the player tick, handling input and updating the player's position on the grid.
      * Processes player movement and redraws the game.

@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * The GridManager is responsible for managing the grid of elements in the game.
@@ -13,6 +14,8 @@ public class GridManager {
     private final ArrayList<NormalWall> walls = new ArrayList<>();
     final ArrayList<Boulder> boulders = new ArrayList<>();
     final ArrayList<Diamond> diamonds = new ArrayList<>();
+    final ArrayList<Butterfly> butterflies = new ArrayList<>();
+    final ArrayList<Firefly> fireflies = new ArrayList<>();
     final ArrayList<Frog> frogs = new ArrayList<>();
     final ArrayList<Amoeba> amoebas = new ArrayList<>();
     private  Player player;
@@ -42,15 +45,20 @@ public class GridManager {
         getDiamonds().clear();
         getFrogs().clear();
         getAmoebas().clear();
+        getButterflies().clear();
+        getFireflies().clear();
 
         for (int row = 0; row < gridTemplate.length; row++) {
             for (int col = 0; col < gridTemplate[row].length; col++) {
-                Element element = createElement(this,gridTemplate[row][col], row, col);
+                Element element = createElement(this,gridTemplate[row][col], row, col, true);
                 elementGrid[row][col] = element;
                 addToList(element);
             }
         }
     }
+
+
+
     /**
      * Creates an element based on the provided code and its position in the grid.
      *
@@ -61,7 +69,7 @@ public class GridManager {
      * @return the created Element object
      * @throws IllegalArgumentException if the code does not correspond to a known element type
      */
-    private Element createElement(GridManager gridManager, int code, int row, int col) {
+    private Element createElement(GridManager gridManager, int code, int row, int col, boolean followsLeftEdge) {
         return switch (code) {
             case 0 -> new Path(row, col);
             case 1 -> new Dirt(row, col);
@@ -82,6 +90,8 @@ public class GridManager {
             case 16 -> new LockedDoor(row, col, KeyColour.BLUE);
             case 17 -> new Key(row, col, KeyColour.BLUE);
             case 18 -> new Exit(row, col);
+            case 19 -> new Butterfly(row, col, followsLeftEdge);
+            case 20 -> new Firefly(row, col, followsLeftEdge);
 
             default -> throw new IllegalArgumentException("Unknown element code: " + code);
         };
@@ -103,6 +113,10 @@ public class GridManager {
             walls.add(wall);
         } else if (element instanceof Boulder boulder) {
             boulders.add(boulder);
+        } else if (element instanceof Butterfly butterfly) {
+            butterflies.add(butterfly);
+        } else if (element instanceof Firefly firefly) {
+            fireflies.add(firefly);
         } else if (element instanceof Frog frog) {
             frogs.add(frog);
         } else if (element instanceof Amoeba amoeba) {
@@ -134,6 +148,10 @@ public class GridManager {
             amoebas.remove(amoeba);
         } else if (element instanceof Diamond diamond) {
             diamonds.remove(diamond);
+        } else if (element instanceof Butterfly butterfly) {
+            butterflies.remove(butterfly);
+        } else if (element instanceof Firefly firefly) {
+            fireflies.remove(firefly);
         }
     }
 
@@ -199,7 +217,13 @@ public class GridManager {
         return diamonds;
     }
 
+    public ArrayList<Firefly> getFireflies() {
+        return fireflies;
+    }
 
+    public ArrayList<Butterfly> getButterflies() {
+        return butterflies;
+    }
 
     public ArrayList<Frog> getFrogs() {
         return frogs;
