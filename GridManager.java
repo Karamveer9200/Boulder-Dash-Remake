@@ -47,7 +47,7 @@ public class GridManager {
         getAmoebas().clear();
         getButterflies().clear();
         getFireflies().clear();
-
+        // follsLeftEdge is true by default
         for (int row = 0; row < gridTemplate.length; row++) {
             for (int col = 0; col < gridTemplate[row].length; col++) {
                 Element element = createElement(this,gridTemplate[row][col], row, col, true);
