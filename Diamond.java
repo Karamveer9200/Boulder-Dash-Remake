@@ -44,11 +44,11 @@ public class Diamond extends Element implements DangerousRock {
             gainMomentum();
 
         } else if (newRow < grid.length && grid[newRow][col] instanceof Player) {
-            // If the diamond lands on a player and has momentum
+            // If the boulder lands on a player and has momentum
             if (hasMomentum) {
                 gridManager.removeFromList(grid[newRow][col]); // Remove the player
                 gridManager.setElement(newRow, col, this);     // Replace player with the diamond
-                System.out.println("Diamond has crushed Player. GAME OVER");
+                System.out.println("Boulder has crushed Player. GAME OVER");
 
                 Element p = new Path(this.getRow(), this.getColumn());
                 gridManager.setElement(this.getRow(), this.getColumn(), p);
@@ -58,12 +58,25 @@ public class Diamond extends Element implements DangerousRock {
             }
             hasMomentum = false;
 
-        } else if(newRow < grid.length && grid[newRow][col] instanceof MagicWall && grid[newRow+1][col] instanceof Path ) {
+        } else if(newRow < grid.length && grid[newRow][col] instanceof MagicWall && (grid[newRow+1][col] instanceof Path
+                || grid[newRow + 1][col] instanceof Player)) {
+            if(grid[newRow+1][col] instanceof Player){
+                System.out.println("Diamond has crushed player");
+            }
             MagicWall magicWall = (MagicWall) grid[newRow][col];
-            magicWall.transformRock(this,gridManager);
+            magicWall.transformRock(this, gridManager);
             //row under magic wall is within range , and is a path ,
             // anything else it stays over the  magic wall until its clear beneath the magic wall
             //turn into diamond and vice versa
+            gainMomentum();
+        } else if (newRow < grid.length && grid[newRow][col] instanceof MagicWall &&  grid[newRow+1][col] instanceof Player) {
+            MagicWall magicWall = (MagicWall) grid[newRow][col];
+            magicWall.transformRock(this, gridManager);
+            //row under magic wall is within range , and is a path ,
+            // anything else it stays over the  magic wall until its clear beneath the magic wall
+            //turn into diamond and vice versa
+            gainMomentum();
+
         }else {
             hasMomentum = false; // Reset momentum if the diamond stops
         }

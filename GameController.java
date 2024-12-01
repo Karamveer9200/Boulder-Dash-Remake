@@ -105,6 +105,7 @@ public class GameController {
             diamond.fall(gridManager);
 //            System.out.println("Processing Diamond at (" + diamond.getRow() + ", " + diamond.getColumn() + ")");
 //            System.out.println("Element below Diamond: "+ gridManager.getElement(diamond.getRow()+1, diamond.getColumn()));
+
         }
         draw();
     }

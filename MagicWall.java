@@ -11,6 +11,7 @@ public class MagicWall extends Tile {
     }
     public void transformRock(Element element,GridManager gridManager) {
         if (element instanceof Boulder) {
+            System.out.println("Boulder entered a magic wall");
             Diamond diamond = new Diamond(element.getRow() + 2,element.getColumn() );
             gridManager.setElement(element.getRow() + 2, element.getColumn(), diamond);
             gridManager.addToList(diamond);
