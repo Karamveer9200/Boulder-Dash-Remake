@@ -57,6 +57,7 @@ public class Main extends Application {
 		KeyFrame playerKeyFrame = new KeyFrame(Duration.millis(50), event -> {
 			gameController.playerTick();
 		});
+		//add keyframe for checking neighboring tiles to enemies , instance of that method is in flies 12/1/2024 - Omar
 
 		KeyFrame dangerousRocksRollKeyFrame = new KeyFrame(Duration.millis(1500), event -> {
 			gameController.boulderRollTick();

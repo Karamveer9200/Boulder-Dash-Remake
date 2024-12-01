@@ -18,7 +18,7 @@ public class GridManager {
     final ArrayList<Frog> frogs = new ArrayList<>();
     final ArrayList<Amoeba> amoebas = new ArrayList<>();
     private  Player player;
-//    private Exit exit;
+    private Exit exit;
 
     /**
      * Constructs a GridManager with a grid template.

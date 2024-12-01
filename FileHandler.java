@@ -20,7 +20,7 @@ public class FileHandler {
 //            case 15 -> new Key(row, col, KeyColour.YELLOW);
 //            case 16 -> new LockedDoor(row, col, KeyColour.BLUE);
 //            case 17 -> new Key(row, col, KeyColour.BLUE);
-//            case 18 -> new Exit(row, col);
+//            case 18 ->  exit = new Exit(row, col);
 //            case 19 -> new Butterfly(row, col, followsLeftEdge);
 //            case 20 -> new Firefly(row, col, followsLeftEdge);
 

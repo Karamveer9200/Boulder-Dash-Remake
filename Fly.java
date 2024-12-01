@@ -37,6 +37,7 @@ public class Fly extends Element {
             Element target = grid[newRow][newCol];
 
             // Move to new position if the target is a Path
+            // we are going to need to change how flies/enemies kill a neighboring Player
             if (target instanceof Path && !checkNeighboursForPlayer(target, grid, newRow, newCol)) {
                 gridManager.setElement(this.getRow(), this.getColumn(), new Path(this.getRow(), this.getColumn()));
                 gridManager.setElement(newRow, newCol, this); // Move to new position
