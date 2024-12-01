@@ -65,10 +65,11 @@ public class Fly extends Element {
     applies killing player if it is in the target rows location , i believe this should be its own tick
      */
     private boolean checkNeighboursForPlayer(Element target, Element [][] grid, int newRow, int newCol) {
-        Element targetRightNeighbor = grid[newRow][newCol+1];
-        Element targetLeftNeighbor = grid[newRow][newCol-1];
-        Element targetDownNeighbor = grid[newRow+1][newCol];
-        Element targetUpNeighbor = grid[newRow-1][newCol];
+        // Check bounds and get neighbors safely
+        Element targetRightNeighbor = (newCol + 1 < grid[0].length) ? grid[newRow][newCol + 1] : null;
+        Element targetLeftNeighbor = (newCol - 1 >= 0) ? grid[newRow][newCol - 1] : null;
+        Element targetDownNeighbor = (newRow + 1 < grid.length) ? grid[newRow + 1][newCol] : null;
+        Element targetUpNeighbor = (newRow - 1 >= 0) ? grid[newRow - 1][newCol] : null;
         if( targetUpNeighbor instanceof Player
                 || targetDownNeighbor instanceof Player || targetRightNeighbor instanceof Player
                 || targetLeftNeighbor instanceof Player ){
