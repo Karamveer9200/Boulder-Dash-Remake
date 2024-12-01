@@ -13,7 +13,7 @@ public class GameController {
     private final Canvas canvas;
     private final GridManager gridManager;
     private final Renderer renderer;
-    private final Player player;
+    private final Player player ;
     private final InputHandler inputHandler;
     private int tickCounter;
 
@@ -38,7 +38,7 @@ public class GameController {
         this.canvas = canvas;
         this.gridManager = new GridManager(gridTemplate);
         this.renderer = new Renderer();
-        this.player = new Player(0,0);
+        this.player = gridManager.getPlayer();
         this.inputHandler = new InputHandler();
         initializePlayer(gridTemplate);
     }
@@ -72,9 +72,9 @@ public class GameController {
         ArrayList<Boulder> boulders = new ArrayList<>(gridManager.getBoulders());
         for (Boulder boulder : boulders) {
             boulder.fall(gridManager);
+
 //            System.out.println("Processing Boulder at (" + boulder.getRow() + ", " + boulder.getColumn() + ")");
 //            System.out.println("Element below boulder: "+ gridManager.getElement(boulder.getRow()+1, boulder.getColumn()));
-
         }
         draw();
     }

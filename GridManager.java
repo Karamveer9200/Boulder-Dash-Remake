@@ -18,7 +18,7 @@ public class GridManager {
     final ArrayList<Frog> frogs = new ArrayList<>();
     final ArrayList<Amoeba> amoebas = new ArrayList<>();
     private  Player player;
-    private Exit exit;
+//    private Exit exit;
 
     /**
      * Constructs a GridManager with a grid template.
@@ -44,23 +44,21 @@ public class GridManager {
         getDiamonds().clear();
         getFrogs().clear();
         getAmoebas().clear();
+        getButterflies().clear();
+        getFireflies().clear();
+
 
         player.resetDiamondCountStatus();
         player.resetKeyInventory();
 
         for (int row = 0; row < gridTemplate.length; row++) {
             for (int col = 0; col < gridTemplate[row].length; col++) {
-                Element element = createElement(this, gridTemplate[row][col], row, col);
+                Element element = createElement(this, gridTemplate[row][col], row, col, true);
                 elementGrid[row][col] = element;
                 addToList(element);
             }
         }
 
-        // Lock the new exit
-        if (exit != null) {
-            exit.lock();
-            System.out.println("New Exit locked after reset. Player diamonds collected  " + player.isHasEnoughDiamonds());
-        }
     }
 
     /**
@@ -78,7 +76,7 @@ public class GridManager {
         getAmoebas().clear();
         getButterflies().clear();
         getFireflies().clear();
-        // follsLeftEdge is true by default
+        // follows LeftEdge is true by default
         for (int row = 0; row < gridTemplate.length; row++) {
             for (int col = 0; col < gridTemplate[row].length; col++) {
                 Element element = createElement(this,gridTemplate[row][col], row, col, true);
@@ -117,7 +115,7 @@ public class GridManager {
             case 15 -> new Key(row, col, KeyColour.YELLOW);
             case 16 -> new LockedDoor(row, col, KeyColour.BLUE);
             case 17 -> new Key(row, col, KeyColour.BLUE);
-            case 18 -> exit = new Exit(row, col);
+            case 18 -> new Exit(row, col);
             case 19 -> new Butterfly(row, col, followsLeftEdge);
             case 20 -> new Firefly(row, col, followsLeftEdge);
 
@@ -275,5 +273,6 @@ public class GridManager {
             }
             System.out.println();
         }
+        System.out.println("---------------------------------------------------------------------------------");
     }
 }

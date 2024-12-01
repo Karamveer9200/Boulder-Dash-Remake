@@ -35,4 +35,8 @@ public class Exit extends Tile {
         return canBeEntered;
     }
 
+    @Override
+    public String toString() {
+        return super.toString() + " Unlocked: " + canBeEntered;
+    }
 }

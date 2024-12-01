@@ -161,7 +161,7 @@ public class Player extends Element {
 
     @Override
     public String toString() {
-        return "Player";
+        return "Player CollectedDiamonds: " + diamondCount;
     }
 
 }
