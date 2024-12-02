@@ -146,11 +146,6 @@ public class Player extends Element {
         return false;
     }
 
-
-
-
-
-
     @Override
     public String toString() {
         return "Player";

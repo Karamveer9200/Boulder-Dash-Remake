@@ -24,6 +24,12 @@ public class FileHandler {
             int amoebaGrowthRate = Integer.parseInt(splitAmoebaInfo[0]);
             int amoebaSizeLimit = Integer.parseInt(splitAmoebaInfo[1]);
 
+            String[] splitCollectedKeys = in.nextLine().split(" ");
+            for (int i = 0; i < splitCollectedKeys.length; i++)
+            {
+                // Have to write code here that reads in collected keys so far
+            }
+
             String[][] initialGrid = new String[height][width];
             int i = 0;
             while (in.hasNextLine()) {
@@ -54,7 +60,8 @@ public class FileHandler {
             out.println(currentGrid[0].length + " " + currentGrid.length);
             out.println(120); //Pass seconds left and output it here
             out.println(10); //Pass diamonds left to collect and output it here
-            out.println(2 + " " + 8); //Pass Ameoba growthrate and size limit and output it here
+            out.println(2 + " " + 8); //Pass Amoeba growth rate and size limit and output it here
+            out.println(); //Code here to output all the player's collected keys so far.
 
             for (int i = 0; i < currentGrid.length; i++) {
                 for (int j = 0; j < currentGrid[i].length; j++) {
@@ -75,6 +82,15 @@ public class FileHandler {
                         case "Frog" -> out.print("F");
                         case "Amoeba" -> out.print("A");
 
+                        case "REDKey" -> out.print("RK");
+                        case "REDLockedDoor" -> out.print("RLD");
+                        case "GREENKey" -> out.print("GK");
+                        case "GREENLockedDoor" -> out.print("GLD");
+                        case "YELLOWKey" -> out.print("YK");
+                        case "YELLOWLockedDoor" -> out.print("YLD");
+                        case "BLUEKey" -> out.print("BK");
+                        case "BLUELockedDoor" -> out.print("BLK");
+
                         //HOW TO SPECIFY FIREFLY AND BUTTERFLY LEFT OR RIGHT? IS IT IN THEIR NAME?
                         // MAYBE AN IF gridManager.getElement(i,j).isButtefly && isLeft???
 //                            //case "FFL" -> new FireFly(row,col,LEFT);
@@ -83,15 +99,7 @@ public class FileHandler {
 //                            //case "BFR" -> new FireFly(row,col,RIGHT);
 
 
-                        //HOW TO DO KEYS AND DOORS? IS IT IN THEIR NAME OR SHOULD WE DO IF STATEMENT?
-//                            case "RLD" -> new LockedDoor(row, col, KeyColour.RED);
-//                            case "RK" -> new Key(row, col, KeyColour.RED);
-//                            case "GLD" -> new LockedDoor(row, col, KeyColour.GREEN);
-//                            case "GK" -> new Key(row, col, KeyColour.GREEN);
-//                            case "YLD" -> new LockedDoor(row, col, KeyColour.YELLOW);
-//                            case "YK" -> new Key(row, col, KeyColour.YELLOW);
-//                            case "BLD" -> new LockedDoor(row, col, KeyColour.BLUE);
-//                            case "BK" -> new Key(row, col, KeyColour.BLUE);
+                        //
                     }
                     if (!(j == currentGrid[i].length - 1)) {
                         out.print(" ");
