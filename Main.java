@@ -19,8 +19,8 @@ import javafx.util.Duration;
 public class Main extends Application {
 	public static final int WINDOW_WIDTH = 800;
 	public static final int WINDOW_HEIGHT = 500;
-	public static final int GRID_CELL_WIDTH = 50;
-	public static final int GRID_CELL_HEIGHT = 50;
+	public static final int GRID_CELL_WIDTH = 30;
+	public static final int GRID_CELL_HEIGHT = 30;
 
 	// Timeline for periodic ticks
 	private Timeline playerTickTimeline;
