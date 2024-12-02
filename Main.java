@@ -150,7 +150,13 @@ public class Main extends Application {
 			gameController.draw();
 		});
 
-		toolbar.getChildren().addAll(resetButton, centerButton, startTickButton, stopTickButton,resetGridButton);
+		Button saveButton = new Button("Save Game");
+		saveButton.setOnAction(e -> {
+			FileHandler.writeFile(gameController.getGridManager());
+		});
+
+		toolbar.getChildren().addAll(resetButton, centerButton, startTickButton, stopTickButton,
+				resetGridButton, saveButton);
 		root.setTop(toolbar);
 
 		return root;
