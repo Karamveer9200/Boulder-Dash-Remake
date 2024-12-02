@@ -32,7 +32,7 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		// Load the initial grid from a file
-		int[][] initialGrid = FileHandler.readFile("PlaceHolder.txt");
+		String[][] initialGrid = FileHandler.readFile("PlaceHolder.txt");
 
 		final int canvasWidth = initialGrid[0].length * GRID_CELL_WIDTH;
 		final int canvasHeight = initialGrid.length * GRID_CELL_HEIGHT;
@@ -144,7 +144,7 @@ public class Main extends Application {
 
 		Button resetGridButton = new Button("Reset Grid");
 		resetGridButton.setOnAction(e -> {
-			int[][] initialGrid = FileHandler.readFile("PlaceHolder.txt");
+			String[][] initialGrid = FileHandler.readFile("PlaceHolder.txt");
 			gameController.getGridManager().initializeGrid(initialGrid);
 			gameController.initializePlayer(initialGrid);
 			gameController.draw();

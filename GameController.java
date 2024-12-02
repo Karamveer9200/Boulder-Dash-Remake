@@ -34,7 +34,7 @@ public class GameController {
      * @param gridTemplate the 2D array representing the initial grid layout
      * @param canvas       the Canvas object used for rendering the game
      */
-    public GameController(int[][] gridTemplate, Canvas canvas) {
+    public GameController(String[][] gridTemplate, Canvas canvas) {
         this.canvas = canvas;
         this.gridManager = new GridManager(gridTemplate);
         this.renderer = new Renderer();
@@ -49,7 +49,7 @@ public class GameController {
      *
      * @param gridTemplate the 2D array representing the grid layout
      */
-    public void initializePlayer(int[][] gridTemplate) {
+    public void initializePlayer(String[][] gridTemplate) {
         Element[][] elementGrid = gridManager.getElementGrid();
         for (int row = 0; row < gridTemplate.length; row++) {
             for (int col = 0; col < gridTemplate[row].length; col++) {

@@ -1,7 +1,7 @@
-5 6
-W W W W W
-W P P P W
-W P P P W
-W P P P W
-W P P P W
-W W W W W
+6 6
+NW NW NW NW NW NW
+NW DT P P P NW
+NW P P P P NW
+NW P P P P NW
+NW P P P P NW
+NW NW NW NW NW NW
