@@ -1,8 +1,5 @@
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.KeyCode;
-
-import javax.swing.plaf.basic.BasicMenuBarUI;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -16,7 +13,6 @@ public class GameController {
     private final Renderer renderer;
 //    private Player player ;
     private final InputHandler inputHandler;
-    private int tickCounter;
     public static boolean gameStatus = true;
 
     /**
@@ -26,7 +22,7 @@ public class GameController {
         LEFT,
         RIGHT,
         DOWN,
-        UP;
+        UP
     }
 
     /**
@@ -43,9 +39,20 @@ public class GameController {
 //        this.player = gridManager.getPlayer();
         this.inputHandler = new InputHandler();
 //        gridManager.initializePlayer(gridTemplate);
-//        gameStart();
+
     }
 
+    private void replacePlayerWithPath(int playerRow, int playerCol) {
+        // Replace the player with a Path in the grid
+        gridManager.setElement(playerRow, playerCol, new Path(playerRow, playerCol));
+
+        // Remove the player from the game
+        gridManager.removeFromList(gridManager.getPlayer());
+
+        // Optional: Stop input handling and end the game
+        System.out.println("Player has been replaced with Path at row: " + playerRow + ", col: " + playerCol);
+        gameOver();
+    }
 
 
     private void checkNeighboursForPlayer(Element enemy, Element [][] grid) {
@@ -57,20 +64,17 @@ public class GameController {
         Element currentDownNeighbor = (enemyRow + 1 < grid.length) ? grid[enemyRow + 1][enemyCol] : null;
         Element currentUpNeighbor = (enemyRow - 1 >= 0) ? grid[enemyRow - 1][enemyCol] : null;
 
-        if( currentUpNeighbor instanceof Player
-                || currentDownNeighbor instanceof Player || currentRightNeighbor instanceof Player
-                || currentLeftNeighbor instanceof Player ){
-            //expand method to kill player
-//            by stopping input and ending the game
-            // NEED TO BE ABLE TO KNOW WHERE TO REPLACE THE PLAYER WITH PATH
-            gridManager.setElement(enemyRow, enemyCol, new Path(enemy.getRow(), enemy.getColumn())); // Replace player with Frog
-            gridManager.removeFromList(gridManager.getPlayer()); // Remove player from the game
-            enemy.setRow(enemyRow);
-            enemy.setColumn(enemyCol);
-            System.out.println("Player has been killed");
-            gameOver();
+        if (currentUpNeighbor instanceof Player) {
+            replacePlayerWithPath(enemyRow - 1, enemyCol); // Replace player at the UP position
+        } else if (currentDownNeighbor instanceof Player) {
+            replacePlayerWithPath(enemyRow + 1, enemyCol); // Replace player at the DOWN position
+        } else if (currentRightNeighbor instanceof Player) {
+            replacePlayerWithPath(enemyRow, enemyCol + 1); // Replace player at the RIGHT position
+        } else if (currentLeftNeighbor instanceof Player) {
+            replacePlayerWithPath(enemyRow, enemyCol - 1); // Replace player at the LEFT position
         }
     }
+
 
     public void killPlayerTick() {
         ArrayList<Frog> frogs = gridManager.getFrogs();
