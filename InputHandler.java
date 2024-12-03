@@ -30,6 +30,7 @@ public class InputHandler {
         }
     }
 
+
     /**
      * Checks if there is a pending player input.
      *

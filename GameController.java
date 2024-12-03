@@ -14,10 +14,10 @@ public class GameController {
     private final Canvas canvas;
     private final GridManager gridManager;
     private final Renderer renderer;
-    private final Player player ;
+//    private Player player ;
     private final InputHandler inputHandler;
     private int tickCounter;
-    private boolean gameStatus = true;
+    public static boolean gameStatus = true;
 
     /**
      * Represents possible inputs for the player.
@@ -40,30 +40,13 @@ public class GameController {
         this.canvas = canvas;
         this.gridManager = new GridManager(gridTemplate);
         this.renderer = new Renderer();
-        this.player = gridManager.getPlayer();
+//        this.player = gridManager.getPlayer();
         this.inputHandler = new InputHandler();
-        initializePlayer(gridTemplate);
+//        gridManager.initializePlayer(gridTemplate);
 //        gameStart();
     }
 
-    /**
-     * Initializes the player's position based on the grid template.
-     * Searches for the Player element in the grid and sets its initial location.
-     *
-     * @param gridTemplate the 2D array representing the grid layout
-     */
-    public void initializePlayer(int[][] gridTemplate) {
-        Element[][] elementGrid = gridManager.getElementGrid();
-        for (int row = 0; row < gridTemplate.length; row++) {
-            for (int col = 0; col < gridTemplate[row].length; col++) {
-                if (elementGrid[row][col] instanceof Player) {
-                    player.setRow(row);
-                    player.setColumn(col);
-                    break;
-                }
-            }
-        }
-    }
+
 
     private void checkNeighboursForPlayer(Element enemy, Element [][] grid) {
         // Check bounds and get neighbors safely
@@ -79,8 +62,9 @@ public class GameController {
                 || currentLeftNeighbor instanceof Player ){
             //expand method to kill player
 //            by stopping input and ending the game
+            // NEED TO BE ABLE TO KNOW WHERE TO REPLACE THE PLAYER WITH PATH
             gridManager.setElement(enemyRow, enemyCol, new Path(enemy.getRow(), enemy.getColumn())); // Replace player with Frog
-            gridManager.removeFromList(player); // Remove player from the game
+            gridManager.removeFromList(gridManager.getPlayer()); // Remove player from the game
             enemy.setRow(enemyRow);
             enemy.setColumn(enemyCol);
             System.out.println("Player has been killed");
@@ -172,7 +156,7 @@ public class GameController {
         // avoids problems with concurrency
         ArrayList<Frog> frogs = new ArrayList<>(gridManager.getFrogs());
         for (Frog frog : frogs) {
-            frog.seekAndKill(gridManager, player);
+            frog.seekAndKill(gridManager, gridManager.getPlayer());
         }
         draw();
     }
@@ -187,7 +171,7 @@ public class GameController {
     public void butterflyTick() {
         ArrayList<Butterfly> butterflies = new ArrayList<>(gridManager.getButterflies());
         for (Butterfly butterfly : butterflies) {
-            butterfly.move(gridManager, player);
+            butterfly.move(gridManager, gridManager.getPlayer());
         }
         draw();
     }
@@ -195,7 +179,7 @@ public class GameController {
     public void fireflyTick() {
         ArrayList<Firefly> fireflies = new ArrayList<>(gridManager.getFireflies());
         for (Firefly firefly : fireflies) {
-            firefly.move(gridManager, player);
+            firefly.move(gridManager, gridManager.getPlayer());
         }
         draw();
     }
@@ -206,29 +190,29 @@ public class GameController {
      * Processes player movement and redraws the game.
      */
     public void playerTick() {
-        if(gameStatus) {
+        if(gridManager.getPlayer()!=null) {
             if (inputHandler.isInputPending()) {
                 PlayerInput input = inputHandler.consumeInput();
                 if (input != null) {
                     switch (input) {
-                        case UP -> player.movePlayer(
-                                player.getRow() - 1,
-                                player.getColumn(),
+                        case UP -> gridManager.getPlayer().movePlayer(
+                                gridManager.getPlayer().getRow() - 1,
+                                gridManager.getPlayer().getColumn(),
                                 gridManager
                         );
-                        case DOWN -> player.movePlayer(
-                                player.getRow() + 1,
-                                player.getColumn(),
+                        case DOWN -> gridManager.getPlayer().movePlayer(
+                                gridManager.getPlayer().getRow() + 1,
+                                gridManager.getPlayer().getColumn(),
                                 gridManager
                         );
-                        case LEFT -> player.movePlayer(
-                                player.getRow(),
-                                player.getColumn() - 1,
+                        case LEFT -> gridManager.getPlayer().movePlayer(
+                                gridManager.getPlayer().getRow(),
+                                gridManager.getPlayer().getColumn() - 1,
                                 gridManager
                         );
-                        case RIGHT -> player.movePlayer(
-                                player.getRow(),
-                                player.getColumn() + 1,
+                        case RIGHT -> gridManager.getPlayer().movePlayer(
+                                gridManager.getPlayer().getRow(),
+                                gridManager.getPlayer().getColumn() + 1,
                                 gridManager
                         );
                     }
@@ -242,7 +226,7 @@ public class GameController {
         gameStatus = false;
     }
 
-    public void gameStart() {
+    public static void gameStart() {
         gameStatus = true;
     }
 
@@ -284,14 +268,14 @@ public class GameController {
      * Resets the player's location to the top-left corner of the grid (0, 0).
      */
     public void resetPlayerLocation() {
-        player.movePlayer(0, 0, gridManager);
+        gridManager.getPlayer().movePlayer(0, 0, gridManager);
     }
 
     /**
      * Moves the player to the center of the grid.
      */
     public void movePlayerToCenter() {
-        player.movePlayer(
+        gridManager.getPlayer().movePlayer(
                 gridManager.getElementGrid().length / 2,
                 gridManager.getElementGrid()[0].length / 2,
                 gridManager

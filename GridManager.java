@@ -20,6 +20,7 @@ public class GridManager {
     private  Player player;
     private Exit exit;
 
+
     /**
      * Constructs a GridManager with a grid template.
      * Initializes the grid based on the provided template and categorizes elements into lists.
@@ -33,12 +34,32 @@ public class GridManager {
     }
 
     /**
+     * Initializes the player's position based on the grid template.
+     * Searches for the Player element in the grid and sets its initial location.
+     *
+     * @param gridTemplate the 2D array representing the grid layout
+     */
+    public void initializePlayer(int[][] gridTemplate) {
+        Element[][] elementGrid = this.getElementGrid();
+        for (int row = 0; row < gridTemplate.length; row++) {
+            for (int col = 0; col < gridTemplate[row].length; col++) {
+                if (elementGrid[row][col] instanceof Player) {
+                    player.setRow(row);
+                    player.setColumn(col);
+                    break;
+                }
+            }
+        }
+    }
+
+    /**
      * Initializes the grid and categorizes elements into appropriate lists.
      * Clears any existing lists before initializing.
      *
      * @param gridTemplate the 2D array representing the initial grid setup
      */
     public void reinitializeGrid(int[][] gridTemplate) {
+        initializePlayer(gridTemplate);
         Exit.toggleFalseExitExists();
         getBoulders().clear();
         getDiamonds().clear();
@@ -46,6 +67,7 @@ public class GridManager {
         getAmoebas().clear();
         getButterflies().clear();
         getFireflies().clear();
+        GameController.gameStart();
 
 
 
@@ -78,6 +100,7 @@ public class GridManager {
         getAmoebas().clear();
         getButterflies().clear();
         getFireflies().clear();
+        GameController.gameStart();
         // follows LeftEdge is true by default
         for (int row = 0; row < gridTemplate.length; row++) {
             for (int col = 0; col < gridTemplate[row].length; col++) {
@@ -117,7 +140,7 @@ public class GridManager {
             case 15 -> new Key(row, col, KeyColour.YELLOW);
             case 16 -> new LockedDoor(row, col, KeyColour.BLUE);
             case 17 -> new Key(row, col, KeyColour.BLUE);
-            case 18 -> new Exit(row, col);
+            case 18 -> exit = new Exit(row, col);
             case 19 -> new Butterfly(row, col, followsLeftEdge);
             case 20 -> new Firefly(row, col, followsLeftEdge);
 
