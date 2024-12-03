@@ -7,7 +7,7 @@ import java.util.*;
 public class FileHandler {
 
     public static String[][] readFile(String filename) {
-        String directoryPath = "Boulder-Dash-Remake/Level1.txt";
+        String directoryPath = "Boulder-Dash-Remake/txt/Level1.txt";
         File readFile = new File(directoryPath);
         try
         {
