@@ -48,6 +48,8 @@ public class GridManager {
         getFireflies().clear();
 
 
+
+        // Clear specific references
         player.resetDiamondCountStatus();
         player.resetKeyInventory();
 
@@ -265,7 +267,7 @@ public class GridManager {
     }
 
 
-    // built for debuging purpuse
+    // built for debugging purpose
     public void printGridState() {
         for (int row = 0; row < elementGrid.length; row++) {
             for (int col = 0; col < elementGrid[row].length; col++) {

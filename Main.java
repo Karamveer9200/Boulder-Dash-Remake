@@ -29,6 +29,7 @@ public class Main extends Application {
 	private Timeline frogTickTimeline;
 	private Timeline aomeebaTickTimeline;
 	private Timeline flyTickTimeline;
+	private Timeline killPlayerTickTimeLine;
 	public static Player player;
 	@Override
 	public void start(Stage primaryStage) {
@@ -57,7 +58,11 @@ public class Main extends Application {
 		KeyFrame playerKeyFrame = new KeyFrame(Duration.millis(50), event -> {
 			gameController.playerTick();
 		});
+
 		//add keyframe for checking neighboring tiles to enemies , instance of that method is in flies 12/1/2024 - Omar
+		KeyFrame killPlayerKeyFrame = new KeyFrame(Duration.millis(20), event -> {
+			gameController.killPlayerTick();
+		});
 
 		KeyFrame dangerousRocksRollKeyFrame = new KeyFrame(Duration.millis(1500), event -> {
 			gameController.boulderRollTick();
@@ -90,9 +95,11 @@ public class Main extends Application {
 		flyTickTimeline = new Timeline(flyKeyFrame);
 		frogTickTimeline = new Timeline(frogKeyFrame);
 		aomeebaTickTimeline = new Timeline(aomeebaKeyFrame);
+		killPlayerTickTimeLine = new Timeline(killPlayerKeyFrame);
 
 		// Set the cycle count to Animation.INDEFINITE
 		playerTickTimeline.setCycleCount(Animation.INDEFINITE);
+		killPlayerTickTimeLine.setCycleCount(Animation.INDEFINITE);
 		dangerousRockFallTickTimeline.setCycleCount(Animation.INDEFINITE);
 		dangerousRockRollTimeline.setCycleCount(Animation.INDEFINITE);
 		flyTickTimeline.setCycleCount(Animation.INDEFINITE);
@@ -140,6 +147,7 @@ public class Main extends Application {
 			flyTickTimeline.play();
 			frogTickTimeline.play();
 			aomeebaTickTimeline.play();
+			killPlayerTickTimeLine.play();
 			startTickButton.setDisable(true);
 			stopTickButton.setDisable(false);
 		});
@@ -151,6 +159,7 @@ public class Main extends Application {
 			flyTickTimeline.stop();
 			frogTickTimeline.stop();
 			aomeebaTickTimeline.stop();
+			killPlayerTickTimeLine.stop();
 			stopTickButton.setDisable(true);
 			startTickButton.setDisable(false);
 		});

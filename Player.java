@@ -155,7 +155,7 @@ public class Player extends Element {
     public void resetDiamondCountStatus() {
         this.diamondCount = 0;
         this.hasEnoughDiamonds = false;
-        System.out.println("Diamond count reset");
+        System.out.println("Diamond count reset to: " + this.diamondCount);
     }
 
 

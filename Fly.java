@@ -38,7 +38,7 @@ public class Fly extends Element {
 
             // Move to new position if the target is a Path
             // we are going to need to change how flies/enemies kill a neighboring Player
-            if (target instanceof Path && !checkNeighboursForPlayer(target, grid, newRow, newCol)) {
+            if (target instanceof Path ) {
                 gridManager.setElement(this.getRow(), this.getColumn(), new Path(this.getRow(), this.getColumn()));
                 gridManager.setElement(newRow, newCol, this); // Move to new position
                 this.setRow(newRow);
@@ -47,7 +47,7 @@ public class Fly extends Element {
                 this.currentDirection = nextDirection;
 
                 // If the target is a Player, kill the player
-            } else if (target instanceof Player || checkNeighboursForPlayer(target,grid, newRow, newCol) ) {
+            } else if (target instanceof Player ) {
                 gridManager.setElement(this.getRow(), this.getColumn(), new Path(this.getRow(), this.getColumn()));
                 gridManager.setElement(newRow, newCol, this); // Replace player with Frog
                 gridManager.removeFromList(player); // Remove player from the game
@@ -62,24 +62,7 @@ public class Fly extends Element {
         }
     }
 
-    /*
-    applies killing player if it is in the target rows location , i believe this should be its own tick
-     */
-    private boolean checkNeighboursForPlayer(Element target, Element [][] grid, int newRow, int newCol) {
-        // Check bounds and get neighbors safely
-        Element targetRightNeighbor = (newCol + 1 < grid[0].length) ? grid[newRow][newCol + 1] : null;
-        Element targetLeftNeighbor = (newCol - 1 >= 0) ? grid[newRow][newCol - 1] : null;
-        Element targetDownNeighbor = (newRow + 1 < grid.length) ? grid[newRow + 1][newCol] : null;
-        Element targetUpNeighbor = (newRow - 1 >= 0) ? grid[newRow - 1][newCol] : null;
-        if( targetUpNeighbor instanceof Player
-                || targetDownNeighbor instanceof Player || targetRightNeighbor instanceof Player
-                || targetLeftNeighbor instanceof Player ){
-            return true;
-        }else {
-            return false;
-        }
 
-    }
 
     private int getNextDirection(Element[][] grid) {
         int direction = currentDirection;

@@ -1,6 +1,7 @@
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.KeyCode;
 
+import javax.swing.plaf.basic.BasicMenuBarUI;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
@@ -16,6 +17,7 @@ public class GameController {
     private final Player player ;
     private final InputHandler inputHandler;
     private int tickCounter;
+    private boolean gameStatus = true;
 
     /**
      * Represents possible inputs for the player.
@@ -41,6 +43,7 @@ public class GameController {
         this.player = gridManager.getPlayer();
         this.inputHandler = new InputHandler();
         initializePlayer(gridTemplate);
+//        gameStart();
     }
 
     /**
@@ -59,6 +62,45 @@ public class GameController {
                     break;
                 }
             }
+        }
+    }
+
+    private void checkNeighboursForPlayer(Element enemy, Element [][] grid) {
+        // Check bounds and get neighbors safely
+        int enemyRow = enemy.getRow();
+        int enemyCol = enemy.getColumn();
+        Element currentRightNeighbor = (enemyCol + 1 < grid[0].length) ? grid[enemyRow][enemyCol + 1] : null;
+        Element currentLeftNeighbor = (enemyCol - 1 >= 0) ? grid[enemyRow][enemyCol - 1] : null;
+        Element currentDownNeighbor = (enemyRow + 1 < grid.length) ? grid[enemyRow + 1][enemyCol] : null;
+        Element currentUpNeighbor = (enemyRow - 1 >= 0) ? grid[enemyRow - 1][enemyCol] : null;
+
+        if( currentUpNeighbor instanceof Player
+                || currentDownNeighbor instanceof Player || currentRightNeighbor instanceof Player
+                || currentLeftNeighbor instanceof Player ){
+            //expand method to kill player
+//            by stopping input and ending the game
+            gridManager.setElement(enemyRow, enemyCol, new Path(enemy.getRow(), enemy.getColumn())); // Replace player with Frog
+            gridManager.removeFromList(player); // Remove player from the game
+            enemy.setRow(enemyRow);
+            enemy.setColumn(enemyCol);
+            System.out.println("Player has been killed");
+            gameOver();
+        }
+    }
+
+    public void killPlayerTick() {
+        ArrayList<Frog> frogs = gridManager.getFrogs();
+        ArrayList<Butterfly> butterflies = gridManager.getButterflies();
+        ArrayList<Firefly> fireflies = gridManager.getFireflies();
+        ArrayList<Element> enemies = new ArrayList<>();
+        enemies.addAll(frogs);
+        enemies.addAll(butterflies);
+        enemies.addAll(fireflies);
+
+        // Iterate through all entities
+        for (Element enemy : enemies) {
+//           System.out.println("Checking enemy at row: " + enemy.getRow() + ", col: " + enemy.getColumn());
+            checkNeighboursForPlayer(enemy, gridManager.getElementGrid());
         }
     }
 
@@ -164,34 +206,44 @@ public class GameController {
      * Processes player movement and redraws the game.
      */
     public void playerTick() {
-        if (inputHandler.isInputPending()) {
-            PlayerInput input = inputHandler.consumeInput();
-            if (input != null) {
-                switch (input) {
-                    case UP -> player.movePlayer(
-                            player.getRow() - 1,
-                            player.getColumn(),
-                            gridManager
-                    );
-                    case DOWN -> player.movePlayer(
-                            player.getRow() + 1,
-                            player.getColumn(),
-                            gridManager
-                    );
-                    case LEFT -> player.movePlayer(
-                            player.getRow(),
-                            player.getColumn() - 1,
-                            gridManager
-                    );
-                    case RIGHT -> player.movePlayer(
-                            player.getRow(),
-                            player.getColumn() + 1,
-                            gridManager
-                    );
+        if(gameStatus) {
+            if (inputHandler.isInputPending()) {
+                PlayerInput input = inputHandler.consumeInput();
+                if (input != null) {
+                    switch (input) {
+                        case UP -> player.movePlayer(
+                                player.getRow() - 1,
+                                player.getColumn(),
+                                gridManager
+                        );
+                        case DOWN -> player.movePlayer(
+                                player.getRow() + 1,
+                                player.getColumn(),
+                                gridManager
+                        );
+                        case LEFT -> player.movePlayer(
+                                player.getRow(),
+                                player.getColumn() - 1,
+                                gridManager
+                        );
+                        case RIGHT -> player.movePlayer(
+                                player.getRow(),
+                                player.getColumn() + 1,
+                                gridManager
+                        );
+                    }
                 }
             }
+            draw();
         }
-        draw();
+    }
+
+    public void gameOver() {
+        gameStatus = false;
+    }
+
+    public void gameStart() {
+        gameStatus = true;
     }
 
     /**
