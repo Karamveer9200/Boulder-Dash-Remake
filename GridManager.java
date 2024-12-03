@@ -77,7 +77,7 @@ public class GridManager {
 
         for (int row = 0; row < gridTemplate.length; row++) {
             for (int col = 0; col < gridTemplate[row].length; col++) {
-                Element element = createElement(this, gridTemplate[row][col], row, col, true);
+                Element element = createElement(this, gridTemplate[row][col], row, col, false);
                 elementGrid[row][col] = element;
                 addToList(element);
             }
@@ -104,7 +104,7 @@ public class GridManager {
         // follows LeftEdge is true by default
         for (int row = 0; row < gridTemplate.length; row++) {
             for (int col = 0; col < gridTemplate[row].length; col++) {
-                Element element = createElement(this,gridTemplate[row][col], row, col, true);
+                Element element = createElement(this,gridTemplate[row][col], row, col, false);
                 elementGrid[row][col] = element;
                 addToList(element);
             }

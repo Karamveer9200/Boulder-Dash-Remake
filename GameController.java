@@ -190,7 +190,7 @@ public class GameController {
      * Processes player movement and redraws the game.
      */
     public void playerTick() {
-        if(gridManager.getPlayer()!=null) {
+        if(gameStatus) {
             if (inputHandler.isInputPending()) {
                 PlayerInput input = inputHandler.consumeInput();
                 if (input != null) {
