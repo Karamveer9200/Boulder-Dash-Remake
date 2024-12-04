@@ -15,6 +15,12 @@ public class GameController {
     private final InputHandler inputHandler;
     public static boolean gameStatus = true;
 
+
+    private int nextExplosionRow;
+    private int nextExplosionCol;
+    private boolean waitingForExplosionAfterMath = false;
+    private boolean waitingForExplosion = false;
+
     /**
      * Represents possible inputs for the player.
      */
@@ -225,6 +231,34 @@ public class GameController {
             draw();
         }
     }
+
+    public void explosionTick() {
+        if (waitingForExplosion) {
+            // Create the initial explosion
+            Explosion.createExplosion(gridManager, nextExplosionRow, nextExplosionCol);
+            draw();
+            waitingForExplosionAfterMath = true;
+            waitingForExplosion= false;
+        } else if // Create the aftermath
+         (waitingForExplosionAfterMath) {
+            System.out.println("i should be aftermathing");
+            Explosion.createExplosionAfterMath(gridManager, nextExplosionRow, nextExplosionCol);
+            System.out.println(gridManager.getElement(1,1));
+            draw();
+            waitingForExplosionAfterMath = false;
+        }
+    }
+
+
+
+
+    public void createExplosion(int row, int column) {
+        waitingForExplosion = true;
+        nextExplosionRow = row;
+        nextExplosionCol = column;
+    }
+
+
 
     public void gameOver() {
         gameStatus = false;
