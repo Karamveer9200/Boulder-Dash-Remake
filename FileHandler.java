@@ -6,9 +6,8 @@ import java.util.*;
  */
 public class FileHandler {
 
-    public static String[][] readFile(String filename) {
-        String directoryPath = "Boulder-Dash-Remake/txt/Level1.txt";
-        File readFile = new File(directoryPath);
+    public static String[][] readFile(String fileName) {
+        File readFile = new File(fileName);
         try
         {
             Scanner in = new Scanner(readFile);

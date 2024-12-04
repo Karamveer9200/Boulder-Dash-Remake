@@ -57,7 +57,8 @@ public class Main extends Application {
 		Button newGameButton = new Button("Start New Game");
 		newGameButton.setOnAction(e -> {
             currentProfile = ProfileManager.promptForProfile(primaryStage);
-			setupGame(primaryStage);
+			String levelFile = "Boulder-Dash-Remake/txt/Level1.txt";
+			setupGame(primaryStage, levelFile);
 		});
 
 		Button loadGameButton = new Button("Load Game");
@@ -74,7 +75,8 @@ public class Main extends Application {
 			selectButton.setOnAction(event -> {
 				String selectedProfileName = profileDropdown.getValue(); // Get the selected profile name
 				if (selectedProfileName != null) {
-					//HERE WE LOAD EITHER THE MAX LEVEL OR THEIR SAVED LEVEL
+					String levelFile = "Boulder-Dash-Remake/txt/Level2.txt";
+					setupGame(primaryStage, levelFile);
 					dialog.close();
 				} else {
 					Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -105,7 +107,7 @@ public class Main extends Application {
 			}
 
 			Button selectButton = new Button("Delete");
-			selectButton.setStyle("-fx-background-color: red;"); // Red background, white text
+			selectButton.setStyle("-fx-background-color: red;"); // Make button red
 			selectButton.setOnAction(event -> {
 				String selectedProfileName = profileDropdown.getValue(); // Get the selected profile name
 				if (selectedProfileName != null) {
@@ -183,9 +185,9 @@ public class Main extends Application {
 	 *
 	 * @param primaryStage the primary stage for the game
 	 */
-	public void setupGame(Stage primaryStage) {
+	public void setupGame(Stage primaryStage, String levelFile) {
 		// Load the initial grid from a file
-		String[][] initialGrid = FileHandler.readFile("PlaceHolder.txt");
+		String[][] initialGrid = FileHandler.readFile(levelFile);
 
 		final int canvasWidth = initialGrid[0].length * GRID_CELL_WIDTH;
 		final int canvasHeight = initialGrid.length * GRID_CELL_HEIGHT;
@@ -305,6 +307,7 @@ public class Main extends Application {
 
 		Button saveButton = new Button("Save Game");
 		saveButton.setOnAction(e -> {
+			
 			FileHandler.writeFile(gameController.getGridManager());
 		});
 
@@ -320,39 +323,6 @@ public class Main extends Application {
 	 */
 	private void closeGame() {
 		System.exit(0);
-	}
-
-	/**
-	 * Displays the profile details in a new window.
-	 *
-	 * @param mainStage the main stage of the application
-	 * @param profile the player profile to display
-	 */
-	public void showProfileWindow(Stage mainStage, PlayerProfile profile) {
-		Stage profileStage = new Stage();
-		profileStage.setTitle("Profile Details");
-
-		Label profileNumberLabel = new Label("#" + profile.getPlayerId() + " " + profile.getName());
-		profileNumberLabel.setStyle("-fx-font-size: 24; -fx-font-weight: bold;");
-
-		Label maxLevelLabel = new Label("Highest Level Reached: " + profile.getMaxLevelReached());
-
-		Button backButton = new Button("Back");
-		backButton.setOnAction(e -> {
-			profileStage.close();
-			mainStage.show();
-		});
-
-		BorderPane root = new BorderPane();
-		VBox profileBox = new VBox(10, profileNumberLabel, maxLevelLabel);
-		profileBox.setStyle("-fx-padding: 20; -fx-alignment: center;");
-		root.setCenter(profileBox);
-		root.setBottom(backButton);
-		BorderPane.setMargin(backButton, new Insets(10));
-
-		Scene profileScene = new Scene(root, 400, 300);
-		profileStage.setScene(profileScene);
-		profileStage.show();
 	}
 
 	public static void main(String[] args) {

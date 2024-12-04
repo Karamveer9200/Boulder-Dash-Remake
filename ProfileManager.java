@@ -13,8 +13,6 @@ import java.util.stream.Collectors;
 
 public class ProfileManager {
 
-//    private static final Map<Integer, PlayerProfile> profiles = new HashMap<>();
-
     public static PlayerProfile promptForProfile(Stage primaryStage) {
         Stage dialog = new Stage();
         dialog.setTitle("Create Profile");
@@ -69,13 +67,6 @@ public class ProfileManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-//            for (int i = 0; i < profile.getHighScores().length; i++) {
-//                writer.write(profile.getHighScores()[i]);
-//                if (i != profile.getHighScores().length - 1) {
-//                    writer.write(" ");
-//                }
-//            }
-
     }
 
     public static PlayerProfile loadProfileFromFile(String fileName) {
@@ -83,12 +74,6 @@ public class ProfileManager {
             int playerId = Integer.parseInt(reader.readLine());
             String playerName = reader.readLine();
             int maxLevelReached = Integer.parseInt(reader.readLine());
-
-//            String[] highScoresLine = reader.readLine().split(" ");
-//            int highScore1 = Integer.parseInt(highScoresLine[0]);
-//            int highScore2 = Integer.parseInt(highScoresLine[1]);
-//            int highScore3 = Integer.parseInt(highScoresLine[2]);
-//            int[] highScores = {highScore1, highScore2, highScore3};
 
             PlayerProfile profile = new PlayerProfile(playerId, playerName, maxLevelReached);
             return profile;
