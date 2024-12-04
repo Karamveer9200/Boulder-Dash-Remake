@@ -74,7 +74,7 @@ public class HighScoreTable extends Application {
         List<PlayerProfile> top5Scores = getTop5HighScores();
         for (int i = 0; i < top5Scores.size(); i++) {
             PlayerProfile profile = top5Scores.get(i);
-            Label scoreLabel = new Label((i + 1) + ". " + profile.getName() + ": " + profile.getHighScore());
+            Label scoreLabel = new Label((i + 1) + ". " + profile.getName());
             highScoresBox.getChildren().add(scoreLabel);
         }
 
