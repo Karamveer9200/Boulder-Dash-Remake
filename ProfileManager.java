@@ -22,9 +22,6 @@ public class ProfileManager {
         TextField nameField = new TextField();
 
         PlayerProfile createdPlayerProfile = new PlayerProfile();
-        System.out.println(createdPlayerProfile.getPlayerId());
-        System.out.println(createdPlayerProfile.getMaxLevelReached());
-
 
         Button saveButton = new Button("Save");
         saveButton.setOnAction(e -> {

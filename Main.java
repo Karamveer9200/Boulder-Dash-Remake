@@ -111,12 +111,17 @@ public class Main extends Application {
 			selectButton.setOnAction(event -> {
 				String selectedProfileName = profileDropdown.getValue(); // Get the selected profile name
 				if (selectedProfileName != null) {
+					PlayerProfile profileToDelete = null;
 					for (PlayerProfile profile : profiles) {
 						if (profile.getName().equals(selectedProfileName)) {
-							int idToDelete = profile.getPlayerId();
-							profiles.remove(profile);
-							ProfileManager.deleteProfile(idToDelete);
+							profileToDelete = profile;
+							break;
 						}
+					}
+					if (profileToDelete != null) {
+						int idToDelete = profileToDelete.getPlayerId();
+						profiles.remove(profileToDelete);
+						ProfileManager.deleteProfile(idToDelete);
 					}
 					dialog.close();
 				} else {
