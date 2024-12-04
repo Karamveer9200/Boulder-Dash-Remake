@@ -3,11 +3,9 @@
  */
 public class PlayerProfile {
 
-    private static int idCounter = 1;
     private final int playerId;
     private String name;
     private int maxLevelReached;
-//    private final int[] highScores;
 
     /**
      * Constructs a new PlayerProfile with the specified name, maximum level reached, and high score.
@@ -16,10 +14,9 @@ public class PlayerProfile {
      * @param name the name of the player
      */
     public PlayerProfile(String name) {
-        this.playerId = idCounter++;
+        this.playerId = ProfileManager.getNextPlayerId();
         this.name = name;
         this.maxLevelReached = 0;
-//        this.highScores = new int[]{0, 0, 0};
     }
 
     /**
@@ -28,9 +25,8 @@ public class PlayerProfile {
      *
      */
     public PlayerProfile() {
-        this.playerId = idCounter++;
+        this.playerId = ProfileManager.getNextPlayerId();
         this.maxLevelReached = 1;
-//        this.highScores = new int[]{0, 0, 0};
     }
 
     /**
@@ -38,13 +34,10 @@ public class PlayerProfile {
      * Each profile is assigned a unique player ID.
      *
      */
-    public PlayerProfile(int playerId, String name, int maxLevelReached
-//                         , int[] highScores
-    ) {
+    public PlayerProfile(int playerId, String name, int maxLevelReached) {
         this.playerId = playerId;
         this.name = name;
         this.maxLevelReached = maxLevelReached;
-//        this.highScores = new int[]{0, 0, 0};
     }
 
     /**
@@ -92,24 +85,5 @@ public class PlayerProfile {
         this.maxLevelReached = maxLevelReached;
     }
 
-//    /**
-//     * Gets the player's high score.
-//     *
-//     * @return the high score
-//     */
-//    public int[] getHighScores() {
-//        return highScores;
-//    }
-//
-//    /**
-//     * Sets the player's high score.
-//     *
-//     * @param highScore the new high score
-//     */
-//    public void setHighScore(int index, int highScore) {
-//        if (highScores[index] < highScore) {
-//            highScores[index] = highScore;
-//        }
-//    }
 
 }

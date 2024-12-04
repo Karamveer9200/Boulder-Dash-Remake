@@ -149,4 +149,34 @@ public class ProfileManager {
             System.out.println("Folder does not exist or is not a directory: " + folderPath);
         }
     }
+
+    public static int getNextPlayerId() {
+        int playerId = 0;
+        String filePath = "Boulder-Dash-Remake/txt/NextPlayerId.txt";
+        File readFile = new File(filePath);
+
+        //Read Next Player ID
+        try
+        {
+            Scanner in = new Scanner(readFile);
+            playerId = Integer.parseInt(in.nextLine());
+        }
+        catch (FileNotFoundException exception)
+        {
+            System.out.println("Error in finding file");
+        }
+
+        //Increment Next Player ID by 1
+        try {
+            PrintWriter out = new PrintWriter(filePath);
+            out.print(playerId + 1);
+            out.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Cannot write file");
+        }
+        return playerId;
+    }
+
+
+
 }
