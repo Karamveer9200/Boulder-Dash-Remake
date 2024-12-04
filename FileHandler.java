@@ -55,7 +55,7 @@ public class FileHandler {
 
         try
         {
-            String outputFile = "Boulder-Dash-Remake/Level1Save.txt";
+            String outputFile = "Boulder-Dash-Remake/txt/Level1Save.txt";
             PrintWriter out = new PrintWriter(outputFile);
             out.println(currentGrid[0].length + " " + currentGrid.length);
             out.println(120); //Pass seconds left and output it here
@@ -105,7 +105,9 @@ public class FileHandler {
                         out.print(" ");
                     }
                 }
-                out.println();
+                if (i != currentGrid.length - 1) {
+                    out.println();
+                }
             }
             out.close();
         }
