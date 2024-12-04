@@ -235,30 +235,57 @@ public class GameController {
     public void explosionTick() {
         if (waitingForExplosion) {
             // Create the initial explosion
-            Explosion.createExplosion(gridManager, nextExplosionRow, nextExplosionCol);
+            createExplosion(nextExplosionRow, nextExplosionCol);
             draw();
             waitingForExplosionAfterMath = true;
             waitingForExplosion= false;
         } else if // Create the aftermath
          (waitingForExplosionAfterMath) {
-            System.out.println("i should be aftermathing");
-            Explosion.createExplosionAfterMath(gridManager, nextExplosionRow, nextExplosionCol);
-            System.out.println(gridManager.getElement(1,1));
+            createExplosionAfterMath(nextExplosionRow, nextExplosionCol);
             draw();
             waitingForExplosionAfterMath = false;
         }
     }
 
-
-
-
-    public void createExplosion(int row, int column) {
+    public void applyExplosion(int row, int column) {
         waitingForExplosion = true;
         nextExplosionRow = row;
         nextExplosionCol = column;
     }
 
+    public void createExplosion(int row, int col) {
+        Element[][] grid = gridManager.getElementGrid();
 
+        for (int i = row - 1; i <= row + 1; i++) {
+            for (int j = col - 1; j <= col + 1; j++) {
+                if (i >= 0 && i < grid.length && j >= 0 && j < grid[0].length) {
+                    if (gridManager.getElement(i,j) instanceof Player)
+                        gameStatus = false; //Kill the player
+                    if (gridManager.getElement(i,j) instanceof DangerousRock) {
+                        gridManager.removeFromList(grid[row][col]);
+                    }
+                    if (gridManager.getElement(i,j).isCanExplode()) {
+                        Explosion explosion = new Explosion(i, j);
+                        gridManager.setElement(i, j, explosion);
+                    }
+                }
+            }
+        }
+    }
+
+    public void createExplosionAfterMath (int row, int col) {
+        Element[][] grid = gridManager.getElementGrid();
+        for (int i = row - 1; i <= row + 1; i++) {
+            for (int j = col - 1; j <= col + 1; j++) {
+                if (i >= 0 && i < grid.length && j >= 0 && j < grid[0].length) {
+                    if (gridManager.getElement(i,j).isCanExplode()) {
+                        Path path = new Path(i, j);
+                        gridManager.setElement(i, j, path);
+                    }
+                }
+            }
+        }
+    }
 
     public void gameOver() {
         gameStatus = false;
