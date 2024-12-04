@@ -8,10 +8,8 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -75,8 +73,20 @@ public class Main extends Application {
 			selectButton.setOnAction(event -> {
 				String selectedProfileName = profileDropdown.getValue(); // Get the selected profile name
 				if (selectedProfileName != null) {
-					String levelFile = "Boulder-Dash-Remake/txt/Level2.txt";
-					setupGame(primaryStage, levelFile);
+					PlayerProfile profileToSelect = null;
+					for (PlayerProfile profile : profiles) {
+						if (profile.getName().equals(selectedProfileName)) {
+							profileToSelect = profile;
+							break;
+						}
+					}
+					if (profileToSelect != null) {
+						int level = profileToSelect.getMaxLevelReached();
+						String levelFile = "Boulder-Dash-Remake/txt/Level" + level + ".txt";
+						setupGame(primaryStage, levelFile);
+						dialog.close();
+
+					}
 					dialog.close();
 				} else {
 					Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -85,7 +95,10 @@ public class Main extends Application {
 					alert.setContentText("Please select a profile before proceeding.");
 					alert.showAndWait();
 				}
+
+
 			});
+
 
 			VBox layout = new VBox(10);
 			layout.getChildren().addAll(new Label("Select a player profile:"), profileDropdown, selectButton);

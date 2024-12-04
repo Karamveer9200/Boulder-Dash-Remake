@@ -22,7 +22,6 @@ public class HighScoreTableManager {
         dialog.setTitle("High Score Table for level " + level);
         dialog.initModality(Modality.APPLICATION_MODAL);
         ArrayList<HighScore> highScores = getHighScores(level);
-        System.out.println(highScores.size());
 
         // Create a VBox layout to hold the high scores
         VBox vbox = new VBox(10);  // 10 is the spacing between each label
