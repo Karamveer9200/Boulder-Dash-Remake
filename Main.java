@@ -22,8 +22,6 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * Main sets up the GUI and initializes everything for a game to take place.
@@ -147,17 +145,20 @@ public class Main extends Application {
 			dialog.initModality(Modality.APPLICATION_MODAL);
 
 			Button highScores1Button = new Button("Level 1 High Scores");
-			highScoresButton.setOnAction(eventHS1 -> {
-						dialog.close();
-					});
+			highScores1Button.setOnAction(eventHS1 -> {
+				HighScoreTableManager.displayHighScoreTable(1);
+				dialog.close();
+			});
 
 			Button highScores2Button = new Button("Level 2 High Scores");
-			highScoresButton.setOnAction(eventHS1 -> {
+			highScores2Button.setOnAction(eventHS2 -> {
+				HighScoreTableManager.displayHighScoreTable(2);
 				dialog.close();
 			});
 
 			Button highScores3Button = new Button("Level 3 High Scores");
-			highScoresButton.setOnAction(eventHS1 -> {
+			highScores3Button.setOnAction(eventHS3 -> {
+				HighScoreTableManager.displayHighScoreTable(3);
 				dialog.close();
 			});
 
