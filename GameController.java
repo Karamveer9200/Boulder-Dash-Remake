@@ -232,6 +232,9 @@ public class GameController {
         }
     }
 
+
+    //Explosion Tick Method, if an applyExplosion has occurred then it is waiting for explosion, after an explosion
+    // the next tick cycle and explosion aftermath should occur
     public void explosionTick() {
         if (waitingForExplosion) {
             // Create the initial explosion
@@ -247,12 +250,14 @@ public class GameController {
         }
     }
 
+    // Select an index in the ElementGrid and create a 3x3 Explosion and then AfterMath at that spot
     public void applyExplosion(int row, int column) {
         waitingForExplosion = true;
         nextExplosionRow = row;
         nextExplosionCol = column;
     }
 
+    // In the 3x3 around the selected index replace explodable tiles with explosion tiles
     public void createExplosion(int row, int col) {
         Element[][] grid = gridManager.getElementGrid();
 
@@ -273,6 +278,8 @@ public class GameController {
         }
     }
 
+    // SHOULD ONLY HAPPEN AFTER 'createExplosion'
+    // In the 3x3 around the selected index replace the explosions that were there with paths.
     public void createExplosionAfterMath (int row, int col) {
         Element[][] grid = gridManager.getElementGrid();
         for (int i = row - 1; i <= row + 1; i++) {
