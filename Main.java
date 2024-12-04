@@ -30,6 +30,8 @@ public class Main extends Application {
 	private Timeline aomeebaTickTimeline;
 	private Timeline flyTickTimeline;
 	private Timeline killPlayerTickTimeLine;
+	private Timeline timerTimeline;
+	private int elapsedSeconds = 0;
 	public static Player player;
 	@Override
 	public void start(Stage primaryStage) {
@@ -96,6 +98,10 @@ public class Main extends Application {
 		frogTickTimeline = new Timeline(frogKeyFrame);
 		aomeebaTickTimeline = new Timeline(aomeebaKeyFrame);
 		killPlayerTickTimeLine = new Timeline(killPlayerKeyFrame);
+		timerTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+			elapsedSeconds++;
+			System.out.println("Elapsed Time: " + elapsedSeconds + "s");
+		}));
 
 		// Set the cycle count to Animation.INDEFINITE
 		playerTickTimeline.setCycleCount(Animation.INDEFINITE);
@@ -105,6 +111,7 @@ public class Main extends Application {
 		flyTickTimeline.setCycleCount(Animation.INDEFINITE);
 		frogTickTimeline.setCycleCount(Animation.INDEFINITE);
 		aomeebaTickTimeline.setCycleCount(Animation.INDEFINITE);
+		timerTimeline.setCycleCount(Animation.INDEFINITE);
 		
 		// Draw the initial grid
 		gameController.draw();
@@ -141,6 +148,7 @@ public class Main extends Application {
 		stopTickButton.setDisable(true);
 
 		startTickButton.setOnAction(e -> {
+			timerTimeline.play();
 			playerTickTimeline.play();
 			dangerousRockFallTickTimeline.play();
 			dangerousRockRollTimeline.play();
@@ -153,6 +161,7 @@ public class Main extends Application {
 		});
 
 		stopTickButton.setOnAction(e -> {
+			timerTimeline.stop();
 			playerTickTimeline.stop();
 			dangerousRockRollTimeline.stop();
 			dangerousRockFallTickTimeline.stop();
