@@ -2,8 +2,8 @@ import javafx.scene.image.Image;
 public class Exit extends Tile {
     private static boolean exitExists = false; //allows us to keep track of whether an exit has already been created
 
-    public Exit(int x, int y) {
-        super(x, y);
+    public Exit(int row, int column) {
+        super(row, column);
         // Ensures only one exit can be created per level
         if (exitExists) {
             throw new IllegalStateException("An exit already exists!");
@@ -13,6 +13,9 @@ public class Exit extends Tile {
         canExplode = false;
         name = "Exit";
         exitExists = true;
+    }
+    public static void toggleFalseExitExists() {
+        exitExists = false;
     }
     // Notifies the player that they have completed the level
     public void announceLevelWin() {

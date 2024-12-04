@@ -36,8 +36,6 @@ public class Main extends Application {
 	private Timeline playerTickTimeline;
 	private Timeline dangerousRockFallTickTimeline;
 	private Timeline dangerousRockRollTimeline;
-	private Timeline diamondFallTickTimeline;
-	private Timeline diamondRollTimeline;
 	private Timeline frogTickTimeline;
 	private Timeline amoebaTickTimeline;
 
@@ -187,7 +185,7 @@ public class Main extends Application {
 	 */
 	public void setupGame(Stage primaryStage) {
 		// Load the initial grid from a file
-		int[][] initialGrid = FileHandler.readFile("PlaceHolder.txt");
+		String[][] initialGrid = FileHandler.readFile("PlaceHolder.txt");
 
 		final int canvasWidth = initialGrid[0].length * GRID_CELL_WIDTH;
 		final int canvasHeight = initialGrid.length * GRID_CELL_HEIGHT;
@@ -220,6 +218,7 @@ public class Main extends Application {
 		KeyFrame dangerousRocksFallKeyFrame = new KeyFrame(Duration.millis(500), event -> {
 			gameController.boulderFallTick();
 			gameController.diamondFallTick();
+
 		});
 
 		KeyFrame frogKeyFrame = new KeyFrame(Duration.millis(1000), event -> {
@@ -298,13 +297,19 @@ public class Main extends Application {
 
 		Button resetGridButton = new Button("Reset Grid");
 		resetGridButton.setOnAction(e -> {
-			int[][] initialGrid = FileHandler.readFile("PlaceHolder.txt");
+			String[][] initialGrid = FileHandler.readFile("PlaceHolder.txt");
 			gameController.getGridManager().initializeGrid(initialGrid);
 			gameController.initializePlayer(initialGrid);
 			gameController.draw();
 		});
 
-		toolbar.getChildren().addAll(resetButton, centerButton, startTickButton, stopTickButton, resetGridButton);
+		Button saveButton = new Button("Save Game");
+		saveButton.setOnAction(e -> {
+			FileHandler.writeFile(gameController.getGridManager());
+		});
+
+		toolbar.getChildren().addAll(resetButton, centerButton, startTickButton, stopTickButton,
+				resetGridButton, saveButton);
 		root.setTop(toolbar);
 
 		return root;

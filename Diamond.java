@@ -58,7 +58,13 @@ public class Diamond extends Element implements DangerousRock {
             }
             hasMomentum = false;
 
-        } else {
+        } else if(newRow < grid.length && grid[newRow][col] instanceof MagicWall && grid[newRow+1][col] instanceof Path ) {
+            MagicWall magicWall = (MagicWall) grid[newRow][col];
+            magicWall.transformRock(this,gridManager);
+            //row under magic wall is within range , and is a path ,
+            // anything else it stays over the  magic wall until its clear beneath the magic wall
+            //turn into diamond and vice versa
+        }else {
             hasMomentum = false; // Reset momentum if the diamond stops
         }
     }

@@ -7,4 +7,8 @@ public class Path extends Tile {
         name = "Path";
     }
 
+    @Override
+    public String toString() {
+        return "Path";
+    }
 }
