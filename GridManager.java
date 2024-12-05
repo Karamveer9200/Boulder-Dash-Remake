@@ -180,10 +180,49 @@ public class GridManager {
 
     /**
      * Removes an element from its corresponding list based on its type.
-     *
+     * Explodes if it is an enemy
      * @param element the Element to be removed
      */
     public void removeFromList(Element element) {
+        if (element instanceof Path path) {
+            paths.remove(path);
+        } else if (element instanceof Dirt dirt) {
+            dirts.remove(dirt);
+        } else if (element instanceof Player player) {
+            players.remove(player);
+            System.out.println("Player removed");
+            GameController.gameOver();
+        } else if (element instanceof NormalWall wall) {
+            walls.remove(wall);
+        } else if (element instanceof Boulder boulder) {
+            boulders.remove(boulder);
+            System.out.println("Boulder removed");
+        } else if (element instanceof Frog frog) {
+            frogs.remove(frog);
+            System.out.println("Frog removed");
+            GameController.applyExplosion(element.row, element.column);
+        } else if (element instanceof Amoeba amoeba) {
+            amoebas.remove(amoeba);
+        } else if (element instanceof Diamond diamond) {
+            diamonds.remove(diamond);
+            System.out.println("Diamond removed");
+        } else if (element instanceof Butterfly butterfly) {
+            butterflies.remove(butterfly);
+            System.out.println("Butterfly removed");
+            GameController.applyExplosion(element.row, element.column);
+        } else if (element instanceof Firefly firefly) {
+            fireflies.remove(firefly);
+            System.out.println("Firefly removed");
+            GameController.applyExplosion(element.row, element.column);
+        }
+    }
+
+    /**
+     * Removes an element from its corresponding list based on its type.
+     * Objects here only get destroyed, thus avoiding a chain reaction.
+     * @param element the Element to be removed
+     */
+    public void explosionRemoveFromList(Element element) {
         if (element instanceof Path path) {
             paths.remove(path);
         } else if (element instanceof Dirt dirt) {
@@ -213,7 +252,6 @@ public class GridManager {
             System.out.println("Firefly removed");
         }
     }
-
     /**
      * Retrieves the 2D array of elements in the grid.
      *

@@ -12,7 +12,6 @@ public class Explosion extends Element {
 
 
 
-
     // In the 3x3 around the selected index replace explodable tiles with explosion tiles
     public static void createExplosion(int row, int col, GridManager gridManager) {
         Element[][] grid = gridManager.getElementGrid();
@@ -21,7 +20,7 @@ public class Explosion extends Element {
             for (int j = col - 1; j <= col + 1; j++) {
                 if (i >= 0 && i < grid.length && j >= 0 && j < grid[0].length) {
                     if (gridManager.getElement(i,j).isCanExplode()) {
-                        gridManager.removeFromList(gridManager.getElement(i,j));
+                        gridManager.explosionRemoveFromList(gridManager.getElement(i,j));
                         Explosion explosion = new Explosion(i, j);
                         gridManager.setElement(i, j, explosion);
                     }

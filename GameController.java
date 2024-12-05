@@ -16,10 +16,10 @@ public class GameController {
     public static boolean gameStatus = true;
 
 
-    private int nextExplosionRow;
-    private int nextExplosionCol;
-    private boolean waitingForExplosionAfterMath = false;
-    private boolean waitingForExplosion = false;
+    private static int nextExplosionRow;
+    private static int nextExplosionCol;
+    private static boolean waitingForExplosionAfterMath = false;
+    private static boolean waitingForExplosion = false;
 
     /**
      * Represents possible inputs for the player.
@@ -233,7 +233,7 @@ public class GameController {
     }
 
     // Select an index in the ElementGrid and create a 3x3 Explosion and then AfterMath at that spot
-    public  void applyExplosion(int row, int column) {
+    public static  void applyExplosion(int row, int column) {
         waitingForExplosion = true;
         nextExplosionRow = row;
         nextExplosionCol = column;
