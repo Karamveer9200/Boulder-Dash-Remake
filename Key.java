@@ -13,7 +13,7 @@ public class Key extends Tile {
             case RED -> image = new Image("images/RedKey.png");
             case GREEN -> image = new Image("images/KeyGreen.png");
             case YELLOW -> image = new Image("images/KeyYellow.png");
-            case BLUE -> image = new Image("images/KeyBlue.png");
+            case BLUE -> image = new Image("images/BlueKey.png");
         }
     }
 
