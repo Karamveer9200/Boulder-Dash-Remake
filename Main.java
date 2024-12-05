@@ -29,7 +29,16 @@ public class Main extends Application {
 	private Timeline frogTickTimeline;
 	private Timeline aomeebaTickTimeline;
 	private Timeline flyTickTimeline;
+	private Timeline killPlayerTickTimeLine;
+
+	private Timeline explosionTickTimeLine;
+
+
+//	private Timeline timerTimeline;
+//	private int elapsedSeconds = 0;
+
 	public static Player player;
+
 	@Override
 	public void start(Stage primaryStage) {
 		// Load the initial grid from a file
@@ -57,7 +66,11 @@ public class Main extends Application {
 		KeyFrame playerKeyFrame = new KeyFrame(Duration.millis(50), event -> {
 			gameController.playerTick();
 		});
+
 		//add keyframe for checking neighboring tiles to enemies , instance of that method is in flies 12/1/2024 - Omar
+		KeyFrame killPlayerKeyFrame = new KeyFrame(Duration.millis(20), event -> {
+			gameController.killPlayerTick();
+		});
 
 		KeyFrame dangerousRocksRollKeyFrame = new KeyFrame(Duration.millis(1500), event -> {
 			gameController.boulderRollTick();
@@ -83,6 +96,10 @@ public class Main extends Application {
 			gameController.amoebaTick();
 		});
 
+		KeyFrame explosionKeyFrame = new KeyFrame(Duration.millis(1000), event -> {
+			gameController.explosionTick();
+		});
+
 		// Set up the periodic tick timeline
 		playerTickTimeline = new Timeline(playerKeyFrame);
 		dangerousRockFallTickTimeline = new Timeline( dangerousRocksFallKeyFrame);
@@ -90,14 +107,24 @@ public class Main extends Application {
 		flyTickTimeline = new Timeline(flyKeyFrame);
 		frogTickTimeline = new Timeline(frogKeyFrame);
 		aomeebaTickTimeline = new Timeline(aomeebaKeyFrame);
+		killPlayerTickTimeLine = new Timeline(killPlayerKeyFrame);
+		explosionTickTimeLine = new Timeline(explosionKeyFrame);
+
+//		timerTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+//			elapsedSeconds++;
+//			System.out.println("Elapsed Time: " + elapsedSeconds + "s");
+//		}));
 
 		// Set the cycle count to Animation.INDEFINITE
 		playerTickTimeline.setCycleCount(Animation.INDEFINITE);
+		killPlayerTickTimeLine.setCycleCount(Animation.INDEFINITE);
 		dangerousRockFallTickTimeline.setCycleCount(Animation.INDEFINITE);
 		dangerousRockRollTimeline.setCycleCount(Animation.INDEFINITE);
 		flyTickTimeline.setCycleCount(Animation.INDEFINITE);
 		frogTickTimeline.setCycleCount(Animation.INDEFINITE);
 		aomeebaTickTimeline.setCycleCount(Animation.INDEFINITE);
+//		timerTimeline.setCycleCount(Animation.INDEFINITE);
+		explosionTickTimeLine.setCycleCount(Animation.INDEFINITE);
 		
 		// Draw the initial grid
 		gameController.draw();
@@ -134,23 +161,29 @@ public class Main extends Application {
 		stopTickButton.setDisable(true);
 
 		startTickButton.setOnAction(e -> {
+//			timerTimeline.play();
 			playerTickTimeline.play();
 			dangerousRockFallTickTimeline.play();
 			dangerousRockRollTimeline.play();
 			flyTickTimeline.play();
 			frogTickTimeline.play();
 			aomeebaTickTimeline.play();
+			killPlayerTickTimeLine.play();
+			explosionTickTimeLine.play();
 			startTickButton.setDisable(true);
 			stopTickButton.setDisable(false);
 		});
 
 		stopTickButton.setOnAction(e -> {
+//			timerTimeline.stop();
 			playerTickTimeline.stop();
 			dangerousRockRollTimeline.stop();
 			dangerousRockFallTickTimeline.stop();
 			flyTickTimeline.stop();
 			frogTickTimeline.stop();
 			aomeebaTickTimeline.stop();
+			killPlayerTickTimeLine.stop();
+			explosionTickTimeLine.stop();
 			stopTickButton.setDisable(true);
 			startTickButton.setDisable(false);
 		});
@@ -159,11 +192,20 @@ public class Main extends Application {
 		resetGridButton.setOnAction(e -> {
 			int[][] initialGrid = FileHandler.readFile("PlaceHolder.txt");
 			gameController.getGridManager().reinitializeGrid(initialGrid);
-			gameController.initializePlayer(initialGrid);
+//		    gameController.initializePlayer(initialGrid);
 			gameController.draw();
 		});
 
-		toolbar.getChildren().addAll(resetButton, centerButton, startTickButton, stopTickButton,resetGridButton);
+		Button testExplosionButton = new Button("Test Explosion");
+		testExplosionButton.setOnAction(e -> {
+			gameController.applyExplosion(2,2);
+			gameController.draw();
+		});
+
+
+
+
+		toolbar.getChildren().addAll(resetButton, centerButton, startTickButton, stopTickButton,resetGridButton,testExplosionButton);
 		root.setTop(toolbar);
 
 		return root;

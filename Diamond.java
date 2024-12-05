@@ -7,7 +7,7 @@ public class Diamond extends Element implements DangerousRock {
         super(row, column);
         image = new Image("images/diamond.png");
         canBeEntered = false;
-        canExplode = false;
+        canExplode = true;
         name = "Diamond";
     }
 
