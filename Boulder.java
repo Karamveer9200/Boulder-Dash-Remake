@@ -98,7 +98,8 @@ public class Boulder extends Element implements DangerousRock {
                 (grid[newRow][col] instanceof Boulder ||
                         grid[newRow][col] instanceof Diamond ||
                         grid[newRow][col] instanceof NormalWall ||
-                        grid[newRow][col] instanceof TitaniumWall)) {
+                        grid[newRow][col] instanceof TitaniumWall ||
+                        grid[newRow][col] instanceof MagicWall)) {
 
             // Check if rolling to the right is possible
             if (col + 1 < grid[0].length &&
