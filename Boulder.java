@@ -32,7 +32,7 @@ public class Boulder extends Element implements DangerousRock {
         int col = this.getColumn();
 
         if (newRow < grid.length && grid[newRow][col] instanceof Path) {
-            // Update the grid to move the diamond
+            // Update the grid to move the boulder
             gridManager.removeFromList(grid[newRow][col]);
             Element p = new Path(this.getRow(), this.getColumn());
             gridManager.setElement(this.getRow(), this.getColumn(), p);
@@ -44,12 +44,11 @@ public class Boulder extends Element implements DangerousRock {
             this.setRow(newRow);
             gainMomentum();
 
-        } else if (newRow < grid.length && grid[newRow][col] instanceof Player) {
+        } else if (newRow < grid.length && ( grid[newRow][col] instanceof Player || grid[newRow ][col] instanceof Frog || grid[newRow ][col] instanceof Fly )){
             // If the boulder lands on a player and has momentum
             if (hasMomentum) {
-                gridManager.removeFromList(grid[newRow][col]); // Remove the player
+                gridManager.removeFromList(grid[newRow][col]); // Remove the player or enemy
                 gridManager.setElement(newRow, col, this);     // Replace player with the diamond
-                System.out.println("Boulder has crushed Player. GAME OVER");
 
                 Element p = new Path(this.getRow(), this.getColumn());
                 gridManager.setElement(this.getRow(), this.getColumn(), p);
@@ -59,17 +58,19 @@ public class Boulder extends Element implements DangerousRock {
             }
             hasMomentum = false;
 
-        } else if(newRow < grid.length && grid[newRow][col] instanceof MagicWall && (grid[newRow+1][col] instanceof Path || grid[newRow +1][col] instanceof Player)) {
-            if(grid[newRow+1][col] instanceof Player){
-                System.out.println("Boulder has crushed player");
+        } else if(newRow < grid.length && grid[newRow][col] instanceof MagicWall && (grid[newRow+1][col] instanceof Path || grid[newRow +1][col] instanceof Player || grid[newRow +1][col] instanceof Frog || grid[newRow +1][col] instanceof Fly )) {
+
+            if(grid[newRow+1][col] instanceof Frog ||grid[newRow+1][col] instanceof Fly ){
+                System.out.println("Boulder has crushed Enemy");
             }
             MagicWall magicWall = (MagicWall) grid[newRow][col];
+
             magicWall.transformRock(this, gridManager);
             //row under magic wall is within range , and is a path ,
             // anything else it stays over the  magic wall until its clear beneath the magic wall
             //turn into diamond and vice versa
             gainMomentum();
-        } else if (newRow < grid.length && grid[newRow][col] instanceof MagicWall &&  grid[newRow+1][col] instanceof Player) {
+        } else if (newRow < grid.length && grid[newRow][col] instanceof MagicWall && (grid[newRow+1][col] instanceof Player|| grid[newRow +1][col] instanceof Frog || grid[newRow +1][col] instanceof Fly )) {
             MagicWall magicWall = (MagicWall) grid[newRow][col];
             magicWall.transformRock(this, gridManager);
             //row under magic wall is within range , and is a path ,

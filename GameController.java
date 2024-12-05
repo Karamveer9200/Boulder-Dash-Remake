@@ -57,7 +57,7 @@ public class GameController {
 
         // Optional: Stop input handling and end the game
         System.out.println("Player has been replaced with Path at row: " + playerRow + ", col: " + playerCol);
-        gameOver();
+
     }
 
 
@@ -232,69 +232,32 @@ public class GameController {
         }
     }
 
+    // Select an index in the ElementGrid and create a 3x3 Explosion and then AfterMath at that spot
+    public  void applyExplosion(int row, int column) {
+        waitingForExplosion = true;
+        nextExplosionRow = row;
+        nextExplosionCol = column;
+    }
 
     //Explosion Tick Method, if an applyExplosion has occurred then it is waiting for explosion, after an explosion
     // the next tick cycle and explosion aftermath should occur
     public void explosionTick() {
         if (waitingForExplosion) {
             // Create the initial explosion
-            createExplosion(nextExplosionRow, nextExplosionCol);
+            Explosion.createExplosion(nextExplosionRow, nextExplosionCol,gridManager);
             draw();
             waitingForExplosionAfterMath = true;
             waitingForExplosion= false;
         } else if // Create the aftermath
          (waitingForExplosionAfterMath) {
-            createExplosionAfterMath(nextExplosionRow, nextExplosionCol);
+            Explosion.createExplosionAfterMath(nextExplosionRow, nextExplosionCol,gridManager);
             draw();
             waitingForExplosionAfterMath = false;
         }
     }
 
-    // Select an index in the ElementGrid and create a 3x3 Explosion and then AfterMath at that spot
-    public void applyExplosion(int row, int column) {
-        waitingForExplosion = true;
-        nextExplosionRow = row;
-        nextExplosionCol = column;
-    }
 
-    // In the 3x3 around the selected index replace explodable tiles with explosion tiles
-    public void createExplosion(int row, int col) {
-        Element[][] grid = gridManager.getElementGrid();
-
-        for (int i = row - 1; i <= row + 1; i++) {
-            for (int j = col - 1; j <= col + 1; j++) {
-                if (i >= 0 && i < grid.length && j >= 0 && j < grid[0].length) {
-                    if (gridManager.getElement(i,j) instanceof Player)
-                        gameStatus = false; //Kill the player
-                    if (gridManager.getElement(i,j) instanceof DangerousRock) {
-                        gridManager.removeFromList(grid[row][col]);
-                    }
-                    if (gridManager.getElement(i,j).isCanExplode()) {
-                        Explosion explosion = new Explosion(i, j);
-                        gridManager.setElement(i, j, explosion);
-                    }
-                }
-            }
-        }
-    }
-
-    // SHOULD ONLY HAPPEN AFTER 'createExplosion'
-    // In the 3x3 around the selected index replace the explosions that were there with paths.
-    public void createExplosionAfterMath (int row, int col) {
-        Element[][] grid = gridManager.getElementGrid();
-        for (int i = row - 1; i <= row + 1; i++) {
-            for (int j = col - 1; j <= col + 1; j++) {
-                if (i >= 0 && i < grid.length && j >= 0 && j < grid[0].length) {
-                    if (gridManager.getElement(i,j).isCanExplode()) {
-                        Path path = new Path(i, j);
-                        gridManager.setElement(i, j, path);
-                    }
-                }
-            }
-        }
-    }
-
-    public void gameOver() {
+    public static void gameOver() {
         gameStatus = false;
     }
 
