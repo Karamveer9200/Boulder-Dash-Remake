@@ -21,6 +21,8 @@ public class Main extends Application {
 	public static final int WINDOW_HEIGHT = 500;
 	public static final int GRID_CELL_WIDTH = 30;
 	public static final int GRID_CELL_HEIGHT = 30;
+	public static final int DIAMOND_SCORE_VALUE = 100;
+	public static final int TIME_SCORE_VALUE = 25;
 
 	// Timeline for periodic ticks
 	private Timeline playerTickTimeline;
@@ -31,8 +33,8 @@ public class Main extends Application {
 	private Timeline flyTickTimeline;
 	private Timeline killPlayerTickTimeLine;
 	private static Timeline timerTimeline;
-	private static final int targetTime = 12;
-	private static int elapsedSeconds = 0;
+	private static final int targetTime = 120;
+	private static int timeLeft = targetTime;
 	public static Player player;
 	@Override
 	public void start(Stage primaryStage) {
@@ -102,8 +104,9 @@ public class Main extends Application {
 		aomeebaTickTimeline = new Timeline(aomeebaKeyFrame);
 		killPlayerTickTimeLine = new Timeline(killPlayerKeyFrame);
 		timerTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
-			elapsedSeconds++; // Increment elapsed seconds
-			int timeLeft = targetTime - elapsedSeconds;
+			timeLeft--; // Decrement the countdown timer
+			System.out.println("Time Left: " + timeLeft + "s");
+
 			if (timeLeft <= 0) {
 				timerTimeline.stop();
 				System.out.println("Time's up, GAME OVER!");
@@ -134,9 +137,8 @@ public class Main extends Application {
 	}
 	static void calculateScore() {
 		int diamondsCollected = player.getDiamondCount();
-		int timeLeft = targetTime - elapsedSeconds;
-		int score = (diamondsCollected * 10) + timeLeft;
-		System.out.println("Score: " + score + " (Diamonds: " + diamondsCollected + ", Time Left: " + timeLeft + ")");
+		int score = (diamondsCollected * DIAMOND_SCORE_VALUE) + (timeLeft * TIME_SCORE_VALUE);
+		System.out.println("Final Score: " + score + " (Diamonds: " + diamondsCollected + ", Time Left: " + timeLeft + ")");
 	}
 
 	public static void stopTimer() {
