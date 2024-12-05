@@ -110,9 +110,6 @@ public class ProfileManager {
                 System.out.println("Error reading file: " + file.getName());
             }
         }
-
-
-
         return profiles;
     }
 
@@ -174,6 +171,14 @@ public class ProfileManager {
         return playerId;
     }
 
+    public static boolean doesPlayerSaveFileExist(int id) {
+        String folderPath = "Boulder-Dash-Remake/txt"; // Define the folder path.
+        String fileName = "Save" + id + ".txt"; // Construct the file name.
 
+        File file = new File(folderPath, fileName); // Create a File object with the folder and file name.
+
+        // Return true if the file exists and is a file, false otherwise.
+        return file.exists() && file.isFile();
+    }
 
 }

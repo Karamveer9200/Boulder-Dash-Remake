@@ -49,17 +49,25 @@ public class FileHandler {
         return null;
     }
 
-    public static void writeFile(GridManager gridManager) {
+    public static void writeFile(GridManager gridManager, PlayerProfile currentProfile) {
         Element[][] currentGrid = gridManager.getElementGrid();
+
+        int id = currentProfile.getPlayerId();
+        String fileName = "Save" + id + ".txt";
 
         try
         {
-            String outputFile = "Boulder-Dash-Remake/txt/Level1Save.txt";
+            String outputFile = "Boulder-Dash-Remake/txt/" + fileName;
             PrintWriter out = new PrintWriter(outputFile);
             out.println(currentGrid[0].length + " " + currentGrid.length);
             out.println(120); //Pass seconds left and output it here
             out.println(10); //Pass diamonds left to collect and output it here
             out.println(2 + " " + 8); //Pass Amoeba growth rate and size limit and output it here
+
+
+
+
+
             out.println(); //Code here to output all the player's collected keys so far.
 
             for (int i = 0; i < currentGrid.length; i++) {

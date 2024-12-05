@@ -32,6 +32,8 @@ public class Player extends Element {
         keyInventory.remove(colour);
     }
 
+    
+
     public int getDiamondCount() {
         return diamondCount;
     }
@@ -43,6 +45,7 @@ public class Player extends Element {
     public void setHasEnoughDiamonds(boolean hasEnoughDiamonds) {
         this.hasEnoughDiamonds = hasEnoughDiamonds;
     }
+
     public void checkDiamonds() {
         if (getDiamondCount() >= 1) {
             setHasEnoughDiamonds(true);

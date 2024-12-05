@@ -77,15 +77,20 @@ public class Main extends Application {
 					for (PlayerProfile profile : profiles) {
 						if (profile.getName().equals(selectedProfileName)) {
 							profileToSelect = profile;
+							currentProfile = profile;
 							break;
 						}
 					}
 					if (profileToSelect != null) {
-						int level = profileToSelect.getMaxLevelReached();
-						String levelFile = "Boulder-Dash-Remake/txt/Level" + level + ".txt";
-						setupGame(primaryStage, levelFile);
-						dialog.close();
-
+						int playerID = currentProfile.getPlayerId();
+						if (ProfileManager.doesPlayerSaveFileExist(playerID)) {
+							String levelFile = "Boulder-Dash-Remake/txt/Save" + playerID + ".txt";
+							setupGame(primaryStage, levelFile);
+						} else {
+							int level = profileToSelect.getMaxLevelReached();
+							String levelFile = "Boulder-Dash-Remake/txt/Level" + level + ".txt";
+							setupGame(primaryStage, levelFile);
+						}
 					}
 					dialog.close();
 				} else {
@@ -95,10 +100,7 @@ public class Main extends Application {
 					alert.setContentText("Please select a profile before proceeding.");
 					alert.showAndWait();
 				}
-
-
 			});
-
 
 			VBox layout = new VBox(10);
 			layout.getChildren().addAll(new Label("Select a player profile:"), profileDropdown, selectButton);
@@ -291,8 +293,8 @@ public class Main extends Application {
 			gameController.draw();
 		});
 
-		Button startTickButton = new Button("Start Ticks");
-		Button stopTickButton = new Button("Stop Ticks");
+		Button startTickButton = new Button("Unpause");
+		Button stopTickButton = new Button("Pause");
 		stopTickButton.setDisable(true);
 
 		startTickButton.setOnAction(e -> {
@@ -326,7 +328,7 @@ public class Main extends Application {
 		Button saveButton = new Button("Save Game");
 		saveButton.setOnAction(e -> {
 			
-			FileHandler.writeFile(gameController.getGridManager());
+			FileHandler.writeFile(gameController.getGridManager(), currentProfile);
 		});
 
 		toolbar.getChildren().addAll(resetButton, centerButton, startTickButton, stopTickButton,
