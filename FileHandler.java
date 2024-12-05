@@ -63,11 +63,7 @@ public class FileHandler {
             out.println(120); //Pass seconds left and output it here
             out.println(10); //Pass diamonds left to collect and output it here
             out.println(2 + " " + 8); //Pass Amoeba growth rate and size limit and output it here
-
-
-
-
-
+            
             out.println(); //Code here to output all the player's collected keys so far.
 
             for (int i = 0; i < currentGrid.length; i++) {
@@ -97,6 +93,8 @@ public class FileHandler {
                         case "YELLOWLockedDoor" -> out.print("YLD");
                         case "BLUEKey" -> out.print("BK");
                         case "BLUELockedDoor" -> out.print("BLK");
+
+                        case "Explosion" -> out.print("P"); // If there is an explosion when we want to save, load a path in its place when the save is loaded
 
                         //HOW TO SPECIFY FIREFLY AND BUTTERFLY LEFT OR RIGHT? IS IT IN THEIR NAME?
                         // MAYBE AN IF gridManager.getElement(i,j).isButtefly && isLeft???
