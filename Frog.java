@@ -7,7 +7,7 @@ public class Frog extends Element {
         super(row, column );
         image = new Image("images/frog.png");
         canBeEntered = false;
-        canExplode = false;
+        canExplode = true;
         name = "Frog";
     }
 

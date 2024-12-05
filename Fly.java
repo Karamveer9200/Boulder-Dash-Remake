@@ -17,7 +17,7 @@ public class Fly extends Element {
         super(row, column);
         image = new Image("images/butterfly.png");
         canBeEntered = false;
-        canExplode = false;
+        canExplode = true;
         name = "fly";
         this.followsLeftEdge = followsLeftEdge;
         this.currentDirection = 0; // Start with "Up" direction

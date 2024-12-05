@@ -190,20 +190,27 @@ public class GridManager {
             dirts.remove(dirt);
         } else if (element instanceof Player player) {
             players.remove(player);
+            System.out.println("Player removed");
+            GameController.gameOver();
         } else if (element instanceof NormalWall wall) {
             walls.remove(wall);
         } else if (element instanceof Boulder boulder) {
             boulders.remove(boulder);
+            System.out.println("Boulder removed");
         } else if (element instanceof Frog frog) {
             frogs.remove(frog);
+            System.out.println("Frog removed");
         } else if (element instanceof Amoeba amoeba) {
             amoebas.remove(amoeba);
         } else if (element instanceof Diamond diamond) {
             diamonds.remove(diamond);
+            System.out.println("Diamond removed");
         } else if (element instanceof Butterfly butterfly) {
             butterflies.remove(butterfly);
+            System.out.println("Butterfly removed");
         } else if (element instanceof Firefly firefly) {
             fireflies.remove(firefly);
+            System.out.println("Firefly removed");
         }
     }
 
