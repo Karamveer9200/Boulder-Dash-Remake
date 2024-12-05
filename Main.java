@@ -281,21 +281,15 @@ public class Main extends Application {
 		HBox toolbar = new HBox(10);
 		toolbar.setPadding(new Insets(10));
 
-		Button resetButton = new Button("Reset Player");
-		resetButton.setOnAction(e -> {
-			gameController.resetPlayerLocation();
-			gameController.draw();
-		});
-
-		Button centerButton = new Button("Center Player");
-		centerButton.setOnAction(e -> {
-			gameController.movePlayerToCenter();
-			gameController.draw();
-		});
-
 		Button startTickButton = new Button("Unpause");
 		Button stopTickButton = new Button("Pause");
 		stopTickButton.setDisable(true);
+		Button saveButton = new Button("Save Game");
+
+		saveButton.setOnAction(e -> {
+			FileHandler.writeFile(gameController.getGridManager(), currentProfile);
+			closeGame();
+		});
 
 		startTickButton.setOnAction(e -> {
 			playerTickTimeline.play();
@@ -305,6 +299,7 @@ public class Main extends Application {
 			amoebaTickTimeline.play();
 			startTickButton.setDisable(true);
 			stopTickButton.setDisable(false);
+			saveButton.setDisable(true);
 		});
 
 		stopTickButton.setOnAction(e -> {
@@ -315,24 +310,11 @@ public class Main extends Application {
 			amoebaTickTimeline.stop();
 			stopTickButton.setDisable(true);
 			startTickButton.setDisable(false);
+			saveButton.setDisable(false);
 		});
 
-		Button resetGridButton = new Button("Reset Grid");
-		resetGridButton.setOnAction(e -> {
-			String[][] initialGrid = FileHandler.readFile("PlaceHolder.txt");
-			gameController.getGridManager().initializeGrid(initialGrid);
-			gameController.initializePlayer(initialGrid);
-			gameController.draw();
-		});
-
-		Button saveButton = new Button("Save Game");
-		saveButton.setOnAction(e -> {
-			
-			FileHandler.writeFile(gameController.getGridManager(), currentProfile);
-		});
-
-		toolbar.getChildren().addAll(resetButton, centerButton, startTickButton, stopTickButton,
-				resetGridButton, saveButton);
+		toolbar.getChildren().addAll(startTickButton, stopTickButton,
+				 saveButton);
 		root.setTop(toolbar);
 
 		return root;

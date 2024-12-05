@@ -32,7 +32,7 @@ public class Player extends Element {
         keyInventory.remove(colour);
     }
 
-    
+
 
     public int getDiamondCount() {
         return diamondCount;
