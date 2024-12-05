@@ -20,6 +20,7 @@ public class Exit extends Tile {
     // Notifies the player that they have completed the level
     public void announceLevelWin() {
         System.out.println("Level Completed!");
+        Main.stopTimer();
     }
     // Method to unlock the Exit so it can be entered
     public void unlock() {

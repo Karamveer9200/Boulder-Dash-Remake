@@ -30,8 +30,8 @@ public class Main extends Application {
 	private Timeline aomeebaTickTimeline;
 	private Timeline flyTickTimeline;
 	private Timeline killPlayerTickTimeLine;
-	private Timeline timerTimeline;
-	private static int targetTime = 12;
+	private static Timeline timerTimeline;
+	private static final int targetTime = 12;
 	private static int elapsedSeconds = 0;
 	public static Player player;
 	@Override
@@ -103,15 +103,11 @@ public class Main extends Application {
 		killPlayerTickTimeLine = new Timeline(killPlayerKeyFrame);
 		timerTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
 			elapsedSeconds++; // Increment elapsed seconds
-			int timeLeft = targetTime - elapsedSeconds; // Calculate remaining time
-			System.out.println("Debug -> Elapsed Seconds: " + elapsedSeconds + ", Time Left: " + timeLeft);
-
+			int timeLeft = targetTime - elapsedSeconds;
 			if (timeLeft <= 0) {
 				timerTimeline.stop();
-				System.out.println("Time's up!");
+				System.out.println("Time's up, GAME OVER!");
 				calculateScore(); // Show the final score
-			} else {
-				calculateScore(); // Log the score each second
 			}
 		}));
 
@@ -141,6 +137,14 @@ public class Main extends Application {
 		int timeLeft = targetTime - elapsedSeconds;
 		int score = (diamondsCollected * 10) + timeLeft;
 		System.out.println("Score: " + score + " (Diamonds: " + diamondsCollected + ", Time Left: " + timeLeft + ")");
+	}
+
+	public static void stopTimer() {
+		if (timerTimeline != null) {
+			timerTimeline.stop();
+			System.out.println("Timer stopped. Game completed.");
+			calculateScore();
+		}
 	}
 
 	private Pane buildGUI(GameController gameController) {
