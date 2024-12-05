@@ -117,6 +117,7 @@ public class Player extends Element {
             gridManager.removeElement(targetRow, targetColumn);
             grid[targetRow][targetColumn] = null;
             System.out.println("Diamond removed");
+            Main.calculateScore();
             checkDiamonds();
             return true;
         }

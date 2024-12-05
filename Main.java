@@ -31,7 +31,8 @@ public class Main extends Application {
 	private Timeline flyTickTimeline;
 	private Timeline killPlayerTickTimeLine;
 	private Timeline timerTimeline;
-	private int elapsedSeconds = 0;
+	private static int targetTime = 12;
+	private static int elapsedSeconds = 0;
 	public static Player player;
 	@Override
 	public void start(Stage primaryStage) {
@@ -46,6 +47,8 @@ public class Main extends Application {
 
 		// Initialize the game controller with the grid and canvas
 		GameController gameController = new GameController(initialGrid, canvas);
+
+		player = gameController.getGridManager().getPlayer();
 
 		// Build the GUI
 		Pane root = buildGUI(gameController);
@@ -99,8 +102,17 @@ public class Main extends Application {
 		aomeebaTickTimeline = new Timeline(aomeebaKeyFrame);
 		killPlayerTickTimeLine = new Timeline(killPlayerKeyFrame);
 		timerTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
-			elapsedSeconds++;
-			System.out.println("Elapsed Time: " + elapsedSeconds + "s");
+			elapsedSeconds++; // Increment elapsed seconds
+			int timeLeft = targetTime - elapsedSeconds; // Calculate remaining time
+			System.out.println("Debug -> Elapsed Seconds: " + elapsedSeconds + ", Time Left: " + timeLeft);
+
+			if (timeLeft <= 0) {
+				timerTimeline.stop();
+				System.out.println("Time's up!");
+				calculateScore(); // Show the final score
+			} else {
+				calculateScore(); // Log the score each second
+			}
 		}));
 
 		// Set the cycle count to Animation.INDEFINITE
@@ -119,6 +131,16 @@ public class Main extends Application {
 		// Show the stage
 		primaryStage.setScene(scene);
 		primaryStage.show();
+
+
+
+
+	}
+	static void calculateScore() {
+		int diamondsCollected = player.getDiamondCount();
+		int timeLeft = targetTime - elapsedSeconds;
+		int score = (diamondsCollected * 10) + timeLeft;
+		System.out.println("Score: " + score + " (Diamonds: " + diamondsCollected + ", Time Left: " + timeLeft + ")");
 	}
 
 	private Pane buildGUI(GameController gameController) {
@@ -158,6 +180,7 @@ public class Main extends Application {
 			killPlayerTickTimeLine.play();
 			startTickButton.setDisable(true);
 			stopTickButton.setDisable(false);
+			timerTimeline.play();
 		});
 
 		stopTickButton.setOnAction(e -> {
@@ -185,7 +208,11 @@ public class Main extends Application {
 		root.setTop(toolbar);
 
 		return root;
+
+
 	}
+
+
 
 	public static void main(String[] args) {
 		launch(args);
