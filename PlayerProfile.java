@@ -40,7 +40,7 @@ public class PlayerProfile extends Application {
         this.playerId = idCounter++;
         this.name = name;
         this.maxLevelReached = maxLevelReached;
-        this.highScore = highScore;
+        PlayerProfile.highScore = highScore;
         profiles.put(this.playerId, this); // Add the new profile to the profiles map
     }
 
@@ -98,13 +98,21 @@ public class PlayerProfile extends Application {
         return highScore;
     }
 
+    public void updateHighScore(int newScore) {
+        if (newScore > highScore) {
+            highScore = newScore;
+            System.out.println("New high score set for " + name + ": " + highScore);
+        }
+    }
+
+
     /**
      * Sets the player's high score.
      *
      * @param highScore the new high score
      */
     public void setHighScore(int highScore) {
-        this.highScore = highScore;
+        PlayerProfile.highScore = highScore;
     }
 
     /**

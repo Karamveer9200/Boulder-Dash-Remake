@@ -36,6 +36,7 @@ public class Main extends Application {
 	private static final int targetTime = 120;
 	private static int timeLeft = targetTime;
 	public static Player player;
+
 	@Override
 	public void start(Stage primaryStage) {
 		// Load the initial grid from a file
@@ -97,8 +98,8 @@ public class Main extends Application {
 
 		// Set up the periodic tick timeline
 		playerTickTimeline = new Timeline(playerKeyFrame);
-		dangerousRockFallTickTimeline = new Timeline( dangerousRocksFallKeyFrame);
-		dangerousRockRollTimeline = new Timeline( dangerousRocksRollKeyFrame);
+		dangerousRockFallTickTimeline = new Timeline(dangerousRocksFallKeyFrame);
+		dangerousRockRollTimeline = new Timeline(dangerousRocksRollKeyFrame);
 		flyTickTimeline = new Timeline(flyKeyFrame);
 		frogTickTimeline = new Timeline(frogKeyFrame);
 		aomeebaTickTimeline = new Timeline(aomeebaKeyFrame);
@@ -123,7 +124,7 @@ public class Main extends Application {
 		frogTickTimeline.setCycleCount(Animation.INDEFINITE);
 		aomeebaTickTimeline.setCycleCount(Animation.INDEFINITE);
 		timerTimeline.setCycleCount(Animation.INDEFINITE);
-		
+
 		// Draw the initial grid
 		gameController.draw();
 
@@ -132,14 +133,23 @@ public class Main extends Application {
 		primaryStage.show();
 
 
-
-
 	}
+
 	static void calculateScore() {
 		int diamondsCollected = player.getDiamondCount();
 		int score = (diamondsCollected * DIAMOND_SCORE_VALUE) + (timeLeft * TIME_SCORE_VALUE);
 		System.out.println("Final Score: " + score + " (Diamonds: " + diamondsCollected + ", Time Left: " + timeLeft + ")");
+
+		PlayerProfile playerProfile = PlayerProfile.loadProfile(player.getName()).orElse(null);
+		if (playerProfile != null) {
+			playerProfile.updateHighScore(score);
+		} else {
+			System.out.println("Player profile not found. Cannot update high score.");
+		}
 	}
+
+
+
 
 	public static void stopTimer() {
 		if (timerTimeline != null) {
