@@ -6,13 +6,20 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
 import java.io.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
+/**
+ * Manages player profiles for Boulder Dash.
+ * Handles profile creation, saving, loading, deletion, and ID management.
+ */
 public class ProfileManager {
 
+    /**
+     * Prompts the user to create a new player profile via a dialog window.
+     * @param primaryStage The main application stage.
+     * @return The created PlayerProfile object.
+     */
     public static PlayerProfile promptForProfile(Stage primaryStage) {
         Stage dialog = new Stage();
         dialog.setTitle("Create Profile");
@@ -25,14 +32,13 @@ public class ProfileManager {
 
         Button saveButton = new Button("Save");
         saveButton.setOnAction(e -> {
-            String name = nameField.getText().trim(); // Get the name from the field and trim whitespace.
-            if (name.isEmpty()) { // Check if the name is empty
-                // Show a pop-up alert
+            String name = nameField.getText().trim();
+            if (name.isEmpty()) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Input Error");
                 alert.setHeaderText("Name is Required");
                 alert.setContentText("Please enter a name.");
-                alert.showAndWait(); // Show the pop-up and wait for user action
+                alert.showAndWait();
             } else {
                 createdPlayerProfile.setName(name);
                 saveProfileToFile(createdPlayerProfile);
@@ -50,12 +56,13 @@ public class ProfileManager {
         return createdPlayerProfile;
     }
 
-
-    // Update to be able to override already existant txt
-    //Create a playerprofile txt or update a txt
+    /**
+     * Saves a player profile to a text file.
+     * @param profile The PlayerProfile to save.
+     */
     public static void saveProfileToFile(PlayerProfile profile) {
+        String outputFile = "Boulder-Dash-Remake/txt/" + profile.getPlayerId() + ".txt";
         try {
-            String outputFile = "Boulder-Dash-Remake/txt/" + profile.getPlayerId() + ".txt";
             PrintWriter out = new PrintWriter(outputFile);
             out.println(profile.getPlayerId());
             out.println(profile.getName());
@@ -66,70 +73,106 @@ public class ProfileManager {
         }
     }
 
+    /**
+     * Creates a player profile from specified file.
+     * @param fileName The name of the file to load.
+     * @return The created PlayerProfile, or null if an error occurs.
+     */
     public static PlayerProfile loadProfileFromFile(String fileName) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(fileName));
             int playerId = Integer.parseInt(reader.readLine());
             String playerName = reader.readLine();
             int maxLevelReached = Integer.parseInt(reader.readLine());
-
-            PlayerProfile profile = new PlayerProfile(playerId, playerName, maxLevelReached);
-            return profile;
-        } catch (IOException e) {
-            e.printStackTrace();
+            return new PlayerProfile(playerId, playerName, maxLevelReached);
+        } catch (IOException | NumberFormatException e) {
+            System.err.println("Error loading profile from file: " + e.getMessage());
         }
         return null;
     }
 
+//    /**
+//     * Retrieves all player profiles stored in text files.
+//     * @return A list of PlayerProfile objects.
+//     */
+//    public static ArrayList<PlayerProfile> getAvailableProfiles() {
+//        String folderPath = "Boulder-Dash-Remake/txt";
+//        ArrayList<PlayerProfile> profiles = new ArrayList<>();
+//
+//        ArrayList<File> matchingFiles = new ArrayList<>(); // Create a list to hold the matching files.
+//        File folder = new File(folderPath); // Represent the folder as a File object.
+//
+//        if (folder.exists() && folder.isDirectory()) { // Check if the folder exists and is valid.
+//            File[] files = folder.listFiles((dir, name) -> name.matches("\\d+\\.txt")); // Filter files with regex.
+//
+//            if (files != null) { // Ensure files is not null (folder might be empty).
+//                for (File file : files) {
+//                    matchingFiles.add(file); // Add each matching file to the list.
+//                }
+//            }
+//        } else {
+//            System.out.println("Folder does not exist or is not a directory: " + folderPath); // Handle invalid folder.
+//        }
+//
+//        for (File file : matchingFiles) { // Iterate over each file.
+//            try (Scanner scanner = new Scanner(file)) {  // Use try-with-resources to automatically close the scanner.
+//                int playerId = Integer.parseInt(scanner.nextLine());
+//                String name = scanner.nextLine();
+//                int maxLevelReached = Integer.parseInt(scanner.nextLine());
+//                PlayerProfile profile = new PlayerProfile(playerId, name, maxLevelReached);
+//                profiles.add(profile);
+//            } catch (IOException e) {
+//                System.out.println("Error reading file: " + file.getName());
+//            }
+//        }
+//        return profiles;
+//    }
+
+    /**
+     * Retrieves all available player profiles from the text files.
+     * @return An Arraylist of PlayerProfile objects.
+     */
     public static ArrayList<PlayerProfile> getAvailableProfiles() {
-        String folderPath = "Boulder-Dash-Remake/txt";
         ArrayList<PlayerProfile> profiles = new ArrayList<>();
+        File folder = new File("Boulder-Dash-Remake/txt");
 
-        ArrayList<File> matchingFiles = new ArrayList<>(); // Create a list to hold the matching files.
-        File folder = new File(folderPath); // Represent the folder as a File object.
-
-        if (folder.exists() && folder.isDirectory()) { // Check if the folder exists and is valid.
-            File[] files = folder.listFiles((dir, name) -> name.matches("\\d+\\.txt")); // Filter files with regex.
-
-            if (files != null) { // Ensure files is not null (folder might be empty).
+        if (folder.exists() && folder.isDirectory()) {
+            File[] files = folder.listFiles((dir, name) -> name.matches("\\d+\\.txt"));
+            if (files != null) {
                 for (File file : files) {
-                    matchingFiles.add(file); // Add each matching file to the list.
+                    try (Scanner scanner = new Scanner(file)) {
+                        int playerId = Integer.parseInt(scanner.nextLine());
+                        String name = scanner.nextLine();
+                        int maxLevelReached = Integer.parseInt(scanner.nextLine());
+                        profiles.add(new PlayerProfile(playerId, name, maxLevelReached));
+                    } catch (IOException | NumberFormatException e) {
+                        System.err.println("Error reading profile file: " + file.getName());
+                    }
                 }
-            }
-        } else {
-            System.out.println("Folder does not exist or is not a directory: " + folderPath); // Handle invalid folder.
-        }
-
-        for (File file : matchingFiles) { // Iterate over each file.
-            try (Scanner scanner = new Scanner(file)) {  // Use try-with-resources to automatically close the scanner.
-                int playerId = Integer.parseInt(scanner.nextLine());
-                String name = scanner.nextLine();
-                int maxLevelReached = Integer.parseInt(scanner.nextLine());
-                PlayerProfile profile = new PlayerProfile(playerId, name, maxLevelReached);
-                profiles.add(profile);
-            } catch (IOException e) {
-                System.out.println("Error reading file: " + file.getName());
             }
         }
         return profiles;
     }
 
+    /**
+     * Deletes the player profile with the selected ID
+     * @param idToDelete The ID of the profile to delete.
+     */
     public static void deleteProfile(int idToDelete) {
         String folderPath = "Boulder-Dash-Remake/txt";
         File folder = new File(folderPath);
-
         if (folder.exists() && folder.isDirectory()) {
             File[] files = folder.listFiles((dir, name) -> name.matches("\\d+\\.txt"));
-            if (files != null) { // Ensure files is not null (folder might be empty).
-                for (File file : files) { // Iterate over matching files.
-                    try (Scanner scanner = new Scanner(file)) { // Use Scanner to read the file.
-                        int playerId = Integer.parseInt(scanner.nextLine()); // Read the first line as ID.
-                        if (playerId == idToDelete) { // Check if it matches the ID to delete.
+            if (files != null) {
+                for (File file : files) {
+                    try (Scanner scanner = new Scanner(file)) {
+                        int playerId = Integer.parseInt(scanner.nextLine());
+                        if (playerId == idToDelete) {
                             try {
                                 scanner.close();
                                 java.nio.file.Files.delete(file.toPath());
                             } catch (IOException e) {
                                 System.out.println("Failed to delete file: " + file.getName());
-                                e.printStackTrace();
                             }
                         }
                     } catch (IOException | NumberFormatException e) {
@@ -144,6 +187,11 @@ public class ProfileManager {
         }
     }
 
+
+    /**
+     * Retrieves the next player ID to set, then increments 'NextPlayerID'
+     * @return The next player ID.
+     */
     public static int getNextPlayerId() {
         int playerId = 0;
         String filePath = "Boulder-Dash-Remake/txt/NextPlayerId.txt";
@@ -168,16 +216,19 @@ public class ProfileManager {
         } catch (FileNotFoundException e) {
             System.out.println("Cannot write file");
         }
+
         return playerId;
     }
 
+    /**
+     * Checks if a player ID currently has a save file
+     * @param id The player ID.
+     * @return True if the save file exists, false if a save file cannot be found.
+     */
     public static boolean doesPlayerSaveFileExist(int id) {
-        String folderPath = "Boulder-Dash-Remake/txt"; // Define the folder path.
-        String fileName = "Save" + id + ".txt"; // Construct the file name.
-
-        File file = new File(folderPath, fileName); // Create a File object with the folder and file name.
-
-        // Return true if the file exists and is a file, false otherwise.
+        String folderPath = "Boulder-Dash-Remake/txt";
+        String fileName = "Save" + id + ".txt";
+        File file = new File(folderPath, fileName);
         return file.exists() && file.isFile();
     }
 

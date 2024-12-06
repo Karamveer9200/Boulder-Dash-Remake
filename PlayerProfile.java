@@ -16,7 +16,7 @@ public class PlayerProfile {
     public PlayerProfile(String name) {
         this.playerId = ProfileManager.getNextPlayerId();
         this.name = name;
-        this.maxLevelReached = 0;
+        this.maxLevelReached = 1;
     }
 
     /**
@@ -84,6 +84,5 @@ public class PlayerProfile {
     public void setMaxLevelReached(int maxLevelReached) {
         this.maxLevelReached = maxLevelReached;
     }
-
 
 }
