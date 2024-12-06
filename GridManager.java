@@ -20,7 +20,6 @@ public class GridManager {
     private  Player player;
     private Exit exit;
 
-
     /**
      * Constructs a GridManager with a grid template.
      * Initializes the grid based on the provided template and categorizes elements into lists.
@@ -39,7 +38,7 @@ public class GridManager {
      *
      * @param gridTemplate the 2D array representing the grid layout
      */
-    public void initializePlayer(int[][] gridTemplate) {
+    public void initializePlayer(String[][] gridTemplate) {
         Element[][] elementGrid = this.getElementGrid();
         for (int row = 0; row < gridTemplate.length; row++) {
             for (int col = 0; col < gridTemplate[row].length; col++) {
@@ -58,7 +57,7 @@ public class GridManager {
      *
      * @param gridTemplate the 2D array representing the initial grid setup
      */
-    public void reinitializeGrid(int[][] gridTemplate) {
+    public void reinitializeGrid(String[][] gridTemplate) {
         initializePlayer(gridTemplate);
         Exit.toggleFalseExitExists();
         getBoulders().clear();
@@ -69,15 +68,13 @@ public class GridManager {
         getFireflies().clear();
         GameController.gameStart();
 
-
-
         // Clear specific references
         player.resetDiamondCountStatus();
         player.resetKeyInventory();
 
         for (int row = 0; row < gridTemplate.length; row++) {
             for (int col = 0; col < gridTemplate[row].length; col++) {
-                Element element = createElement(this, gridTemplate[row][col], row, col, false);
+                Element element = createElement(this, gridTemplate[row][col], row, col); // i removed false here
                 elementGrid[row][col] = element;
                 addToList(element);
             }
@@ -104,7 +101,7 @@ public class GridManager {
         // follows LeftEdge is true by default
         for (int row = 0; row < gridTemplate.length; row++) {
             for (int col = 0; col < gridTemplate[row].length; col++) {
-                Element element = createElement(this,gridTemplate[row][col], row, col, false);
+                Element element = createElement(this,gridTemplate[row][col], row, col); //I removed false here
                 elementGrid[row][col] = element;
                 addToList(element);
             }

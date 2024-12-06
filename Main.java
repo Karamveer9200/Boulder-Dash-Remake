@@ -281,6 +281,8 @@ public class Main extends Application {
 		flyTickTimeline = new Timeline(flyKeyFrame);
 		frogTickTimeline = new Timeline(frogKeyFrame);
 		amoebaTickTimeline = new Timeline(amoebaKeyFrame);
+		killPlayerTickTimeLine = new Timeline(killPlayerKeyFrame);
+		explosionTickTimeLine = new Timeline(explosionKeyFrame);
 		playerTickTimeline.setCycleCount(Animation.INDEFINITE);
 		killPlayerTickTimeLine.setCycleCount(Animation.INDEFINITE);
 		dangerousRockFallTickTimeline.setCycleCount(Animation.INDEFINITE);
@@ -288,8 +290,6 @@ public class Main extends Application {
 		flyTickTimeline.setCycleCount(Animation.INDEFINITE);
 		frogTickTimeline.setCycleCount(Animation.INDEFINITE);
 		amoebaTickTimeline.setCycleCount(Animation.INDEFINITE);
-		killPlayerTickTimeLine = new Timeline(killPlayerKeyFrame);
-		explosionTickTimeLine = new Timeline(explosionKeyFrame);
 
 		// Draw the initial grid
 		gameController.draw();
@@ -319,8 +319,8 @@ public class Main extends Application {
 			int levelReached = currentProfile.getMaxLevelReached();
 			String levelFile = "Boulder-Dash-Remake/txt/Level" + levelReached + ".txt";
 			String[][] initialGrid = FileHandler.readFile(levelFile);
-//			gameController.getGridManager().reinitializeGrid(initialGrid);
-//		    gameController.initializePlayer(initialGrid);
+			gameController.getGridManager().reinitializeGrid(initialGrid);
+		    gameController.getGridManager().initializePlayer(initialGrid);
 			gameController.draw();
 		});
 
@@ -359,13 +359,16 @@ public class Main extends Application {
 			resetGridButton.setDisable(false);
 		});
 
-		Button testExplosionButton = new Button("Test Explosion");
-		testExplosionButton.setOnAction(e -> {
-			gameController.applyExplosion(2,2);
-			gameController.draw();
-		});
+//		Button testExplosionButton = new Button("Test Explosion");
+//		testExplosionButton.setOnAction(e -> {
+//			System.out.println("hi");
+//			gameController.applyExplosion(2,2);
+//			gameController.draw();
+//		});
 
-		toolbar.getChildren().addAll(startTickButton, stopTickButton, resetGridButton, saveButton, testExplosionButton);
+		toolbar.getChildren().addAll(startTickButton, stopTickButton, resetGridButton, saveButton
+//				testExplosionButton
+				);
 
 		root.setTop(toolbar);
 
