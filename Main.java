@@ -44,7 +44,7 @@ public class Main extends Application {
 
 	private Timeline timerTimeline;
 	private Timeline diamondCountTimeline;
-	private int secondsRemaining = 120;
+	private int secondsRemaining;
 
 	public static Player player;
 
@@ -67,6 +67,7 @@ public class Main extends Application {
 		newGameButton.setOnAction(e -> {
             currentProfile = ProfileManager.promptForProfile();
 			String levelFile = "txt/Level1.txt";
+			secondsRemaining = FileHandler.readSecondsFromLevelFile(levelFile);
 			setupGame(primaryStage, levelFile);
 		});
 
@@ -96,10 +97,12 @@ public class Main extends Application {
 						int playerID = currentProfile.getPlayerId();
 						if (ProfileManager.doesPlayerSaveFileExist(playerID)) {
 							String levelFile = "txt/Save" + playerID + ".txt";
+							secondsRemaining = FileHandler.readSecondsFromLevelFile(levelFile);
 							setupGame(primaryStage, levelFile);
 						} else {
 							int level = profileToSelect.getMaxLevelReached();
 							String levelFile = "txt/Level" + level + ".txt";
+							secondsRemaining = FileHandler.readSecondsFromLevelFile(levelFile);
 							setupGame(primaryStage, levelFile);
 						}
 					}
@@ -378,7 +381,7 @@ public class Main extends Application {
 			gameController.draw();
 		});
 		// adds timer to the toolbar
-		Text timerText = new Text("Time Remaining: 120s");
+		Text timerText = new Text("Time Remaining: " + secondsRemaining + "s");
 		timerTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
 			secondsRemaining--;
 			timerText.setText("Time Remaining: " + secondsRemaining + "s");

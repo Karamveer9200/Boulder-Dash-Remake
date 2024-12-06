@@ -214,4 +214,15 @@ public class FileHandler {
         }
     }
 
+    public static int readSecondsFromLevelFile(String fileName) {
+        File readFile = new File(fileName);
+        try {
+            Scanner in = new Scanner(readFile);
+            in.nextLine(); // Skip first line
+            return Integer.parseInt(in.nextLine()); // Return seconds
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException("File not found: " + fileName, e);
+        }
+    }
+
 }
