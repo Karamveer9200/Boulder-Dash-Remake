@@ -42,7 +42,7 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
-		primaryStage.setTitle("Game Menu");
+		primaryStage.setTitle("BOULDER DASH");
 
 		VBox menuBox = new VBox(10);
 
@@ -286,6 +286,17 @@ public class Main extends Application {
 		stopTickButton.setDisable(true);
 		Button saveButton = new Button("Save Game");
 
+
+		Button resetGridButton = new Button("Reset Level");
+		resetGridButton.setOnAction(e -> {
+			int levelReached = currentProfile.getMaxLevelReached();
+			String levelFile = "Boulder-Dash-Remake/txt/Level" + levelReached + ".txt";
+			String[][] initialGrid = FileHandler.readFile(levelFile);
+			gameController.getGridManager().initializeGrid(initialGrid);
+		    gameController.initializePlayer(initialGrid);
+			gameController.draw();
+		});
+
 		saveButton.setOnAction(e -> {
 			FileHandler.writeFile(gameController.getGridManager(), currentProfile);
 			closeGame();
@@ -300,6 +311,7 @@ public class Main extends Application {
 			startTickButton.setDisable(true);
 			stopTickButton.setDisable(false);
 			saveButton.setDisable(true);
+			resetGridButton.setDisable(true);
 		});
 
 		stopTickButton.setOnAction(e -> {
@@ -311,10 +323,10 @@ public class Main extends Application {
 			stopTickButton.setDisable(true);
 			startTickButton.setDisable(false);
 			saveButton.setDisable(false);
+			resetGridButton.setDisable(false);
 		});
 
-		toolbar.getChildren().addAll(startTickButton, stopTickButton,
-				 saveButton);
+		toolbar.getChildren().addAll(startTickButton, stopTickButton, resetGridButton, saveButton);
 		root.setTop(toolbar);
 
 		return root;
