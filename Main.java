@@ -220,6 +220,9 @@ public class Main extends Application {
 		}));
 		diamondCountTimeline.setCycleCount(Animation.INDEFINITE);
 
+		Text levelText = new Text ("Current Level: 1");
+		
+
 		toolbar.getChildren().addAll(resetButton, centerButton, startTickButton, stopTickButton,resetGridButton,testExplosionButton, timerText, diamondCountText);
 		root.setTop(toolbar);
 
