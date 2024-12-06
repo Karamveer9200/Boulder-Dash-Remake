@@ -149,7 +149,7 @@ public class FileHandler {
 
         try
         {
-            String outputFile = "Boulder-Dash-Remake/txt/" + fileName;
+            String outputFile = "txt/" + fileName;
             PrintWriter out = new PrintWriter(outputFile);
             out.println(currentGrid[0].length + " " + currentGrid.length);
             out.println(120); //Pass seconds left and output it here

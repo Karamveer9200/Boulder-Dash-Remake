@@ -52,7 +52,7 @@ public class HighScoreTableManager {
     }
 
     private static ArrayList<HighScore> getHighScores(int level) {
-        String folderPath = "Boulder-Dash-Remake/txt";
+        String folderPath = "txt";
         ArrayList<HighScore> highScores = new ArrayList<>();
 
         File folder = new File(folderPath); // Represent the folder as a File object.
@@ -86,7 +86,7 @@ public class HighScoreTableManager {
 
     public static void saveHighScoreTable(ArrayList<HighScore> highScores, int level) {
         try {
-            String outputFile = "Boulder-Dash-Remake/txt/HighScoreTable" + level + ".txt";
+            String outputFile = "txt/HighScoreTable" + level + ".txt";
             PrintWriter out = new PrintWriter(outputFile);
             for (int i = 0; i < highScores.size(); i++) {
                 HighScore highScore = highScores.get(i);

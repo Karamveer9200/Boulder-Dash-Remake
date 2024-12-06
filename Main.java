@@ -64,7 +64,7 @@ public class Main extends Application {
 		Button newGameButton = new Button("Start New Game");
 		newGameButton.setOnAction(e -> {
             currentProfile = ProfileManager.promptForProfile();
-			String levelFile = "Boulder-Dash-Remake/txt/Level1.txt";
+			String levelFile = "txt/Level1.txt";
 			setupGame(primaryStage, levelFile);
 		});
 
@@ -93,11 +93,11 @@ public class Main extends Application {
 					if (profileToSelect != null) {
 						int playerID = currentProfile.getPlayerId();
 						if (ProfileManager.doesPlayerSaveFileExist(playerID)) {
-							String levelFile = "Boulder-Dash-Remake/txt/Save" + playerID + ".txt";
+							String levelFile = "txt/Save" + playerID + ".txt";
 							setupGame(primaryStage, levelFile);
 						} else {
 							int level = profileToSelect.getMaxLevelReached();
-							String levelFile = "Boulder-Dash-Remake/txt/Level" + level + ".txt";
+							String levelFile = "txt/Level" + level + ".txt";
 							setupGame(primaryStage, levelFile);
 						}
 					}
@@ -317,7 +317,7 @@ public class Main extends Application {
 		Button resetGridButton = new Button("Reset Level");
 		resetGridButton.setOnAction(e -> {
 			int levelReached = currentProfile.getMaxLevelReached();
-			String levelFile = "Boulder-Dash-Remake/txt/Level" + levelReached + ".txt";
+			String levelFile = "txt/Level" + levelReached + ".txt";
 			String[][] initialGrid = FileHandler.readFile(levelFile);
 			gameController.getGridManager().reinitializeGrid(initialGrid);
 		    gameController.getGridManager().initializePlayer(initialGrid);

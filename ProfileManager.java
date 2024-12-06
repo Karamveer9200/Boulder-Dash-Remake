@@ -60,7 +60,7 @@ public class ProfileManager {
      * @param profile The PlayerProfile to save.
      */
     public static void saveProfileToFile(final PlayerProfile profile) {
-        String outputFile = "Boulder-Dash-Remake/txt/" + profile.getPlayerId() + ".txt";
+        String outputFile = "txt/" + profile.getPlayerId() + ".txt";
         try {
             PrintWriter out = new PrintWriter(outputFile);
             out.println(profile.getPlayerId());
@@ -96,7 +96,7 @@ public class ProfileManager {
      */
     public static ArrayList<PlayerProfile> getAvailableProfiles() {
         ArrayList<PlayerProfile> profiles = new ArrayList<>();
-        File folder = new File("Boulder-Dash-Remake/txt");
+        File folder = new File("txt");
 
         if (folder.exists() && folder.isDirectory()) {
             File[] files = folder.listFiles((dir, name) -> name.matches("\\d+\\.txt"));
@@ -121,7 +121,7 @@ public class ProfileManager {
      * @param idToDelete The ID of the profile to delete.
      */
     public static void deleteProfile(final int idToDelete) {
-        String folderPath = "Boulder-Dash-Remake/txt";
+        String folderPath = "txt";
         File folder = new File(folderPath);
 
         if (!folder.exists() || !folder.isDirectory()) {
@@ -159,7 +159,7 @@ public class ProfileManager {
      */
     public static int getNextPlayerId() {
         int playerId = 0;
-        String filePath = "Boulder-Dash-Remake/txt/NextPlayerId.txt";
+        String filePath = "txt/NextPlayerId.txt";
         File readFile = new File(filePath);
 
         //Read Next Player ID
@@ -188,7 +188,7 @@ public class ProfileManager {
      * @return True if the save file exists, false if a save file cannot be found.
      */
     public static boolean doesPlayerSaveFileExist(final int id) {
-        String folderPath = "Boulder-Dash-Remake/txt";
+        String folderPath = "txt";
         String fileName = "Save" + id + ".txt";
         File file = new File(folderPath, fileName);
         return file.exists() && file.isFile();
