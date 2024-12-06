@@ -38,8 +38,7 @@ public class AmoebaManager {
                 // Check grid boundaries and if the cell contains dirt
                 if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < cols) {
                     Element target = grid[newRow][newCol];
-                    if (target instanceof Dirt || target instanceof Path ||
-                            target instanceof Butterfly || target instanceof Firefly) {
+                    if (target instanceof Dirt) {
                         validPositions.add(new int[]{newRow, newCol});
                     }
                 }
