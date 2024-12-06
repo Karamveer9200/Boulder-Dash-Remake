@@ -20,6 +20,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import java.util.ArrayList;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 /**
  * Main sets up the GUI and initialises everything for a game to take place
@@ -207,7 +209,14 @@ public class Main extends Application {
 		Button quitButton = new Button("Quit Game");
 		quitButton.setOnAction(e -> closeGame());
 
-		menuBox.getChildren().addAll(newGameButton, loadGameButton, profileButton, highScoresButton, quitButton);
+
+		Image logoImage = new Image("images/BoulderDashTitle.png");
+		ImageView logoImageView = new ImageView(logoImage);
+
+		logoImageView.setFitWidth(700);
+		logoImageView.setPreserveRatio(true);
+
+		menuBox.getChildren().addAll(logoImageView, newGameButton, loadGameButton, profileButton, highScoresButton, quitButton);
 		menuBox.setStyle("-fx-padding: 20; -fx-alignment: center;");
 
 		// Show the menu
@@ -336,7 +345,7 @@ public class Main extends Application {
 		});
 
 		saveButton.setOnAction(e -> {
-			FileHandler.writeFile(gameController.getGridManager(), currentProfile);
+			FileHandler.writeFile(gameController.getGridManager(), currentProfile, secondsRemaining);
 			closeGame();
 		});
 
@@ -400,10 +409,10 @@ public class Main extends Application {
 		diamondCountTimeline.setCycleCount(Animation.INDEFINITE);
 
 		// display current level for the player
-		Text levelText = new Text ("Current Level: 1");
+		Text levelText = new Text ("Current Level: " + currentProfile.getMaxLevelReached());
 
-		toolbar.getChildren().addAll(startTickButton, stopTickButton,resetGridButton,
-				testExplosionButton, timerText, diamondCountText, levelText);
+		toolbar.getChildren().addAll(startTickButton, stopTickButton, resetGridButton,
+				saveButton, timerText, diamondCountText, levelText);
 		root.setTop(toolbar);
 
 		return root;

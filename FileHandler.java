@@ -143,7 +143,7 @@ public class FileHandler {
         return null;
     }
 
-    public static void writeFile(GridManager gridManager, PlayerProfile currentProfile) {
+    public static void writeFile(GridManager gridManager, PlayerProfile currentProfile, int secondsRemaining) {
         Element[][] currentGrid = gridManager.getElementGrid();
 
         int id = currentProfile.getPlayerId();
@@ -154,7 +154,7 @@ public class FileHandler {
             String outputFile = "txt/" + fileName;
             PrintWriter out = new PrintWriter(outputFile);
             out.println(currentGrid[0].length + " " + currentGrid.length);
-            out.println(120); //Pass seconds left and output it here
+            out.println(secondsRemaining); //Pass seconds left and output it here
             out.println(10); //Pass diamonds left to collect and output it here
             out.println(2 + " " + 8); //Pass Amoeba growth rate and size limit and output it here
 
