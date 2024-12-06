@@ -314,13 +314,12 @@ public class Main extends Application {
 		stopTickButton.setDisable(true);
 		Button saveButton = new Button("Save Game");
 
-
 		Button resetGridButton = new Button("Reset Level");
 		resetGridButton.setOnAction(e -> {
 			int levelReached = currentProfile.getMaxLevelReached();
 			String levelFile = "Boulder-Dash-Remake/txt/Level" + levelReached + ".txt";
 			String[][] initialGrid = FileHandler.readFile(levelFile);
-			gameController.getGridManager().reinitializeGrid(initialGrid);
+//			gameController.getGridManager().reinitializeGrid(initialGrid);
 //		    gameController.initializePlayer(initialGrid);
 			gameController.draw();
 		});
@@ -365,9 +364,6 @@ public class Main extends Application {
 			gameController.applyExplosion(2,2);
 			gameController.draw();
 		});
-
-
-
 
 		toolbar.getChildren().addAll(startTickButton, stopTickButton, resetGridButton, saveButton, testExplosionButton);
 
