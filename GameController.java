@@ -309,4 +309,9 @@ public class GameController {
                 gridManager
         );
     }
+    // allows the player being managed by Game Controller to be retrieved
+    public Player getPlayer() {
+        return gridManager.getPlayer();
+    }
+
 }

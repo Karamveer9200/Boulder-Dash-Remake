@@ -14,6 +14,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -41,8 +42,9 @@ public class Main extends Application {
 	private Timeline explosionTickTimeLine;
 
 
-//	private Timeline timerTimeline;
-//	private int elapsedSeconds = 0;
+	private Timeline timerTimeline;
+	private Timeline diamondCountTimeline;
+	private int secondsRemaining = 120;
 
 	public static Player player;
 
@@ -283,6 +285,10 @@ public class Main extends Application {
 		amoebaTickTimeline = new Timeline(amoebaKeyFrame);
 		killPlayerTickTimeLine = new Timeline(killPlayerKeyFrame);
 		explosionTickTimeLine = new Timeline(explosionKeyFrame);
+
+
+
+		// Set the cycle count to Animation.INDEFINITE
 		playerTickTimeline.setCycleCount(Animation.INDEFINITE);
 		killPlayerTickTimeLine.setCycleCount(Animation.INDEFINITE);
 		dangerousRockFallTickTimeline.setCycleCount(Animation.INDEFINITE);
@@ -290,6 +296,8 @@ public class Main extends Application {
 		flyTickTimeline.setCycleCount(Animation.INDEFINITE);
 		frogTickTimeline.setCycleCount(Animation.INDEFINITE);
 		amoebaTickTimeline.setCycleCount(Animation.INDEFINITE);
+		timerTimeline.setCycleCount(Animation.INDEFINITE);
+		explosionTickTimeLine.setCycleCount(Animation.INDEFINITE);
 
 		// Draw the initial grid
 		gameController.draw();
@@ -330,6 +338,8 @@ public class Main extends Application {
 		});
 
 		startTickButton.setOnAction(e -> {
+			timerTimeline.play();
+			diamondCountTimeline.play();
 			playerTickTimeline.play();
 			dangerousRockFallTickTimeline.play();
 			dangerousRockRollTimeline.play();
@@ -345,6 +355,8 @@ public class Main extends Application {
 		});
 
 		stopTickButton.setOnAction(e -> {
+			timerTimeline.stop();
+			diamondCountTimeline.stop();
 			playerTickTimeline.stop();
 			dangerousRockRollTimeline.stop();
 			dangerousRockFallTickTimeline.stop();
@@ -359,17 +371,35 @@ public class Main extends Application {
 			resetGridButton.setDisable(false);
 		});
 
-//		Button testExplosionButton = new Button("Test Explosion");
-//		testExplosionButton.setOnAction(e -> {
-//			System.out.println("hi");
-//			gameController.applyExplosion(2,2);
-//			gameController.draw();
-//		});
 
-		toolbar.getChildren().addAll(startTickButton, stopTickButton, resetGridButton, saveButton
-//				testExplosionButton
-				);
+		Button testExplosionButton = new Button("Test Explosion");
+		testExplosionButton.setOnAction(e -> {
+			gameController.applyExplosion(2,2);
+			gameController.draw();
+		});
+		// adds timer to the toolbar
+		Text timerText = new Text("Time Remaining: 120s");
+		timerTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+			secondsRemaining--;
+			timerText.setText("Time Remaining: " + secondsRemaining + "s");
+		}));
+		timerTimeline.setCycleCount(Animation.INDEFINITE);
 
+		// adds diamond count to the toolbar, displays as zero if player has not been initialised
+		Text diamondCountText = new Text("Diamonds Collected: 0");
+		diamondCountTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+			if (Main.player != null) {
+				diamondCountText.setText("Diamonds collected: " + Main.player.getDiamondCount());
+			} else {
+				diamondCountText.setText("Diamonds collected: 0");
+			}
+		}));
+		diamondCountTimeline.setCycleCount(Animation.INDEFINITE);
+
+		// display current level for the player
+		Text levelText = new Text ("Current Level: 1");
+
+		toolbar.getChildren().addAll(resetButton, centerButton, startTickButton, stopTickButton,resetGridButton,testExplosionButton, timerText, diamondCountText, levelText);
 		root.setTop(toolbar);
 
 		return root;
