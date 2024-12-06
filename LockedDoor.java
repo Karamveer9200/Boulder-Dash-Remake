@@ -7,7 +7,7 @@ public class LockedDoor extends Tile {
         super(row, column);
         this.colour = colour;
         canBeEntered = false;
-        name = "LockedDoor";
+        name = colour + "LockedDoor";
 
         switch (colour) {
             case RED -> image = new Image("images/RedLockedDoor.png");

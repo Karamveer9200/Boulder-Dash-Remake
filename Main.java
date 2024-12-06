@@ -3,15 +3,22 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import java.util.ArrayList;
 
 /**
  * Main sets up the GUI and initialises everything for a game to take place
@@ -27,7 +34,7 @@ public class Main extends Application {
 	private Timeline dangerousRockFallTickTimeline;
 	private Timeline dangerousRockRollTimeline;
 	private Timeline frogTickTimeline;
-	private Timeline aomeebaTickTimeline;
+	private Timeline amoebaTickTimeline;
 	private Timeline flyTickTimeline;
 	private Timeline killPlayerTickTimeLine;
 
@@ -39,10 +46,177 @@ public class Main extends Application {
 
 	public static Player player;
 
+	private ArrayList<PlayerProfile> profiles = new ArrayList<>();
+	private PlayerProfile currentProfile;
+
 	@Override
 	public void start(Stage primaryStage) {
+		primaryStage.setTitle("BOULDER DASH");
+
+		VBox menuBox = new VBox(10);
+
+		Scene menuScene = new Scene(menuBox, WINDOW_WIDTH, WINDOW_HEIGHT);
+		primaryStage.setScene(menuScene);
+
+		profiles = ProfileManager.getAvailableProfiles(); //Load all player profiles in txt to
+
+		// Set up menu buttons
+		Button newGameButton = new Button("Start New Game");
+		newGameButton.setOnAction(e -> {
+            currentProfile = ProfileManager.promptForProfile(primaryStage);
+			String levelFile = "Boulder-Dash-Remake/txt/Level1.txt";
+			setupGame(primaryStage, levelFile);
+		});
+
+		Button loadGameButton = new Button("Load Game");
+		loadGameButton.setOnAction(e -> {
+			Stage dialog = new Stage();
+			dialog.setTitle("Choose a player profile");
+
+			ComboBox<String> profileDropdown = new ComboBox<>();
+			for (PlayerProfile profile : profiles) {
+				profileDropdown.getItems().add(profile.getName()); // Add each profile name to the dropdown
+			}
+
+			Button selectButton = new Button("Select");
+			selectButton.setOnAction(event -> {
+				String selectedProfileName = profileDropdown.getValue(); // Get the selected profile name
+				if (selectedProfileName != null) {
+					PlayerProfile profileToSelect = null;
+					for (PlayerProfile profile : profiles) {
+						if (profile.getName().equals(selectedProfileName)) {
+							profileToSelect = profile;
+							currentProfile = profile;
+							break;
+						}
+					}
+					if (profileToSelect != null) {
+						int playerID = currentProfile.getPlayerId();
+						if (ProfileManager.doesPlayerSaveFileExist(playerID)) {
+							String levelFile = "Boulder-Dash-Remake/txt/Save" + playerID + ".txt";
+							setupGame(primaryStage, levelFile);
+						} else {
+							int level = profileToSelect.getMaxLevelReached();
+							String levelFile = "Boulder-Dash-Remake/txt/Level" + level + ".txt";
+							setupGame(primaryStage, levelFile);
+						}
+					}
+					dialog.close();
+				} else {
+					Alert alert = new Alert(Alert.AlertType.WARNING);
+					alert.setTitle("No Selection");
+					alert.setHeaderText("No Profile Selected");
+					alert.setContentText("Please select a profile before proceeding.");
+					alert.showAndWait();
+				}
+			});
+
+			VBox layout = new VBox(10);
+			layout.getChildren().addAll(new Label("Select a player profile:"), profileDropdown, selectButton);
+			layout.setAlignment(Pos.CENTER);
+
+			Scene scene = new Scene(layout, 300, 200);
+			dialog.setScene(scene);
+			dialog.show();
+		});
+
+		Button profileButton = new Button("Delete Player Profile");
+		profileButton.setOnAction(e -> {
+			Stage dialog = new Stage();
+			dialog.setTitle("Delete a player profile");
+
+			ComboBox<String> profileDropdown = new ComboBox<>();
+			for (PlayerProfile profile : profiles) {
+				profileDropdown.getItems().add(profile.getName()); // Add each profile name to the dropdown
+			}
+
+			Button selectButton = new Button("Delete");
+			selectButton.setStyle("-fx-background-color: red;"); // Make button red
+			selectButton.setOnAction(event -> {
+				String selectedProfileName = profileDropdown.getValue(); // Get the selected profile name
+				if (selectedProfileName != null) {
+					PlayerProfile profileToDelete = null;
+					for (PlayerProfile profile : profiles) {
+						if (profile.getName().equals(selectedProfileName)) {
+							profileToDelete = profile;
+							break;
+						}
+					}
+					if (profileToDelete != null) {
+						int idToDelete = profileToDelete.getPlayerId();
+						profiles.remove(profileToDelete);
+						ProfileManager.deleteProfile(idToDelete);
+					}
+					dialog.close();
+				} else {
+					Alert alert = new Alert(Alert.AlertType.WARNING);
+					alert.setTitle("No Selection");
+					alert.setHeaderText("No Profile Selected");
+					alert.setContentText("Please select a profile before proceeding.");
+					alert.showAndWait();
+				}
+			});
+
+			VBox layout = new VBox(10);
+			layout.getChildren().addAll(new Label("Delete a player profile:"), profileDropdown, selectButton);
+			layout.setAlignment(Pos.CENTER);
+
+			Scene scene = new Scene(layout, 300, 200);
+			dialog.setScene(scene);
+			dialog.show();
+
+		});
+
+		Button highScoresButton = new Button("High Scores");
+		highScoresButton.setOnAction(e -> {
+			Stage dialog = new Stage();
+			dialog.setTitle("High Scores");
+			dialog.initModality(Modality.APPLICATION_MODAL);
+
+			Button highScores1Button = new Button("Level 1 High Scores");
+			highScores1Button.setOnAction(eventHS1 -> {
+				HighScoreTableManager.displayHighScoreTable(1);
+				dialog.close();
+			});
+
+			Button highScores2Button = new Button("Level 2 High Scores");
+			highScores2Button.setOnAction(eventHS2 -> {
+				HighScoreTableManager.displayHighScoreTable(2);
+				dialog.close();
+			});
+
+			Button highScores3Button = new Button("Level 3 High Scores");
+			highScores3Button.setOnAction(eventHS3 -> {
+				HighScoreTableManager.displayHighScoreTable(3);
+				dialog.close();
+			});
+
+			VBox dialogBox = new VBox(10, highScores1Button, highScores2Button, highScores3Button);
+			dialogBox.setStyle("-fx-padding: 20; -fx-alignment: center;");
+
+			Scene dialogScene = new Scene(dialogBox, 300, 150);
+			dialog.setScene(dialogScene);
+			dialog.showAndWait();
+		});
+
+		Button quitButton = new Button("Quit Game");
+		quitButton.setOnAction(e -> closeGame());
+
+		menuBox.getChildren().addAll(newGameButton, loadGameButton, profileButton, highScoresButton, quitButton);
+		menuBox.setStyle("-fx-padding: 20; -fx-alignment: center;");
+
+		// Show the menu
+		primaryStage.show();
+	}
+
+	/**
+	 * Sets up the game interface and initializes everything for a game to take place.
+	 *
+	 * @param primaryStage the primary stage for the game
+	 */
+	public void setupGame(Stage primaryStage, String levelFile) {
 		// Load the initial grid from a file
-		int[][] initialGrid = FileHandler.readFile("PlaceHolder.txt");
+		String[][] initialGrid = FileHandler.readFile(levelFile);
 
 		final int canvasWidth = initialGrid[0].length * GRID_CELL_WIDTH;
 		final int canvasHeight = initialGrid.length * GRID_CELL_HEIGHT;
@@ -92,7 +266,7 @@ public class Main extends Application {
 			gameController.frogTick();
 		});
 
-		KeyFrame aomeebaKeyFrame = new KeyFrame(Duration.millis(1000), event -> {
+		KeyFrame amoebaKeyFrame = new KeyFrame(Duration.millis(1000), event -> {
 			gameController.amoebaTick();
 		});
 
@@ -102,30 +276,21 @@ public class Main extends Application {
 
 		// Set up the periodic tick timeline
 		playerTickTimeline = new Timeline(playerKeyFrame);
-		dangerousRockFallTickTimeline = new Timeline( dangerousRocksFallKeyFrame);
-		dangerousRockRollTimeline = new Timeline( dangerousRocksRollKeyFrame);
+		dangerousRockFallTickTimeline = new Timeline(dangerousRocksFallKeyFrame);
+		dangerousRockRollTimeline = new Timeline(dangerousRocksRollKeyFrame);
 		flyTickTimeline = new Timeline(flyKeyFrame);
 		frogTickTimeline = new Timeline(frogKeyFrame);
-		aomeebaTickTimeline = new Timeline(aomeebaKeyFrame);
-		killPlayerTickTimeLine = new Timeline(killPlayerKeyFrame);
-		explosionTickTimeLine = new Timeline(explosionKeyFrame);
-
-//		timerTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
-//			elapsedSeconds++;
-//			System.out.println("Elapsed Time: " + elapsedSeconds + "s");
-//		}));
-
-		// Set the cycle count to Animation.INDEFINITE
+		amoebaTickTimeline = new Timeline(amoebaKeyFrame);
 		playerTickTimeline.setCycleCount(Animation.INDEFINITE);
 		killPlayerTickTimeLine.setCycleCount(Animation.INDEFINITE);
 		dangerousRockFallTickTimeline.setCycleCount(Animation.INDEFINITE);
 		dangerousRockRollTimeline.setCycleCount(Animation.INDEFINITE);
 		flyTickTimeline.setCycleCount(Animation.INDEFINITE);
 		frogTickTimeline.setCycleCount(Animation.INDEFINITE);
-		aomeebaTickTimeline.setCycleCount(Animation.INDEFINITE);
-//		timerTimeline.setCycleCount(Animation.INDEFINITE);
-		explosionTickTimeLine.setCycleCount(Animation.INDEFINITE);
-		
+		amoebaTickTimeline.setCycleCount(Animation.INDEFINITE);
+		killPlayerTickTimeLine = new Timeline(killPlayerKeyFrame);
+		explosionTickTimeLine = new Timeline(explosionKeyFrame);
+
 		// Draw the initial grid
 		gameController.draw();
 
@@ -144,56 +309,55 @@ public class Main extends Application {
 		HBox toolbar = new HBox(10);
 		toolbar.setPadding(new Insets(10));
 
-		Button resetButton = new Button("Reset Player");
-		resetButton.setOnAction(e -> {
-			gameController.resetPlayerLocation();
-			gameController.draw();
-		});
-
-		Button centerButton = new Button("Center Player");
-		centerButton.setOnAction(e -> {
-			gameController.movePlayerToCenter();
-			gameController.draw();
-		});
-
-		Button startTickButton = new Button("Start Ticks");
-		Button stopTickButton = new Button("Stop Ticks");
+		Button startTickButton = new Button("Unpause");
+		Button stopTickButton = new Button("Pause");
 		stopTickButton.setDisable(true);
+		Button saveButton = new Button("Save Game");
+
+
+		Button resetGridButton = new Button("Reset Level");
+		resetGridButton.setOnAction(e -> {
+			int levelReached = currentProfile.getMaxLevelReached();
+			String levelFile = "Boulder-Dash-Remake/txt/Level" + levelReached + ".txt";
+			String[][] initialGrid = FileHandler.readFile(levelFile);
+			gameController.getGridManager().reinitializeGrid(initialGrid);
+//		    gameController.initializePlayer(initialGrid);
+			gameController.draw();
+		});
+
+		saveButton.setOnAction(e -> {
+			FileHandler.writeFile(gameController.getGridManager(), currentProfile);
+			closeGame();
+		});
 
 		startTickButton.setOnAction(e -> {
-//			timerTimeline.play();
 			playerTickTimeline.play();
 			dangerousRockFallTickTimeline.play();
 			dangerousRockRollTimeline.play();
 			flyTickTimeline.play();
 			frogTickTimeline.play();
-			aomeebaTickTimeline.play();
+			amoebaTickTimeline.play();
 			killPlayerTickTimeLine.play();
 			explosionTickTimeLine.play();
 			startTickButton.setDisable(true);
 			stopTickButton.setDisable(false);
+			saveButton.setDisable(true);
+			resetGridButton.setDisable(true);
 		});
 
 		stopTickButton.setOnAction(e -> {
-//			timerTimeline.stop();
 			playerTickTimeline.stop();
 			dangerousRockRollTimeline.stop();
 			dangerousRockFallTickTimeline.stop();
 			flyTickTimeline.stop();
 			frogTickTimeline.stop();
-			aomeebaTickTimeline.stop();
+			amoebaTickTimeline.stop();
 			killPlayerTickTimeLine.stop();
 			explosionTickTimeLine.stop();
 			stopTickButton.setDisable(true);
 			startTickButton.setDisable(false);
-		});
-
-		Button resetGridButton = new Button("Reset Grid");
-		resetGridButton.setOnAction(e -> {
-			int[][] initialGrid = FileHandler.readFile("PlaceHolder.txt");
-			gameController.getGridManager().reinitializeGrid(initialGrid);
-//		    gameController.initializePlayer(initialGrid);
-			gameController.draw();
+			saveButton.setDisable(false);
+			resetGridButton.setDisable(false);
 		});
 
 		Button testExplosionButton = new Button("Test Explosion");
@@ -205,10 +369,18 @@ public class Main extends Application {
 
 
 
-		toolbar.getChildren().addAll(resetButton, centerButton, startTickButton, stopTickButton,resetGridButton,testExplosionButton);
+		toolbar.getChildren().addAll(startTickButton, stopTickButton, resetGridButton, saveButton, testExplosionButton);
+
 		root.setTop(toolbar);
 
 		return root;
+	}
+
+	/**
+	 * Closes the game.
+	 */
+	private void closeGame() {
+		System.exit(0);
 	}
 
 	public static void main(String[] args) {

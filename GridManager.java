@@ -27,7 +27,7 @@ public class GridManager {
      *
      * @param gridTemplate the 2D array representing the initial grid setup
      */
-    public GridManager(int[][] gridTemplate) {
+    public GridManager(String[][] gridTemplate) {
         this.elementGrid = new Element[gridTemplate.length][gridTemplate[0].length];
         initializeGrid(gridTemplate);
 
@@ -91,7 +91,7 @@ public class GridManager {
      *
      * @param gridTemplate the 2D array representing the initial grid setup
      */
-    public void initializeGrid(int[][] gridTemplate) {
+    public void initializeGrid(String[][] gridTemplate) {
         // Clear all memory of existing lists
         Exit.toggleFalseExitExists();
         getBoulders().clear();
@@ -114,38 +114,46 @@ public class GridManager {
      * Creates an element based on the provided code and its position in the grid.
      *
      * @param gridManager
-     * @param code        the integer code representing the type of element
+     * @param code        the String code representing the type of element
      * @param row         the row position of the element
      * @param col         the column position of the element
      * @return the created Element object
      * @throws IllegalArgumentException if the code does not correspond to a known element type
      */
-    private Element createElement(GridManager gridManager, int code, int row, int col, boolean followsLeftEdge) {
+    private Element createElement(GridManager gridManager, String code, int row, int col) {
         return switch (code) {
-            case 0 -> new Path(row, col);
-            case 1 -> new Dirt(row, col);
-            case 2 -> player = new Player(row, col);
-            case 3 -> new NormalWall(row, col);
-            case 4 -> new Boulder(row, col);
-            case 5 -> new Frog(row, col);
-            case 6 -> new Amoeba(row, col);
-            case 7 -> new Diamond(row, col);
-            case 8 -> new TitaniumWall(row, col);
-            case 9 -> new MagicWall(row, col);
-            case 10 -> new LockedDoor(row, col, KeyColour.RED);
-            case 11 -> new Key(row, col, KeyColour.RED);
-            case 12 -> new LockedDoor(row, col, KeyColour.GREEN);
-            case 13 -> new Key(row, col, KeyColour.GREEN);
-            case 14 -> new LockedDoor(row, col, KeyColour.YELLOW);
-            case 15 -> new Key(row, col, KeyColour.YELLOW);
-            case 16 -> new LockedDoor(row, col, KeyColour.BLUE);
-            case 17 -> new Key(row, col, KeyColour.BLUE);
-            case 18 -> exit = new Exit(row, col);
-            case 19 -> new Butterfly(row, col, followsLeftEdge);
-            case 20 -> new Firefly(row, col, followsLeftEdge);
+            case "*" -> player = new Player(row, col);
 
+            case "P" -> new Path(row, col);
+            case "DT" -> new Dirt(row, col);
+            case "E" -> new Exit(row, col);
 
-            default -> throw new IllegalArgumentException("Unknown element code: " + code);
+            case "NW" -> new NormalWall(row, col);
+            case "TW" -> new TitaniumWall(row, col);
+            case "MW" -> new MagicWall(row, col);
+
+            case "B" -> new Boulder(row, col);
+            case "DD" -> new Diamond(row, col);
+
+            case "F" -> new Frog(row, col);
+            case "A" -> new Amoeba(row, col);
+
+            //THIS IS WHERE WE SPECIFY IF FIREFLY IS LEFT OR RIGHT EDGE FOLLOWING
+            //case "FFL" -> new FireFly(row,col,LEFT);
+            //case "FFR" -> new FireFly(row,col,RIGHT);
+            //case "BFL" -> new FireFly(row,col,LEFT);
+            //case "BFR" -> new FireFly(row,col,RIGHT);
+
+            case "RLD" -> new LockedDoor(row, col, KeyColour.RED);
+            case "RK" -> new Key(row, col, KeyColour.RED);
+            case "GLD" -> new LockedDoor(row, col, KeyColour.GREEN);
+            case "GK" -> new Key(row, col, KeyColour.GREEN);
+            case "YLD" -> new LockedDoor(row, col, KeyColour.YELLOW);
+            case "YK" -> new Key(row, col, KeyColour.YELLOW);
+            case "BLD" -> new LockedDoor(row, col, KeyColour.BLUE);
+            case "BK" -> new Key(row, col, KeyColour.BLUE);
+
+            default -> throw new IllegalArgumentException("Unknown element: " + code);
         };
     }
 
@@ -252,6 +260,7 @@ public class GridManager {
             System.out.println("Firefly removed");
         }
     }
+
     /**
      * Retrieves the 2D array of elements in the grid.
      *
@@ -334,15 +343,4 @@ public class GridManager {
         return amoebas;
     }
 
-
-    // built for debugging purpose
-    public void printGridState() {
-        for (int row = 0; row < elementGrid.length; row++) {
-            for (int col = 0; col < elementGrid[row].length; col++) {
-                System.out.print(elementGrid[row][col] + " ");
-            }
-            System.out.println();
-        }
-        System.out.println("---------------------------------------------------------------------------------");
-    }
 }
