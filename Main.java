@@ -63,7 +63,7 @@ public class Main extends Application {
 		// Set up menu buttons
 		Button newGameButton = new Button("Start New Game");
 		newGameButton.setOnAction(e -> {
-            currentProfile = ProfileManager.promptForProfile(primaryStage);
+            currentProfile = ProfileManager.promptForProfile();
 			String levelFile = "Boulder-Dash-Remake/txt/Level1.txt";
 			setupGame(primaryStage, levelFile);
 		});
