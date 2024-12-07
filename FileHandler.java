@@ -100,7 +100,7 @@ public class FileHandler {
 //            {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,},
 //    };
 
-    public static String[][] readFile(String fileName) {
+    public static String[][] readElementGridFromLevelFile(String fileName) {
         File readFile = new File(fileName);
         try
         {
@@ -110,18 +110,23 @@ public class FileHandler {
             int width = Integer.parseInt(splitGridDimensions[0]);
             int height = Integer.parseInt(splitGridDimensions[1]);
 
-            int secondsLeft = Integer.parseInt(in.nextLine());
-            int diamondsToCollect = Integer.parseInt(in.nextLine());
+            in.nextLine(); //Skip line containing seconds left
+            in.nextLine(); //Skip line containing diamond information
+            in.nextLine(); //Skip line containing amoeba information
+            in.nextLine(); //skip line containing key inventory information
 
-            String[] splitAmoebaInfo = in.nextLine().split(" ");
-            int amoebaGrowthRate = Integer.parseInt(splitAmoebaInfo[0]);
-            int amoebaSizeLimit = Integer.parseInt(splitAmoebaInfo[1]);
-
-            String[] splitCollectedKeys = in.nextLine().split(" ");
-            for (int i = 0; i < splitCollectedKeys.length; i++)
-            {
-                // Have to write code here that reads in collected keys so far
-            }
+//            int secondsLeft = Integer.parseInt(in.nextLine());
+//            int diamondsToCollect = Integer.parseInt(in.nextLine());
+//
+//            String[] splitAmoebaInfo = in.nextLine().split(" ");
+//            int amoebaGrowthRate = Integer.parseInt(splitAmoebaInfo[0]);
+//            int amoebaSizeLimit = Integer.parseInt(splitAmoebaInfo[1]);
+//
+//            String[] splitCollectedKeys = in.nextLine().split(" ");
+//            for (int i = 0; i < splitCollectedKeys.length; i++)
+//            {
+//                // Have to write code here that reads in collected keys so far
+//            }
 
             String[][] initialGrid = new String[height][width];
             int i = 0;
@@ -155,7 +160,8 @@ public class FileHandler {
             PrintWriter out = new PrintWriter(outputFile);
             out.println(currentGrid[0].length + " " + currentGrid.length);
             out.println(secondsRemaining); //Pass seconds left and output it here
-            out.println(10); //Pass diamonds left to collect and output it here
+
+            out.println(0 + " " + 10); //Pass diamonds collected and how many diamonds left to collect and output it here
             out.println(2 + " " + 8); //Pass Amoeba growth rate and size limit and output it here
 
             out.println(); //Code here to output all the player's collected keys so far.
@@ -226,5 +232,53 @@ public class FileHandler {
             throw new RuntimeException("File not found: " + fileName, e);
         }
     }
+
+    public static int readDiamondsCollectedFromLevelFile(String fileName) {
+        return readDiamondsInformationFromLevelFile(fileName, 0); // Index 0 for diamonds collected
+    }
+
+    public static int readRequiredDiamondsFromLevelFile(String fileName) {
+        return readDiamondsInformationFromLevelFile(fileName, 1); // Index 1 for required diamonds
+    }
+
+    private static int readDiamondsInformationFromLevelFile(String fileName, int index) {
+        File readFile = new File(fileName);
+        try {
+            Scanner in = new Scanner(readFile);
+            in.nextLine(); // Skip first line
+            in.nextLine(); // Skip second line about seconds left
+            String[] splitDiamondInformation = in.nextLine().split(" ");
+            return Integer.parseInt(splitDiamondInformation[index]);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException("File not found: " + fileName, e);
+        }
+    }
+
+    public static int readAmoebaGrowthRateFromLevelFile(String fileName) {
+        return readAmoebaInformationFromLevelFile(fileName, 0); // Index 0 for amoeba growth rate
+    }
+
+    public static int readAmoebaSizeLimitFromLevelFile(String fileName) {
+        return readAmoebaInformationFromLevelFile(fileName, 1); // Index 1 for amoeba size limit
+    }
+
+    private static int readAmoebaInformationFromLevelFile(String fileName, int index) {
+        File readFile = new File(fileName);
+        try (Scanner in = new Scanner(readFile)) {
+            in.nextLine(); // Skip first line about grid dimensions
+            in.nextLine(); // Skip second line about seconds left
+            in.nextLine(); // Skip third line about diamonds information
+            String[] splitAmoebaInfo = in.nextLine().split(" ");
+            return Integer.parseInt(splitAmoebaInfo[index]);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException("File not found: " + fileName, e);
+        } catch (IndexOutOfBoundsException | NumberFormatException e) {
+            throw new RuntimeException("Error parsing amoeba information from file: " + fileName, e);
+        }
+    }
+
+//    public static ArrayList<Key> readKeyInventoryFromLevelFile(String fileName) {
+//
+//    }
 
 }

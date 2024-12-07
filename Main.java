@@ -40,15 +40,12 @@ public class Main extends Application {
 	private Timeline amoebaTickTimeline;
 	private Timeline flyTickTimeline;
 	private Timeline killPlayerTickTimeLine;
-
 	private Timeline explosionTickTimeLine;
-
-
 	private Timeline timerTimeline;
 	private Timeline diamondCountTimeline;
-	private int secondsRemaining;
 
-	public static Player player;
+
+	private int secondsRemaining;
 
 	private ArrayList<PlayerProfile> profiles = new ArrayList<>();
 	private PlayerProfile currentProfile;
@@ -230,7 +227,7 @@ public class Main extends Application {
 	 */
 	public void setupGame(Stage primaryStage, String levelFile) {
 		// Load the initial grid from a file
-		String[][] initialGrid = FileHandler.readFile(levelFile);
+		String[][] initialGrid = FileHandler.readElementGridFromLevelFile(levelFile);
 
 		final int canvasWidth = initialGrid[0].length * GRID_CELL_WIDTH;
 		final int canvasHeight = initialGrid.length * GRID_CELL_HEIGHT;
@@ -338,7 +335,7 @@ public class Main extends Application {
 		resetGridButton.setOnAction(e -> {
 			int levelReached = currentProfile.getMaxLevelReached();
 			String levelFile = "txt/Level" + levelReached + ".txt";
-			String[][] initialGrid = FileHandler.readFile(levelFile);
+			String[][] initialGrid = FileHandler.readElementGridFromLevelFile(levelFile);
 			gameController.getGridManager().reinitializeGrid(initialGrid);
 		    gameController.getGridManager().initializePlayer(initialGrid);
 			gameController.draw();
@@ -400,8 +397,8 @@ public class Main extends Application {
 		// adds diamond count to the toolbar, displays as zero if player has not been initialised
 		Text diamondCountText = new Text("Diamonds Collected: 0");
 		diamondCountTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
-			if (Main.player != null) {
-				diamondCountText.setText("Diamonds collected: " + Main.player.getDiamondCount());
+			if (gameController.getPlayer() != null) {
+				diamondCountText.setText("Diamonds collected: " + gameController.getPlayer().getDiamondCount());
 			} else {
 				diamondCountText.setText("Diamonds collected: 0");
 			}
