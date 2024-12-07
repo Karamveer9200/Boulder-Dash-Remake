@@ -184,19 +184,19 @@ public class Main extends Application {
 			Button highScores1Button = new Button("Level 1 High Scores");
 			highScores1Button.setOnAction(event -> {
 				dialog.hide();
-				HighScoreTableManager.displayHighScoreTable(1, dialog);
+				HighScoreTableManager.displayHighScoresInMainMenu(1, dialog);
 			});
 
 			Button highScores2Button = new Button("Level 2 High Scores");
 			highScores2Button.setOnAction(event -> {
 				dialog.hide();
-				HighScoreTableManager.displayHighScoreTable(2, dialog);
+				HighScoreTableManager.displayHighScoresInMainMenu(2, dialog);
 			});
 
 			Button highScores3Button = new Button("Level 3 High Scores");
 			highScores3Button.setOnAction(event -> {
 				dialog.hide();
-				HighScoreTableManager.displayHighScoreTable(3, dialog);
+				HighScoreTableManager.displayHighScoresInMainMenu(3, dialog);
 			});
 
 			VBox dialogBox = new VBox(10, highScores1Button, highScores2Button, highScores3Button);
@@ -444,7 +444,9 @@ public class Main extends Application {
 
 		// Show the high score table for the current level
 		int currentLevel = currentProfile.getMaxLevelReached();
-		HighScoreTableManager.displayHighScoreTable(currentLevel);
+		String currentPlayerName = currentProfile.getName();
+		HighScoreTableManager.updateHighScoreTable(currentPlayerName,500,currentLevel);
+		HighScoreTableManager.displayHighScoresAfterLevel(currentLevel, 500);
 
 		// Check if there’s a next level
 		int nextLevel = currentLevel + 1;
@@ -458,7 +460,7 @@ public class Main extends Application {
 			setupGame(primaryStage, nextLevelFile);
 		} else {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			alert.setTitle("Game Over");
+			alert.setTitle("VICTORY");
 			alert.setHeaderText("Congratulations!");
 			alert.setContentText("You have completed all levels!");
 			alert.showAndWait();

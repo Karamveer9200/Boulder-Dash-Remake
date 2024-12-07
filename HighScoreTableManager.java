@@ -18,7 +18,7 @@ import java.util.Scanner;
 public class HighScoreTableManager {
     private static final int MAX_HIGH_SCORES = 10;
 
-    public static void displayHighScoreTable(int level, Stage parentDialog) {
+    public static void displayHighScoresInMainMenu(int level, Stage parentDialog) {
         Stage dialog = new Stage();
         dialog.setTitle("High Score Table for Level " + level);
         dialog.initModality(Modality.APPLICATION_MODAL);
@@ -42,6 +42,43 @@ public class HighScoreTableManager {
 
         vbox.getChildren().add(backButton);
         
+        Scene dialogScene = new Scene(vbox, 400, 500);
+        dialog.setScene(dialogScene);
+        dialog.showAndWait();
+    }
+
+    public static void displayHighScoresAfterLevel(int level, int scoreAchieved) {
+        Stage dialog = new Stage();
+        dialog.setTitle("High Score Table for Level " + level);
+        dialog.initModality(Modality.APPLICATION_MODAL);
+
+        VBox vbox = new VBox(10);
+        vbox.setStyle("-fx-padding: 20; -fx-alignment: center;");
+
+        ArrayList<HighScore> highScores = HighScoreTableManager.getHighScores(level);
+
+        for (HighScore highScore : highScores) {
+            Label scoreLabel = new Label(highScore.getName() + " : " + highScore.getScore());
+            scoreLabel.setStyle("-fx-font-size: 18px; -fx-text-alignment: center;");
+            vbox.getChildren().add(scoreLabel);
+        }
+
+        Label addSpace = new Label();
+        addSpace.setMinHeight(20);
+        vbox.getChildren().add(addSpace);
+
+        Label recentScore = new Label("Your Score: " + scoreAchieved);
+        recentScore.setStyle("-fx-font-size: 18px; -fx-text-alignment: center;");
+
+        vbox.getChildren().add(recentScore);
+
+        Button backButton = new Button("Begin Next Level");
+        backButton.setOnAction(event -> {
+            dialog.close();
+        });
+
+        vbox.getChildren().add(backButton);
+
         Scene dialogScene = new Scene(vbox, 400, 500);
         dialog.setScene(dialogScene);
         dialog.showAndWait();
