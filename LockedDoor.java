@@ -43,7 +43,7 @@ public class LockedDoor extends Tile {
     }
 
     /**
-     * Unlocks the door, allowing it to be entered.
+     * Unlocks the door, allowing it to be entered/walked over.
      */
     public void unlock() {
         this.canBeEntered = true;

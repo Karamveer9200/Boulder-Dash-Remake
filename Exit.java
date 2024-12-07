@@ -3,7 +3,7 @@ import javafx.scene.image.Image;
 /**
  * Represents an Exit tile in the game.
  * Only one exit can be created per level.
- * Initially, it cannot be entered or exploded.
+ * Initially, cannot be entered/walked over or exploded.
  * It is represented by an image located at "images/Exit.png".
  */
 public class Exit extends Tile {
@@ -13,7 +13,7 @@ public class Exit extends Tile {
     private static boolean exitExists = false;
 
     /**
-     * Creates a new Exit tile at the specified row and column.
+     * Creates a new Exit tile at the specified row and column (x and y).
      *
      * @param row the row position of the tile
      * @param column the column position of the tile
@@ -72,7 +72,7 @@ public class Exit extends Tile {
     }
 
     /**
-     * Returns a string representation of the exit, including its locked status.
+     * This returns a string representation of the exit and its locked status.
      *
      * @return the string representation of the exit
      */

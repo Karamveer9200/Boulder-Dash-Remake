@@ -8,7 +8,8 @@ import javafx.scene.image.Image;
 public class NormalWall extends Tile {
 
     /**
-     * Creates a new Normal Wall tile at the specified row(X co-ord) and column(Y co-ord).
+     * Creates a new Normal Wall tile at the specified row (X co-ord)
+     * and column(Y co-ord).
      *
      * @param row the row position (X co-ord) of the tile
      * @param column the column (Y co-ord) position of the tile
