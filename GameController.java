@@ -166,10 +166,10 @@ public class GameController {
     }
 
     public void amoebaTick() {
-        if (gridManager.getAmoebas().size() > 0) {
-            AmoebaManager.spreadAll(gridManager);
+        if (!AmoebaManager.isEmpty()) { // Check if there are any active amoeba groups
+            AmoebaManager.updateAll(gridManager); // Update all amoeba groups
         }
-        draw();
+        draw(); // Redraw the grid after updating
     }
 
     public void butterflyTick() {

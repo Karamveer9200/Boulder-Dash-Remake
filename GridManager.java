@@ -17,6 +17,7 @@ public class GridManager {
     final ArrayList<Firefly> fireflies = new ArrayList<>();
     final ArrayList<Frog> frogs = new ArrayList<>();
     final ArrayList<Amoeba> amoebas = new ArrayList<>();
+    private final ArrayList<AmoebaGroup> amoebaGroups = new ArrayList<>();
     private  Player player;
     private Exit exit;
 
@@ -64,6 +65,7 @@ public class GridManager {
         getDiamonds().clear();
         getFrogs().clear();
         getAmoebas().clear();
+        amoebaGroups.clear();
         getButterflies().clear();
         getFireflies().clear();
         GameController.gameStart();
@@ -106,6 +108,7 @@ public class GridManager {
                 addToList(element);
             }
         }
+        identifyAmoebaGroups();
     }
     /**
      * Creates an element based on the provided code and its position in the grid.
@@ -152,6 +155,46 @@ public class GridManager {
 
             default -> throw new IllegalArgumentException("Unknown element: " + code);
         };
+    }
+
+    private void identifyAmoebaGroups() {
+        boolean[][] visited = new boolean[elementGrid.length][elementGrid[0].length];
+        AmoebaManager.clearGroups(); // Clear previous groups
+
+        for (int row = 0; row < elementGrid.length; row++) {
+            for (int col = 0; col < elementGrid[row].length; col++) {
+                if (elementGrid[row][col] instanceof Amoeba && !visited[row][col]) {
+                    // Start a new group if an unvisited amoeba is found
+                    AmoebaGroup group = new AmoebaGroup();
+                    exploreAmoebaGroup(row, col, group, visited);
+                    amoebaGroups.add(group); // Add to the local list
+                    AmoebaManager.addAmoebaGroup(group); // Add to the global manager
+                }
+            }
+        }
+    }
+
+    private void exploreAmoebaGroup(int row, int col, AmoebaGroup group, boolean[][] visited) {
+        // Boundary check
+        if (row < 0 || row >= elementGrid.length || col < 0 || col >= elementGrid[0].length) return;
+
+        // Check if the cell is already visited or not an amoeba
+        if (visited[row][col] || !(elementGrid[row][col] instanceof Amoeba)) return;
+
+        // Mark the cell as visited and add the amoeba to the group
+        visited[row][col] = true;
+        Amoeba amoeba = (Amoeba) elementGrid[row][col];
+        group.addAmoeba(amoeba);
+
+        // Explore all four directions
+        exploreAmoebaGroup(row - 1, col, group, visited); // Up
+        exploreAmoebaGroup(row + 1, col, group, visited); // Down
+        exploreAmoebaGroup(row, col - 1, group, visited); // Left
+        exploreAmoebaGroup(row, col + 1, group, visited); // Right
+    }
+
+    public ArrayList<AmoebaGroup> getAmoebaGroups() {
+        return amoebaGroups;
     }
 
     /**
