@@ -49,7 +49,6 @@ public class Main extends Application {
 	private Timeline diamondCountTimeline;
 	private Timeline checkLevelWinTimeline;
 
-	private boolean levelWon;
 	private int secondsRemaining;
 	private ArrayList<PlayerProfile> profiles = new ArrayList<>();
 	private PlayerProfile currentProfile;
@@ -405,12 +404,6 @@ public class Main extends Application {
 			resetGridButton.setDisable(false);
 		});
 
-		Button testExplosionButton = new Button("Test Explosion");
-		testExplosionButton.setOnAction(e -> {
-			gameController.applyExplosion(2,2);
-			gameController.draw();
-		});
-
 		// adds timer to the toolbar
 		Text timerText = new Text("Time Remaining: " + secondsRemaining + "s");
 		timerTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
@@ -503,15 +496,11 @@ public class Main extends Application {
 	}
 
 	public int calcHighScore(int secondsRemaining, int diamondsCollected) {
-		System.out.println(diamondsCollected);
-		System.out.println(DIAMOND_SCORE_VALUE);
-		System.out.println(secondsRemaining);
-		System.out.println(TIME_SCORE_VALUE);
 		return (diamondsCollected * DIAMOND_SCORE_VALUE) + (secondsRemaining * TIME_SCORE_VALUE);
 	}
 
 	public static void main(String[] args) {
 		launch(args);
 	}
-	
+
 }
