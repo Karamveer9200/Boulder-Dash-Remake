@@ -135,11 +135,11 @@ public class GridManager {
             case "F" -> new Frog(row, col);
             case "A" -> new Amoeba(row, col);
 
-            //THIS IS WHERE WE SPECIFY IF FIREFLY IS LEFT OR RIGHT EDGE FOLLOWING
-            //case "FFL" -> new FireFly(row,col,LEFT);
-            //case "FFR" -> new FireFly(row,col,RIGHT);
-            //case "BFL" -> new FireFly(row,col,LEFT);
-            //case "BFR" -> new FireFly(row,col,RIGHT);
+
+            case "FFL" -> new Firefly(row,col,true);
+            case "FFR" -> new Firefly(row,col,false);
+            case "BFL" -> new Butterfly(row,col,true);
+            case "BFR" -> new Butterfly(row,col,false);
 
             case "RLD" -> new LockedDoor(row, col, KeyColour.RED);
             case "RK" -> new Key(row, col, KeyColour.RED);
