@@ -54,20 +54,53 @@ public class Main extends Application {
 	private PlayerProfile currentProfile;
 
 	private Stage primaryStage;
-
 	@Override
 	public void start(Stage primaryStage) {
 		this.primaryStage = primaryStage; // Store the primary stage
 		primaryStage.setTitle("BOULDER DASH");
 
-		VBox menuBox = new VBox(10);
-
+		VBox menuBox = createMenuBox();
 		Scene menuScene = new Scene(menuBox, WINDOW_WIDTH, WINDOW_HEIGHT);
 		primaryStage.setScene(menuScene);
 
-		profiles = ProfileManager.getAvailableProfiles(); //Load all player profiles in txt to
+		profiles = ProfileManager.getAvailableProfiles(); // Load player profiles
 
-		// Set up menu buttons
+		primaryStage.show(); // Show the main menu
+	}
+
+	/**
+	 * Creates the main menu layout with buttons and a logo.
+	 */
+	private VBox createMenuBox() {
+		VBox menuBox = new VBox(10);
+
+		ImageView logo = createLogo();
+		Button newGameButton = createNewGameButton();
+		Button loadGameButton = createLoadGameButton();
+		Button profileButton = createProfileButton();
+		Button highScoresButton = createHighScoresButton();
+		Button quitButton = createQuitButton();
+
+		menuBox.getChildren().addAll(logo, newGameButton, loadGameButton, profileButton, highScoresButton, quitButton);
+		menuBox.setStyle("-fx-padding: 20; -fx-alignment: center;");
+		return menuBox;
+	}
+
+	/**
+	 * Creates the logo for the main menu.
+	 */
+	private ImageView createLogo() {
+		Image logoImage = new Image("images/BoulderDashTitle.png");
+		ImageView logoImageView = new ImageView(logoImage);
+		logoImageView.setFitWidth(700);
+		logoImageView.setPreserveRatio(true);
+		return logoImageView;
+	}
+
+	/**
+	 * Creates the "Start New Game" button.
+	 */
+	private Button createNewGameButton() {
 		Button newGameButton = new Button("Start New Game");
 		newGameButton.setOnAction(e -> {
 			currentProfile = ProfileManager.promptForProfile();
@@ -75,154 +108,181 @@ public class Main extends Application {
 			String levelFile = "txt/Level1.txt";
 			setupGame(primaryStage, levelFile);
 		});
+		return newGameButton;
+	}
 
+	/**
+	 * Creates the "Load Game" button.
+	 */
+	private Button createLoadGameButton() {
 		Button loadGameButton = new Button("Load Game");
-		loadGameButton.setOnAction(e -> {
-			Stage dialog = new Stage();
-			dialog.setTitle("Choose a player profile");
+		loadGameButton.setOnAction(e -> showProfileSelectionDialog("Load Game", true));
+		return loadGameButton;
+	}
 
-			ComboBox<String> profileDropdown = new ComboBox<>();
-			for (PlayerProfile profile : profiles) {
-				profileDropdown.getItems().add(profile.getName()); // Add each profile name to the dropdown
-			}
-
-			Button selectButton = new Button("Select");
-			selectButton.setOnAction(event -> {
-				String selectedProfileName = profileDropdown.getValue(); // Get the selected profile name
-				if (selectedProfileName != null) {
-					PlayerProfile profileToSelect = null;
-					for (PlayerProfile profile : profiles) {
-						if (profile.getName().equals(selectedProfileName)) {
-							profileToSelect = profile;
-							currentProfile = profile;
-							break;
-						}
-					}
-					if (profileToSelect != null) {
-						int playerID = currentProfile.getPlayerId();
-						if (ProfileManager.doesPlayerSaveFileExist(playerID)) {
-							String levelFile = "txt/Save" + playerID + ".txt";
-							setupGame(primaryStage, levelFile);
-						} else {
-							int level = profileToSelect.getMaxLevelReached();
-							String levelFile = "txt/Level" + level + ".txt";
-							setupGame(primaryStage, levelFile);
-						}
-					}
-					dialog.close();
-				} else {
-					Alert alert = new Alert(Alert.AlertType.WARNING);
-					alert.setTitle("No Selection");
-					alert.setHeaderText("No Profile Selected");
-					alert.setContentText("Please select a profile before proceeding.");
-					alert.showAndWait();
-				}
-			});
-
-			VBox layout = new VBox(10);
-			layout.getChildren().addAll(new Label("Select a player profile:"), profileDropdown, selectButton);
-			layout.setAlignment(Pos.CENTER);
-
-			Scene scene = new Scene(layout, 300, 200);
-			dialog.setScene(scene);
-			dialog.show();
-		});
-
+	/**
+	 * Creates the "Delete Player Profile" button.
+	 */
+	private Button createProfileButton() {
 		Button profileButton = new Button("Delete Player Profile");
-		profileButton.setOnAction(e -> {
-			Stage dialog = new Stage();
-			dialog.setTitle("Delete a player profile");
+		profileButton.setOnAction(e -> showProfileSelectionDialog("Delete Player Profile", false));
+		return profileButton;
+	}
 
-			ComboBox<String> profileDropdown = new ComboBox<>();
-			for (PlayerProfile profile : profiles) {
-				profileDropdown.getItems().add(profile.getName()); // Add each profile name to the dropdown
-			}
-
-			Button selectButton = new Button("Delete");
-			selectButton.setStyle("-fx-background-color: red;"); // Make button red
-			selectButton.setOnAction(event -> {
-				String selectedProfileName = profileDropdown.getValue(); // Get the selected profile name
-				if (selectedProfileName != null) {
-					PlayerProfile profileToDelete = null;
-					for (PlayerProfile profile : profiles) {
-						if (profile.getName().equals(selectedProfileName)) {
-							profileToDelete = profile;
-							break;
-						}
-					}
-					if (profileToDelete != null) {
-						int idToDelete = profileToDelete.getPlayerId();
-						profiles.remove(profileToDelete);
-						ProfileManager.deleteProfile(idToDelete);
-					}
-					dialog.close();
-				} else {
-					Alert alert = new Alert(Alert.AlertType.WARNING);
-					alert.setTitle("No Selection");
-					alert.setHeaderText("No Profile Selected");
-					alert.setContentText("Please select a profile before proceeding.");
-					alert.showAndWait();
-				}
-			});
-
-			VBox layout = new VBox(10);
-			layout.getChildren().addAll(new Label("Delete a player profile:"), profileDropdown, selectButton);
-			layout.setAlignment(Pos.CENTER);
-
-			Scene scene = new Scene(layout, 300, 200);
-			dialog.setScene(scene);
-			dialog.show();
-
-		});
-
+	/**
+	 * Creates the "High Scores" button to access the High Score Table.
+	 */
+	private Button createHighScoresButton() {
 		Button highScoresButton = new Button("High Scores");
-		highScoresButton.setOnAction(e -> {
-			Stage dialog = new Stage();
-			dialog.setTitle("High Scores");
-			dialog.initModality(Modality.APPLICATION_MODAL);
+		highScoresButton.setOnAction(e -> showHighScoresTableSelection());
+		return highScoresButton;
+	}
 
-			Button highScores1Button = new Button("Level 1 High Scores");
-			highScores1Button.setOnAction(event -> {
-				dialog.hide();
-				HighScoreTableManager.displayHighScoresInMainMenu(1, dialog);
-			});
-
-			Button highScores2Button = new Button("Level 2 High Scores");
-			highScores2Button.setOnAction(event -> {
-				dialog.hide();
-				HighScoreTableManager.displayHighScoresInMainMenu(2, dialog);
-			});
-
-			Button highScores3Button = new Button("Level 3 High Scores");
-			highScores3Button.setOnAction(event -> {
-				dialog.hide();
-				HighScoreTableManager.displayHighScoresInMainMenu(3, dialog);
-			});
-
-			VBox dialogBox = new VBox(10, highScores1Button, highScores2Button, highScores3Button);
-			dialogBox.setStyle("-fx-padding: 20; -fx-alignment: center;");
-
-			Scene dialogScene = new Scene(dialogBox, 300, 150);
-			dialog.setScene(dialogScene);
-			dialog.showAndWait();
-		});
-
+	/**
+	 * Creates the "Quit Game" button.
+	 */
+	private Button createQuitButton() {
 		Button quitButton = new Button("Quit Game");
 		quitButton.setOnAction(e -> closeGame());
-
-
-		Image logoImage = new Image("images/BoulderDashTitle.png");
-		ImageView logoImageView = new ImageView(logoImage);
-
-		logoImageView.setFitWidth(700);
-		logoImageView.setPreserveRatio(true);
-
-		menuBox.getChildren().addAll(logoImageView, newGameButton, loadGameButton, profileButton, highScoresButton, quitButton);
-		menuBox.setStyle("-fx-padding: 20; -fx-alignment: center;");
-
-		// Show the menu
-		primaryStage.show();
+		return quitButton;
 	}
+
+	/**
+	 * Displays a profile selection dialog for either loading or deleting a profile.
+	 */
+	private void showProfileSelectionDialog(String title, boolean isLoadGame) {
+		Stage dialog = new Stage();
+		dialog.setTitle(title);
+
+		ComboBox<String> profileDropdown = new ComboBox<>();
+		for (PlayerProfile profile : profiles) {
+			profileDropdown.getItems().add(profile.getName());
+		}
+
+		String buttonText;
+
+		if (isLoadGame) {
+			buttonText = "Load";
+		} else {
+			buttonText = "Delete";
+		}
+
+		Button actionButton = new Button(buttonText);
+
+		if (!isLoadGame) {
+			actionButton.setStyle(isLoadGame ? null : "-fx-background-color: red;");
+		}
+
+		actionButton.setOnAction(event -> {
+			String selectedProfileName = profileDropdown.getValue();
+			if (selectedProfileName != null) {
+				if (isLoadGame) {
+					handleLoadGame(selectedProfileName, dialog);
+				} else {
+					handleDeleteProfile(selectedProfileName, dialog);
+				}
+			} else {
+				Alert alert = new Alert(Alert.AlertType.WARNING);
+				alert.setTitle("No Selection");
+				alert.setHeaderText("No Profile Selected");
+				alert.setContentText("Please select a profile");
+				alert.showAndWait();
+			}
+		});
+
+		Label label = new Label("Select a player profile:");
+
+		VBox layout = new VBox(10);
+		layout.getChildren().addAll(label, profileDropdown, actionButton);
+		layout.setAlignment(Pos.CENTER);
+
+		Scene scene = new Scene(layout, 300, 200);
+		dialog.setScene(scene);
+		dialog.show();
+	}
+
+	/**
+	 * Handles loading a game for the selected profile.
+	 */
+	private void handleLoadGame(String selectedProfileName, Stage dialog) {
+		int index = 0;
+		while (index < profiles.size() && currentProfile == null) {
+			PlayerProfile profile = profiles.get(index);
+			if (profile.getName().equals(selectedProfileName)) {
+				currentProfile = profile;
+			}
+			index++;
+		}
+
+		if (currentProfile != null) {
+			int playerID = currentProfile.getPlayerId();
+			if (ProfileManager.doesPlayerSaveFileExist(playerID)) {
+				String levelFile = "txt/Save" + playerID + ".txt";
+				setupGame(primaryStage, levelFile);
+			} else {
+				int level = currentProfile.getMaxLevelReached();
+				String levelFile = "txt/Level" + level + ".txt";
+				setupGame(primaryStage, levelFile);
+			}
+		}
+		dialog.close();
+	}
+
+	/**
+	 * Handles deleting the selected profile.
+	 */
+	private void handleDeleteProfile(String selectedProfileName, Stage dialog) {
+		PlayerProfile profileToDelete = null;
+		int index = 0;
+		while (index < profiles.size() && profileToDelete == null) {
+			PlayerProfile profile = profiles.get(index);
+			if (profile.getName().equals(selectedProfileName)) {
+				profileToDelete = profile;
+			}
+			index++;
+		}
+
+		if (profileToDelete != null) {
+			profiles.remove(profileToDelete);
+			ProfileManager.deleteProfile(profileToDelete.getPlayerId());
+			dialog.close();
+		}
+	}
+
+	/**
+	 * Displays the available high scores to view
+	 */
+	private void showHighScoresTableSelection() {
+		Stage dialog = new Stage();
+		dialog.setTitle("High Scores");
+		dialog.initModality(Modality.APPLICATION_MODAL);
+
+		Button highScores1Button = new Button("Level 1 High Scores");
+		highScores1Button.setOnAction(event -> {
+			dialog.hide();
+			HighScoreTableManager.displayHighScoresInMainMenu(1, dialog);
+		});
+
+		Button highScores2Button = new Button("Level 2 High Scores");
+		highScores2Button.setOnAction(event -> {
+			dialog.hide();
+			HighScoreTableManager.displayHighScoresInMainMenu(2, dialog);
+		});
+
+		Button highScores3Button = new Button("Level 3 High Scores");
+		highScores3Button.setOnAction(event -> {
+			dialog.hide();
+			HighScoreTableManager.displayHighScoresInMainMenu(3, dialog);
+		});
+
+		VBox dialogBox = new VBox(10, highScores1Button, highScores2Button, highScores3Button);
+		dialogBox.setStyle("-fx-padding: 20; -fx-alignment: center;");
+
+		Scene dialogScene = new Scene(dialogBox, 300, 150);
+		dialog.setScene(dialogScene);
+		dialog.showAndWait();
+	}
+
 
 	/**
 	 * Sets up the game interface and initializes everything for a game to take place.
