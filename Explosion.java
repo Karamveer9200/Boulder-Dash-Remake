@@ -40,7 +40,8 @@ public class Explosion extends Element {
             for (int j = col - 1; j <= col + 1; j++) {
                 if (i >= 0 && i < grid.length && j >= 0 && j < grid[0].length) {
                     if (gridManager.getElement(i,j).isCanExplode()) {
-                        gridManager.explosionRemoveFromList(gridManager.getElement(i,j));
+                        gridManager.destroyRemoveFromList(gridManager.getElement(i,j));
+                        System.out.println(gridManager.getElement(i,j).toString());
                         Explosion explosion = new Explosion(i, j);
                         gridManager.setElement(i, j, explosion);
                     }
