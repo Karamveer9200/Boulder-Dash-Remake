@@ -74,7 +74,6 @@ public class Main extends Application {
 			currentProfile = ProfileManager.promptForProfile();
 			profiles.add(currentProfile);
 			String levelFile = "txt/Level1.txt";
-			secondsRemaining = FileHandler.readSecondsFromLevelFile(levelFile);
 			setupGame(primaryStage, levelFile);
 		});
 
@@ -104,12 +103,10 @@ public class Main extends Application {
 						int playerID = currentProfile.getPlayerId();
 						if (ProfileManager.doesPlayerSaveFileExist(playerID)) {
 							String levelFile = "txt/Save" + playerID + ".txt";
-							secondsRemaining = FileHandler.readSecondsFromLevelFile(levelFile);
 							setupGame(primaryStage, levelFile);
 						} else {
 							int level = profileToSelect.getMaxLevelReached();
 							String levelFile = "txt/Level" + level + ".txt";
-							secondsRemaining = FileHandler.readSecondsFromLevelFile(levelFile);
 							setupGame(primaryStage, levelFile);
 						}
 					}
@@ -241,7 +238,7 @@ public class Main extends Application {
 		final int canvasHeight = initialGrid.length * GRID_CELL_HEIGHT;
 
 		int amoebaGrowthRate = FileHandler.readAmoebaGrowthRateFromLevelFile(levelFile); //Read amoeba growth rate
-
+		secondsRemaining = FileHandler.readSecondsFromLevelFile(levelFile);
 
 		// Create the canvas
 		Canvas canvas = new Canvas(canvasWidth, canvasHeight);
@@ -357,6 +354,9 @@ public class Main extends Application {
 		resetGridButton.setOnAction(e -> {
 			int levelReached = currentProfile.getMaxLevelReached();
 			String levelFile = "txt/Level" + levelReached + ".txt";
+			secondsRemaining = FileHandler.readSecondsFromLevelFile(levelFile);
+			gameController.getPlayer().setDiamondCount(FileHandler.readDiamondsCollectedFromLevelFile(levelFile));
+			gameController.getPlayer().setKeyInventory(FileHandler.readKeyInventoryFromLevelFile(levelFile));
 			String[][] initialGrid = FileHandler.readElementGridFromLevelFile(levelFile);
 			gameController.getGridManager().reinitializeGrid(initialGrid);
 			gameController.getGridManager().initializePlayer(initialGrid);
@@ -513,4 +513,5 @@ public class Main extends Application {
 	public static void main(String[] args) {
 		launch(args);
 	}
+	
 }
