@@ -340,4 +340,10 @@ public class GridManager {
         return amoebas;
     }
 
+    public void killPlayer() {
+        removeFromList(player);
+        Path path = new Path(player.getRow(), player.getColumn());
+        elementGrid[player.row][player.column] = path;
+    }
+
 }

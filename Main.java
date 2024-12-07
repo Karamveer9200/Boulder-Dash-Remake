@@ -416,6 +416,11 @@ public class Main extends Application {
 		timerTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
 			secondsRemaining--;
 			timerText.setText("Time Remaining: " + secondsRemaining + "s");
+			if (secondsRemaining == 0) {
+				gameController.getGridManager().killPlayer();
+				gameController.draw();
+				timerTimeline.stop();
+			}
 		}));
 		timerTimeline.setCycleCount(Animation.INDEFINITE);
 
