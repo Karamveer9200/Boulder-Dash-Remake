@@ -5,7 +5,7 @@ import java.util.List;
 public class AmoebaGroup {
     private List<Amoeba> amoebas; // All amoebas in this group
     private boolean isGrowing;
-    private static final int amoebaSizeLimit = 4; // Whether the group is still growing
+    private static final int amoebaSizeLimit = 4;
 
     public AmoebaGroup() {
         this.amoebas = new ArrayList<>();
@@ -13,6 +13,11 @@ public class AmoebaGroup {
     }
 
 
+    /**
+     * Adds an amoeba to the group.
+     *
+     * @param amoeba the Amoeba to be added to the group
+     */
     public void addAmoeba(Amoeba amoeba) {
         amoebas.add(amoeba);
     }
@@ -74,6 +79,11 @@ public class AmoebaGroup {
         }
     }
 
+    /**
+     * Replaces all amoebas in the group with diamonds and removes them from the list.
+     *
+     * @param gridManager the grid manager to access and update the grid
+     */
     private void transformToDiamonds(GridManager gridManager) {
         for (Amoeba amoeba : amoebas) {
             int row = amoeba.getRow();
@@ -86,6 +96,11 @@ public class AmoebaGroup {
         System.out.println("All Amoebas in the group transformed into diamonds!");
     }
 
+    /**
+     * Replaces all amoebas in the group with boulders and removes them from the list.
+     *
+     * @param gridManager the grid manager to access and update the grid
+     */
     private void transformToBoulders(GridManager gridManager) {
         for (Amoeba amoeba : amoebas) {
             int row = amoeba.getRow();
@@ -98,10 +113,20 @@ public class AmoebaGroup {
         System.out.println("All Amoebas in the group transformed into boulders!");
     }
 
+    /**
+     * Returns the number of amoebas in this group.
+     *
+     * @return the number of amoebas in this group
+     */
     public int size() {
         return amoebas.size();
     }
 
+    /**
+     * Checks if the amoeba group is empty.
+     *
+     * @return true if there are no amoebas in the group, false otherwise
+     */
     public boolean isEmpty() {
         return amoebas.isEmpty();
     }

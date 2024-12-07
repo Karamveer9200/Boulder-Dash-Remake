@@ -157,6 +157,10 @@ public class GridManager {
         };
     }
 
+    /**
+     * Identifies all the groups of connected amoebas in the grid and
+     * stores them in the local list and the global manager.
+     */
     private void identifyAmoebaGroups() {
         boolean[][] visited = new boolean[elementGrid.length][elementGrid[0].length];
         AmoebaManager.clearGroups(); // Clear previous groups
@@ -174,6 +178,13 @@ public class GridManager {
         }
     }
 
+    /**
+     * Explores a group of connected amoebas by performing a depth-first search.
+     * @param row the row of the cell to explore
+     * @param col the column of the cell to explore
+     * @param group the group of amoebas to add to
+     * @param visited a 2D boolean array to mark visited cells
+     */
     private void exploreAmoebaGroup(int row, int col, AmoebaGroup group, boolean[][] visited) {
         // Boundary check
         if (row < 0 || row >= elementGrid.length || col < 0 || col >= elementGrid[0].length) return;
@@ -193,6 +204,12 @@ public class GridManager {
         exploreAmoebaGroup(row, col + 1, group, visited); // Right
     }
 
+    /**
+     * Returns the list of AmoebaGroup objects, each representing a group of connected
+     * Amoeba elements in the grid.
+     *
+     * @return the list of AmoebaGroup objects
+     */
     public ArrayList<AmoebaGroup> getAmoebaGroups() {
         return amoebaGroups;
     }
