@@ -68,6 +68,7 @@ public class Main extends Application {
 		Button newGameButton = new Button("Start New Game");
 		newGameButton.setOnAction(e -> {
 			currentProfile = ProfileManager.promptForProfile();
+			profiles.add(currentProfile);
 			String levelFile = "txt/Level1.txt";
 			secondsRemaining = FileHandler.readSecondsFromLevelFile(levelFile);
 			setupGame(primaryStage, levelFile);
@@ -461,6 +462,9 @@ public class Main extends Application {
 			alert.setHeaderText("Congratulations!");
 			alert.setContentText("You have completed all levels!");
 			alert.showAndWait();
+
+			profiles.remove(currentProfile);
+			ProfileManager.deleteProfile(currentProfile.getPlayerId());
 			start(primaryStage);
 		}
 	}
