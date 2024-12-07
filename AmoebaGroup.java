@@ -5,16 +5,14 @@ import java.util.List;
 public class AmoebaGroup {
     private List<Amoeba> amoebas; // All amoebas in this group
     private boolean isGrowing;
-    private static final int MAX_AMOEBA_COUNT = 4; // Whether the group is still growing
+    private static final int amoebaSizeLimit = 4; // Whether the group is still growing
 
     public AmoebaGroup() {
         this.amoebas = new ArrayList<>();
         this.isGrowing = true;
     }
 
-    /**
-     * Adds an amoeba to this group.
-     */
+
     public void addAmoeba(Amoeba amoeba) {
         amoebas.add(amoeba);
     }
@@ -23,7 +21,7 @@ public class AmoebaGroup {
      * Spreads the amoeba group by one cell if possible.
      */
     public void spread(GridManager gridManager) {
-        if (amoebas.size() > MAX_AMOEBA_COUNT) {
+        if (amoebas.size() > amoebaSizeLimit) {
             transformToBoulders(gridManager);
         } else {
             if (!isGrowing) return;
@@ -75,9 +73,7 @@ public class AmoebaGroup {
             }
         }
     }
-    /**
-     * Converts all amoebas in this group to diamonds.
-     */
+
     private void transformToDiamonds(GridManager gridManager) {
         for (Amoeba amoeba : amoebas) {
             int row = amoeba.getRow();
