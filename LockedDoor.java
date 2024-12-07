@@ -23,7 +23,8 @@ public class LockedDoor extends Tile {
         super(row, column);
         this.colour = colour;
         canBeEntered = false;
-        name = colour + "LockedDoor";
+        name = colour + "LockedDoor";;
+        canExplode = true;
 
         switch (colour) {
             case RED -> image = new Image("images/RedLockedDoor.png");

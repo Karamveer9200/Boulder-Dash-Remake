@@ -24,6 +24,7 @@ public class Key extends Tile {
         this.colour = colour;
         canBeEntered = true;
         name = colour + "Key";
+        canExplode = true;
 
         switch (colour) {
             case RED -> image = new Image("images/RedKey.png");
@@ -52,4 +53,5 @@ public class Key extends Tile {
     public String toString() {
         return "Key Colour: " + colour;
     }
+
 }

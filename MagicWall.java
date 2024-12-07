@@ -30,25 +30,27 @@ public class MagicWall extends Tile {
      */
     public void transformRock(final Element element, final GridManager gridManager) {
         if (element instanceof Boulder) {
-            // Transform Boulder into Diamond
-            Element elementBelowMagicWall = gridManager.getElement(this.getRow() + 1, this.getColumn());
-            gridManager.removeFromList(elementBelowMagicWall);
+
             System.out.println("Boulder entered a magic wall");
-            Diamond diamond = new Diamond(element.getRow() + 2, element.getColumn());
+            //disable old rock from falling
             gridManager.removeFromList(element);
+            // replace rock location above the magicWall with a path
             gridManager.removeElement(element.getRow(), element.getColumn());
-            gridManager.setElement(element.getRow() + 2, element.getColumn(), diamond);
+            Diamond diamond = new Diamond(element.getRow() + 1,element.getColumn() );
             gridManager.addToList(diamond);
+            diamond.gainMomentum();
+//            System.out.println(diamond.getRow() + " " + diamond.getColumn());
         } else if (element instanceof Diamond) {
-            // Transform Diamond into Boulder
-            Element elementBelowMagicWall = gridManager.getElement(this.getRow() + 1, this.getColumn());
-            gridManager.removeFromList(elementBelowMagicWall);
+
             System.out.println("Diamond entered a magic wall");
-            Boulder boulder = new Boulder(element.getRow() + 2, element.getColumn());
-            gridManager.setElement(element.getRow() + 2, element.getColumn(), boulder);
-            gridManager.addToList(boulder);
+            //disable old rock from falling
             gridManager.removeFromList(element);
+            // replace rock location above the magicWall with a path
             gridManager.removeElement(element.getRow(), element.getColumn());
+            Boulder boulder = new Boulder(element.getRow() + 1,element.getColumn() );
+            gridManager.addToList(boulder);
+            boulder.gainMomentum();
+//            System.out.println(boulder.getRow() + " " + boulder.getColumn());
         }
     }
 

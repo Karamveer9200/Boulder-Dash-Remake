@@ -205,7 +205,7 @@ public class GridManager {
         } else if (element instanceof Frog frog) {
             frogs.remove(frog);
             System.out.println("Frog removed");
-            GameController.applyExplosion(element.row, element.column);
+            GameController.applyExplosion(element.row, element.column,Frog.dropDiamond );
         } else if (element instanceof Amoeba amoeba) {
             amoebas.remove(amoeba);
         } else if (element instanceof Diamond diamond) {
@@ -214,11 +214,11 @@ public class GridManager {
         } else if (element instanceof Butterfly butterfly) {
             butterflies.remove(butterfly);
             System.out.println("Butterfly removed");
-            GameController.applyExplosion(element.row, element.column);
+            GameController.applyExplosion(element.row, element.column, Butterfly.dropDiamond);
         } else if (element instanceof Firefly firefly) {
             fireflies.remove(firefly);
             System.out.println("Firefly removed");
-            GameController.applyExplosion(element.row, element.column);
+            GameController.applyExplosion(element.row, element.column, Firefly.dropDiamond);
         }
     }
 
@@ -232,29 +232,31 @@ public class GridManager {
             paths.remove(path);
         } else if (element instanceof Dirt dirt) {
             dirts.remove(dirt);
+            System.out.println("Explosion Dirt removed");
         } else if (element instanceof Player player) {
             players.remove(player);
-            System.out.println("Player removed");
             GameController.gameOver();
+            System.out.println("Explosion Player removed");
         } else if (element instanceof NormalWall wall) {
             walls.remove(wall);
+            System.out.println("Explosion NormalWall removed");
         } else if (element instanceof Boulder boulder) {
             boulders.remove(boulder);
-            System.out.println("Boulder removed");
+            System.out.println("Explosion Boulder removed");
         } else if (element instanceof Frog frog) {
             frogs.remove(frog);
-            System.out.println("Frog removed");
+            System.out.println("Explosion Frog removed");
         } else if (element instanceof Amoeba amoeba) {
             amoebas.remove(amoeba);
         } else if (element instanceof Diamond diamond) {
             diamonds.remove(diamond);
-            System.out.println("Diamond removed");
+            System.out.println("Explosion Diamond removed");
         } else if (element instanceof Butterfly butterfly) {
             butterflies.remove(butterfly);
-            System.out.println("Butterfly removed");
+            System.out.println("Explosion Butterfly removed");
         } else if (element instanceof Firefly firefly) {
             fireflies.remove(firefly);
-            System.out.println("Firefly removed");
+            System.out.println("Explosion Firefly removed");
         }
     }
 
@@ -297,7 +299,7 @@ public class GridManager {
      * @param col the column position of the element to remove
      */
     public void removeElement(int row, int col) {
-        removeFromList(elementGrid[row][col]);
+//        removeFromList(elementGrid[row][col]);
         Path p = new Path(row, col);
         elementGrid[row][col] = p;
     }

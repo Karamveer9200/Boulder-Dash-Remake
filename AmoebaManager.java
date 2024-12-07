@@ -73,4 +73,6 @@ public class AmoebaManager {
             gridManager.addToList(newDiamond);
         }
     }
+
+    // transfroms all ameobas into boulders if the growth is blocked
 }

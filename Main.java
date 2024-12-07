@@ -257,14 +257,12 @@ public class Main extends Application {
 			gameController.killPlayerTick();
 		});
 
-		KeyFrame dangerousRocksRollKeyFrame = new KeyFrame(Duration.millis(1500), event -> {
-			gameController.boulderRollTick();
-			gameController.diamondRollTick();
+		KeyFrame dangerousRocksRollKeyFrame = new KeyFrame(Duration.millis(800), event -> {
+			gameController.dangerousRockRollTick();
 		});
 
 		KeyFrame dangerousRocksFallKeyFrame = new KeyFrame(Duration.millis(500), event -> {
-			gameController.boulderFallTick();
-			gameController.diamondFallTick();
+			gameController.dangerousRockFallTick();
 
 		});
 
@@ -380,10 +378,16 @@ public class Main extends Application {
 			resetGridButton.setDisable(false);
 		});
 
+		Button resetGridButton = new Button("Reset Grid");
+		resetGridButton.setOnAction(e -> {
+			int[][] initialGrid = FileHandler.readFile("PlaceHolder.txt");
+			gameController.getGridManager().reinitializeGrid(initialGrid);
+			gameController.draw();
+		});
 
 		Button testExplosionButton = new Button("Test Explosion");
 		testExplosionButton.setOnAction(e -> {
-			gameController.applyExplosion(2,2);
+			gameController.applyExplosion(2,2,true);
 			gameController.draw();
 		});
 		// adds timer to the toolbar
