@@ -195,7 +195,7 @@ public class Main extends Application {
 
 		Button testExplosionButton = new Button("Test Explosion");
 		testExplosionButton.setOnAction(e -> {
-			gameController.applyExplosion(2,2);
+			gameController.applyExplosion(2,2,true);
 			gameController.draw();
 		});
 

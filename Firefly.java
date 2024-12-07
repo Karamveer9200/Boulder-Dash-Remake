@@ -7,7 +7,7 @@ import javafx.scene.image.Image;
  * In addition to the properties and methods of Fly, Firefly can optionally drop a diamond.
  */
 public class Firefly extends Fly{
-    public Boolean dropDiamond = false;
+    public static final Boolean dropDiamond = false;
     public Firefly(int row, int column, boolean followsLeftEdge) {
         super(row, column, followsLeftEdge);
         image = new Image("images/firefly.png");

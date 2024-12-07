@@ -198,7 +198,7 @@ public class GridManager {
         } else if (element instanceof Frog frog) {
             frogs.remove(frog);
             System.out.println("Frog removed");
-            GameController.applyExplosion(element.row, element.column);
+            GameController.applyExplosion(element.row, element.column,Frog.dropDiamond );
         } else if (element instanceof Amoeba amoeba) {
             amoebas.remove(amoeba);
         } else if (element instanceof Diamond diamond) {
@@ -207,11 +207,11 @@ public class GridManager {
         } else if (element instanceof Butterfly butterfly) {
             butterflies.remove(butterfly);
             System.out.println("Butterfly removed");
-            GameController.applyExplosion(element.row, element.column);
+            GameController.applyExplosion(element.row, element.column, Butterfly.dropDiamond);
         } else if (element instanceof Firefly firefly) {
             fireflies.remove(firefly);
             System.out.println("Firefly removed");
-            GameController.applyExplosion(element.row, element.column);
+            GameController.applyExplosion(element.row, element.column, Firefly.dropDiamond);
         }
     }
 

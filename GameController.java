@@ -20,6 +20,7 @@ public class GameController {
     private static int nextExplosionCol;
     private static boolean waitingForExplosionAfterMath = false;
     private static boolean waitingForExplosion = false;
+    private static boolean transformToDiamonds;
 
     /**
      * Represents possible inputs for the player.
@@ -140,8 +141,6 @@ public class GameController {
     }
 
 
-
-
     public void frogTick() {
         // Making a copy of the boulders Arraylist,
         // avoids problems with concurrency
@@ -214,15 +213,18 @@ public class GameController {
     }
 
     // Select an index in the ElementGrid and create a 3x3 Explosion and then AfterMath at that spot
-    public static  void applyExplosion(int row, int column) {
+    public static  void applyExplosion(int row, int column, boolean dropsDiamonds) {
         waitingForExplosion = true;
         nextExplosionRow = row;
         nextExplosionCol = column;
+        transformToDiamonds = dropsDiamonds;
+
     }
 
     //Explosion Tick Method, if an applyExplosion has occurred then it is waiting for explosion, after an explosion
     // the next tick cycle and explosion aftermath should occur
     public void explosionTick() {
+
         if (waitingForExplosion) {
             // Create the initial explosion
             Explosion.createExplosion(nextExplosionRow, nextExplosionCol,gridManager);
@@ -230,7 +232,15 @@ public class GameController {
             waitingForExplosionAfterMath = true;
             waitingForExplosion= false;
         } else if // Create the aftermath
+        (waitingForExplosionAfterMath && transformToDiamonds) {
+            // if dropsDiamonds
+            Explosion.createDiamondExplosionAfterMath(nextExplosionRow, nextExplosionCol,gridManager);
+            draw();
+            waitingForExplosionAfterMath = false;
+            transformToDiamonds = false;
+        } else if // Create the aftermath
          (waitingForExplosionAfterMath) {
+          // if dropsDiamonds
             Explosion.createExplosionAfterMath(nextExplosionRow, nextExplosionCol,gridManager);
             draw();
             waitingForExplosionAfterMath = false;
