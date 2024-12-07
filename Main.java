@@ -33,6 +33,9 @@ public class Main extends Application {
 	public static final int GRID_CELL_WIDTH = 30;
 	public static final int GRID_CELL_HEIGHT = 30;
 
+	public static final int DIAMOND_SCORE_VALUE = 100;
+	public static final int TIME_SCORE_VALUE = 25;
+
 	// Timeline for periodic ticks
 	private Timeline playerTickTimeline;
 	private Timeline dangerousRockFallTickTimeline;
@@ -244,6 +247,7 @@ public class Main extends Application {
 		GameController gameController = new GameController(initialGrid, canvas);
 
 		gameController.setDiamondsRequired(FileHandler.readRequiredDiamondsFromLevelFile(levelFile));
+		gameController.getPlayer().setDiamondCount(FileHandler.readDiamondsCollectedFromLevelFile(levelFile));
 
 		// Build the GUI
 		Pane root = buildGUI(gameController);
@@ -395,11 +399,6 @@ public class Main extends Application {
 			resetGridButton.setDisable(false);
 		});
 
-		Button nextLevelButton = new Button("Next Level");
-		nextLevelButton.setOnAction(e -> {
-			levelCompleted(gameController);
-		});
-
 		Button testExplosionButton = new Button("Test Explosion");
 		testExplosionButton.setOnAction(e -> {
 			gameController.applyExplosion(2,2);
@@ -415,7 +414,8 @@ public class Main extends Application {
 		timerTimeline.setCycleCount(Animation.INDEFINITE);
 
 		// adds diamond count to the toolbar, displays as zero if player has not been initialised
-		Text diamondCountText = new Text("Diamonds Collected: 0");
+		int diamondsCollected = gameController.getPlayer().getDiamondCount();
+		Text diamondCountText = new Text("Diamonds Collected: " + diamondsCollected);
 		diamondCountTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
 			if (gameController.getPlayer() != null) {
 				diamondCountText.setText("Diamonds collected: " + gameController.getPlayer().getDiamondCount());
@@ -429,7 +429,7 @@ public class Main extends Application {
 		Text levelText = new Text ("Current Level: " + currentProfile.getMaxLevelReached());
 
 		toolbar.getChildren().addAll(startTickButton, stopTickButton, resetGridButton,
-				saveButton, timerText, diamondCountText, levelText, nextLevelButton);
+				saveButton, timerText, diamondCountText, levelText);
 		root.setTop(toolbar);
 
 		return root;
@@ -446,6 +446,7 @@ public class Main extends Application {
 		int levelReached = currentProfile.getMaxLevelReached();
 		String levelFile = "txt/Level" + levelReached + ".txt";
 		String[][] initialGrid = FileHandler.readElementGridFromLevelFile(levelFile);
+		int score = calcHighScore(secondsRemaining, gameController.getPlayer().getDiamondCount());
 		gameController.getGridManager().reinitializeGrid(initialGrid);
 		gameController.getGridManager().initializePlayer(initialGrid);
 		// Stop all timelines
@@ -462,9 +463,9 @@ public class Main extends Application {
 		// Show the high score table for the current level
 		int currentLevel = currentProfile.getMaxLevelReached();
 		String currentPlayerName = currentProfile.getName();
-		HighScoreTableManager.updateHighScoreTable(currentPlayerName,500,currentLevel);
+		HighScoreTableManager.updateHighScoreTable(currentPlayerName,score,currentLevel);
 		Platform.runLater(() -> {
-			HighScoreTableManager.displayHighScoresAfterLevel(currentLevel, 500);
+			HighScoreTableManager.displayHighScoresAfterLevel(currentLevel, score);
 		});
 
 		// Check if there’s a next level
@@ -482,12 +483,20 @@ public class Main extends Application {
 			alert.setTitle("VICTORY");
 			alert.setHeaderText("Congratulations!");
 			alert.setContentText("You have completed all levels!");
-			alert.showAndWait();
+			alert.show();
 
 			profiles.remove(currentProfile);
 			ProfileManager.deleteProfile(currentProfile.getPlayerId());
 			start(primaryStage);
 		}
+	}
+
+	public int calcHighScore(int secondsRemaining, int diamondsCollected) {
+		System.out.println(diamondsCollected);
+		System.out.println(DIAMOND_SCORE_VALUE);
+		System.out.println(secondsRemaining);
+		System.out.println(TIME_SCORE_VALUE);
+		return (diamondsCollected * DIAMOND_SCORE_VALUE) + (secondsRemaining * TIME_SCORE_VALUE);
 	}
 
 	public static void main(String[] args) {

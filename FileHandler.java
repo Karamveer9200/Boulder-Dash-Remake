@@ -161,7 +161,7 @@ public class FileHandler {
             out.println(currentGrid[0].length + " " + currentGrid.length);
             out.println(secondsRemaining); //Pass seconds left and output it here
 
-            out.println(0 + " " + 10); //Pass diamonds collected and how many diamonds left to collect and output it here
+            out.println(Player.diamondCount + " " + GameController.diamondsRequired); //Pass diamonds collected and how many diamonds left to collect and output it here
             out.println(2 + " " + 8); //Pass Amoeba growth rate and size limit and output it here
 
             out.println(); //Code here to output all the player's collected keys so far.

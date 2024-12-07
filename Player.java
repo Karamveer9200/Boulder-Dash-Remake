@@ -6,7 +6,7 @@ import java.util.List;
 public class Player extends Element {
 
     private final List<KeyColour> keyInventory;
-    private int diamondCount = 0;
+    public static int diamondCount = 0;
     private boolean hasEnoughDiamonds;
     private boolean hasPlayerWon;
 
@@ -40,6 +40,10 @@ public class Player extends Element {
 
     public int getDiamondCount() {
         return diamondCount;
+    }
+
+    public void setDiamondCount(int diamondCount) {
+        this.diamondCount = diamondCount;
     }
 
     public boolean isHasEnoughDiamonds() {

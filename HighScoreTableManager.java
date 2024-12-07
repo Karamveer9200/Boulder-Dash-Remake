@@ -72,7 +72,17 @@ public class HighScoreTableManager {
 
         vbox.getChildren().add(recentScore);
 
-        Button backButton = new Button("Begin Next Level");
+
+        String buttonText;
+
+        if (level == 3) {
+            buttonText = "Close";
+        } else {
+            buttonText = "Begin Next Level";
+        }
+
+
+        Button backButton = new Button(buttonText);
         backButton.setOnAction(event -> {
             dialog.close();
         });
