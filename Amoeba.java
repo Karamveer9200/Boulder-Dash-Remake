@@ -6,7 +6,7 @@ public class Amoeba extends Element {
         super(row, column);
         image = new Image("images/amoeba.png");
         canBeEntered = false;
-        canExplode = false;
+        canExplode = true;
         name = "Amoeba";
     }
 

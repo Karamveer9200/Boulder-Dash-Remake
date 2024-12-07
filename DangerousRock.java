@@ -1,4 +1,4 @@
-public class DangerousRock extends Element {
+public abstract class DangerousRock extends Element {
 
 
     private boolean hasMomentum = false;
@@ -28,7 +28,19 @@ public class DangerousRock extends Element {
         int newRow = this.getRow() + 1;
         int col = this.getColumn();
 
-        if (newRow < grid.length && grid[newRow][col] instanceof Path) {
+        if (newRow < grid.length && grid[this.row][this.column] instanceof MagicWall && (grid[newRow][col] instanceof Path
+                        || grid[newRow][col] instanceof Player
+                        || grid[newRow][col] instanceof Frog
+                        || grid[newRow][col] instanceof Fly)) {
+            // transformed rocks are on the same coordinates as the magic wall
+            //this if  statement makes sure magic walls are not replaced with paths after the transformed rock falls.
+            gridManager.removeFromList(grid[newRow][col]);
+            gridManager.removeElement(newRow, col);
+            gridManager.setElement(newRow, col, this);
+            // Update position
+            this.setRow(newRow);
+            gainMomentum();
+        }else if (newRow < grid.length && grid[newRow][col] instanceof Path) {
             // Update the grid to move the boulder
             gridManager.removeFromList(grid[newRow][col]);
             Element p = new Path(this.getRow(), this.getColumn());
@@ -42,6 +54,7 @@ public class DangerousRock extends Element {
             gainMomentum();
 
         } else if (newRow < grid.length && (grid[newRow][col] instanceof Player || grid[newRow][col] instanceof Frog || grid[newRow][col] instanceof Fly)) {
+            // if the rock lands on a player/enemy and has momentum , remove the player/enemy
             // If the boulder lands on a player and has momentum
             if (hasMomentum) {
                 gridManager.removeFromList(grid[newRow][col]); // Remove the player or enemy
@@ -55,25 +68,19 @@ public class DangerousRock extends Element {
             }
             hasMomentum = false;
 
-        } else if (newRow < grid.length && grid[newRow][col] instanceof MagicWall && (grid[newRow + 1][col] instanceof Path || grid[newRow + 1][col] instanceof Player || grid[newRow + 1][col] instanceof Frog || grid[newRow + 1][col] instanceof Fly)) {
+        } else if (newRow < grid.length && grid[newRow][col] instanceof MagicWall && (grid[newRow + 1][col] instanceof Path
+                || grid[newRow + 1][col] instanceof Player
+                || grid[newRow + 1][col] instanceof Frog
+                || grid[newRow + 1][col] instanceof Fly)) {
+            //row under magic wall is within range , and is a path ,
+            // anything else it stays over the  magic wall until its clear beneath the magic wall (assuming it wouldn't roll)
+            //turn into diamond and vice versa
 
             if (grid[newRow + 1][col] instanceof Frog || grid[newRow + 1][col] instanceof Fly) {
-                System.out.println("Boulder has crushed Enemy");
+                System.out.println("Rock has crushed Enemy after passing through magic wall");
             }
-            MagicWall magicWall = (MagicWall) grid[newRow][col];
-
+            MagicWall magicWall = (MagicWall) gridManager.getElement(newRow,col);
             magicWall.transformRock(this, gridManager);
-            //row under magic wall is within range , and is a path ,
-            // anything else it stays over the  magic wall until its clear beneath the magic wall
-            //turn into diamond and vice versa
-            gainMomentum();
-        } else if (newRow < grid.length && grid[newRow][col] instanceof MagicWall && (grid[newRow + 1][col] instanceof Player || grid[newRow + 1][col] instanceof Frog || grid[newRow + 1][col] instanceof Fly)) {
-            MagicWall magicWall = (MagicWall) grid[newRow][col];
-            magicWall.transformRock(this, gridManager);
-            //row under magic wall is within range , and is a path ,
-            // anything else it stays over the  magic wall until its clear beneath the magic wall
-            //turn into diamond and vice versa
-            gainMomentum();
 
         } else {
             hasMomentum = false; // Reset momentum if the diamond stops
@@ -91,15 +98,17 @@ public class DangerousRock extends Element {
         int newRow = this.getRow() + 1; // Row below the current position
         int col = this.getColumn();
 
-        // Check if below is a Boulder, Diamond, or NormalWall
+        // Check if below is a surface rock can roll on Boulder, Diamond, or NormalWall, and check that the
         if (newRow < grid.length &&
                 (grid[newRow][col] instanceof Boulder ||
                         grid[newRow][col] instanceof Diamond ||
                         grid[newRow][col] instanceof NormalWall ||
                         grid[newRow][col] instanceof TitaniumWall ||
-                        grid[newRow][col] instanceof MagicWall)) {
+                        (grid[newRow][col] instanceof MagicWall) && !(grid[newRow + 1][col] instanceof Player ||
+                                grid[newRow + 1][col] instanceof Frog ||
+                                grid[newRow + 1][col] instanceof Fly))) {
 
-            // Check if rolling to the right is possible
+            // Check if rolling to the right is possible by checking if directly right and diagonally right is path.
             if (col + 1 < grid[0].length &&
                     grid[newRow][col + 1] instanceof Path &&
                     grid[this.getRow()][col + 1] instanceof Path) {
@@ -109,26 +118,27 @@ public class DangerousRock extends Element {
                 gridManager.setElement(this.getRow(), this.getColumn(), p);
                 gridManager.addToList(p);
 
-                gridManager.setElement(newRow, col + 1, this);
-                this.setRow(newRow);
+                gridManager.setElement(this.getRow(), col + 1, this);
+                this.setRow(this.getRow());
                 this.setColumn(col + 1);
 
                 this.gainMomentum();
             }
 
-            // Check if rolling to the left is possible
-            if (col - 1 >= 0 &&
+            // Check if rolling to the left is possible  by checking if directly left and diagonally left is path.
+            if (col - 1 < grid[0].length &&
                     grid[newRow][col - 1] instanceof Path &&
                     grid[this.getRow()][col - 1] instanceof Path) {
 
-                // Move to the diagonal left
+                // Move to the diagonal right
                 Element p = new Path(this.getRow(), this.getColumn());
                 gridManager.setElement(this.getRow(), this.getColumn(), p);
                 gridManager.addToList(p);
 
-                gridManager.setElement(newRow, col - 1, this);
-                this.setRow(newRow);
+                gridManager.setElement(this.getRow(), col - 1, this);
+                this.setRow(this.getRow());
                 this.setColumn(col - 1);
+
                 this.gainMomentum();
             }
         }

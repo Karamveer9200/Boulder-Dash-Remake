@@ -102,64 +102,45 @@ public class GameController {
      * Executes the boulder tick, triggering all boulders to perform their movement logic.
      * Updates the grid and redraws the game.
      */
-    public void boulderFallTick() {
-        // Making a copy of the boulders Arraylist,
-        // avoids problems with concurrently changing the arraylist when a boulder passes through magic wall
-        ArrayList<Boulder> boulders = new ArrayList<>(gridManager.getBoulders());
-        for (Boulder boulder : boulders) {
-            boulder.fall(gridManager);
-
-//            System.out.println("Processing Boulder at (" + boulder.getRow() + ", " + boulder.getColumn() + ")");
-//            System.out.println("Element below boulder: "+ gridManager.getElement(boulder.getRow()+1, boulder.getColumn()));
-        }
-        draw();
-    }
-
-    /**
-     * Executes the boulder tick, triggering all boulders to perform their movement logic.
-     * Updates the grid and redraws the game.
-     */
-    public void boulderRollTick() {
+    public void dangerousRockRollTick() {
         // Making a copy of the boulders Arraylist,
         // avoids problems with concurrently changing the arraylist when a diamond passes through magic wall
         ArrayList<Boulder> boulders = new ArrayList<>(gridManager.getBoulders());
+        ArrayList<Diamond> diamonds = new ArrayList<>(gridManager.getDiamonds());
+
         for (Boulder boulder : boulders) {
             boulder.roll(gridManager);
         }
-        draw();
-    }
 
-    /**
-     * Executes the boulder tick, triggering all boulders to perform their movement logic.
-     * Updates the grid and redraws the game.
-     */
-    public void diamondFallTick() {
-        // Making a copy of the boulders Arraylist,
-        // avoids problems with concurrently changing the arraylist when a boulder passes through magic wall
-        ArrayList<Diamond> diamonds = new ArrayList<>(gridManager.getDiamonds());
-        for (Diamond diamond : diamonds) {
-            diamond.fall(gridManager);
-//            System.out.println("Processing Diamond at (" + diamond.getRow() + ", " + diamond.getColumn() + ")");
-//            System.out.println("Element below Diamond: "+ gridManager.getElement(diamond.getRow()+1, diamond.getColumn()));
-
-        }
-        draw();
-    }
-
-
-    /**
-     * Executes the boulder tick, triggering all boulders to perform their movement logic.
-     * Updates the grid and redraws the game.
-     */
-    public void diamondRollTick() {
-        // Making a copy of the boulders Arraylist,
-        // avoids problems with concurrency
-        ArrayList<Diamond> diamonds = new ArrayList<>(gridManager.getDiamonds());
         for (Diamond diamond : diamonds) {
             diamond.roll(gridManager);
         }
+
         draw();
     }
+
+    /**
+     * Executes the boulder tick, triggering all boulders to perform their movement logic.
+     * Updates the grid and redraws the game.
+     */
+    public void dangerousRockFallTick() {
+        // Making a copy of the boulders Arraylist,
+        // avoids problems with concurrently changing the arraylist when a boulder passes through magic wall
+        ArrayList<Diamond> diamonds = new ArrayList<>(gridManager.getDiamonds());
+        ArrayList<Boulder> boulders = new ArrayList<>(gridManager.getBoulders());
+
+        for (Diamond diamond : diamonds) {
+            diamond.fall(gridManager);
+        }
+
+        for (Boulder boulder : boulders) {
+            boulder.fall(gridManager);
+        }
+            draw();
+    }
+
+
+
 
     public void frogTick() {
         // Making a copy of the boulders Arraylist,
