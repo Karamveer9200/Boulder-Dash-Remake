@@ -220,39 +220,31 @@ public class GridManager {
 
     /**
      * Removes an element from its corresponding list based on its type.
-     * Objects here only get destroyed, thus avoiding a chain reaction.
+     * Objects here only get destroyed, thus avoiding an explosion and chain reaction.
      * @param element the Element to be removed
      */
-    public void explosionRemoveFromList(Element element) {
+    public void destroyRemoveFromList(Element element) {
         if (element instanceof Path path) {
             paths.remove(path);
         } else if (element instanceof Dirt dirt) {
             dirts.remove(dirt);
-            System.out.println("Explosion Dirt removed");
         } else if (element instanceof Player player) {
             players.remove(player);
             GameController.gameOver();
-            System.out.println("Explosion Player removed");
         } else if (element instanceof NormalWall wall) {
             walls.remove(wall);
-            System.out.println("Explosion NormalWall removed");
         } else if (element instanceof Boulder boulder) {
             boulders.remove(boulder);
-            System.out.println("Explosion Boulder removed");
         } else if (element instanceof Frog frog) {
             frogs.remove(frog);
-            System.out.println("Explosion Frog removed");
         } else if (element instanceof Amoeba amoeba) {
             amoebas.remove(amoeba);
         } else if (element instanceof Diamond diamond) {
             diamonds.remove(diamond);
-            System.out.println("Explosion Diamond removed");
         } else if (element instanceof Butterfly butterfly) {
             butterflies.remove(butterfly);
-            System.out.println("Explosion Butterfly removed");
         } else if (element instanceof Firefly firefly) {
             fireflies.remove(firefly);
-            System.out.println("Explosion Firefly removed");
         }
     }
     /**

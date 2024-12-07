@@ -63,20 +63,20 @@ public class Main extends Application {
 			event.consume();
 		});
 
-		KeyFrame playerKeyFrame = new KeyFrame(Duration.millis(50), event -> {
+		KeyFrame playerKeyFrame = new KeyFrame(Duration.millis(100), event -> {
 			gameController.playerTick();
 		});
 
 		//add keyframe for checking neighboring tiles to enemies , instance of that method is in flies 12/1/2024 - Omar
-		KeyFrame killPlayerKeyFrame = new KeyFrame(Duration.millis(20), event -> {
+		KeyFrame killPlayerKeyFrame = new KeyFrame(Duration.millis(100), event -> {
 			gameController.killPlayerTick();
 		});
 
-		KeyFrame dangerousRocksRollKeyFrame = new KeyFrame(Duration.millis(800), event -> {
+		KeyFrame dangerousRocksRollKeyFrame = new KeyFrame(Duration.millis(200), event -> {
 			gameController.dangerousRockRollTick();
 		});
 
-		KeyFrame dangerousRocksFallKeyFrame = new KeyFrame(Duration.millis(500), event -> {
+		KeyFrame dangerousRocksFallKeyFrame = new KeyFrame(Duration.millis(200), event -> {
 			gameController.dangerousRockFallTick();
 
 		});
@@ -90,7 +90,7 @@ public class Main extends Application {
 			gameController.frogTick();
 		});
 
-		KeyFrame aomeebaKeyFrame = new KeyFrame(Duration.millis(1000), event -> {
+		KeyFrame aomeebaKeyFrame = new KeyFrame(Duration.millis(3000), event -> {
 			gameController.amoebaTick();
 		});
 

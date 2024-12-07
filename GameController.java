@@ -48,7 +48,7 @@ public class GameController {
 
     private void replaceEnemyWithPath(int targetRow, int targetColumn) {
         // Remove the target from the game
-        gridManager.explosionRemoveFromList(gridManager.getElement(targetRow, targetColumn));
+        gridManager.destroyRemoveFromList(gridManager.getElement(targetRow, targetColumn));
 
         // Replace the target with a Path in the grid
         gridManager.setElement(targetRow, targetColumn, new Path(targetRow, targetColumn));
