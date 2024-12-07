@@ -6,5 +6,5 @@ Jeremy 850
 Leo 600
 Alex 500
 Rick 500
+Alex 500
 Ben 300
-Chris 100

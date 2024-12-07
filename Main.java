@@ -431,6 +431,11 @@ public class Main extends Application {
 	}
 
 	public void levelCompleted(GameController gameController) {
+		int levelReached = currentProfile.getMaxLevelReached();
+		String levelFile = "txt/Level" + levelReached + ".txt";
+		String[][] initialGrid = FileHandler.readElementGridFromLevelFile(levelFile);
+		gameController.getGridManager().reinitializeGrid(initialGrid);
+		gameController.getGridManager().initializePlayer(initialGrid);
 		// Stop all timelines
 		playerTickTimeline.stop();
 		killPlayerTickTimeLine.stop();

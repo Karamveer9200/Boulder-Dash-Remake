@@ -15,7 +15,6 @@ public class GameController {
     private final InputHandler inputHandler;
     public static boolean gameStatus = true;
 
-
     private static int nextExplosionRow;
     private static int nextExplosionCol;
     private static boolean waitingForExplosionAfterMath = false;

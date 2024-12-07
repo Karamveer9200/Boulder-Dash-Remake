@@ -50,7 +50,7 @@ public class Player extends Element {
     }
 
     public void checkDiamonds() {
-        if (getDiamondCount() >= 1) {
+        if (getDiamondCount() >= 5) {
             setHasEnoughDiamonds(true);
             System.out.println("You have enough Diamonds to finish the level!");
         }
@@ -138,7 +138,6 @@ public class Player extends Element {
         }
         if (grid[targetRow][targetColumn] instanceof Exit exit) {
             if (isHasEnoughDiamonds()) {
-                // If the player has enough diamonds, unlock the Exit and announce level win
                 exit.unlock();
                 exit.announceLevelWin();
                 return true;
