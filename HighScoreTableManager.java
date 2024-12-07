@@ -1,4 +1,5 @@
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -17,25 +18,31 @@ import java.util.Scanner;
 public class HighScoreTableManager {
     private static final int MAX_HIGH_SCORES = 10;
 
-    public static void displayHighScoreTable(int level) {
+    public static void displayHighScoreTable(int level, Stage parentDialog) {
         Stage dialog = new Stage();
-        dialog.setTitle("High Score Table for level " + level);
+        dialog.setTitle("High Score Table for Level " + level);
         dialog.initModality(Modality.APPLICATION_MODAL);
-        ArrayList<HighScore> highScores = getHighScores(level);
 
-        // Create a VBox layout to hold the high scores
-        VBox vbox = new VBox(10);  // 10 is the spacing between each label
+        VBox vbox = new VBox(10);
+        vbox.setStyle("-fx-padding: 20; -fx-alignment: center;");
 
-        // Iterate through each high score and create a label
+        ArrayList<HighScore> highScores = HighScoreTableManager.getHighScores(level);
+
         for (HighScore highScore : highScores) {
-            // Create a label with the format "name score"
-            String scoreText = highScore.getName() + " " + highScore.getScore();
-            Label scoreLabel = new Label(scoreText);
-            vbox.getChildren().add(scoreLabel);  // Add the label to the VBox
+            Label scoreLabel = new Label(highScore.getName() + " : " + highScore.getScore());
+            scoreLabel.setStyle("-fx-font-size: 18px; -fx-text-alignment: center;");
+            vbox.getChildren().add(scoreLabel);
         }
 
-        // Set up the scene and show the dialog
-        Scene dialogScene = new Scene(vbox, 500, 500);
+        Button backButton = new Button("Back to High Scores");
+        backButton.setOnAction(event -> {
+            dialog.close();
+            parentDialog.show();
+        });
+
+        vbox.getChildren().add(backButton);
+        
+        Scene dialogScene = new Scene(vbox, 400, 500);
         dialog.setScene(dialogScene);
         dialog.showAndWait();
     }
