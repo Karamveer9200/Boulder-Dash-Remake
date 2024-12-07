@@ -3,7 +3,7 @@ import javafx.scene.image.Image;
 /**
  * Represents a Magic Wall tile in the game.
  * This tile cannot be entered/walked over but can explode.
- * Represented by an image found at "images/MagicWall.png".
+ * It is represented by an image found at "images/MagicWall.png".
  */
 public class MagicWall extends Tile {
 

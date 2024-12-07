@@ -5,11 +5,10 @@
 public class Path extends Tile {
 
     /**
-     * Creates a new Path tile at the specified row (x co-ord)
-     * and column (y co-ord).
+     * Creates a new Path tile at the specified row and column.
      *
      * @param row the row position (x co-ord) of the tile
-     * @param column the column position(y co-ord)  of the tile
+     * @param column the column position(y c-oord)  of the tile
      */
     public Path(final int row, final int column) {
         super(row, column);
