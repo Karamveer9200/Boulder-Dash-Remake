@@ -179,20 +179,95 @@ public class Main extends Application {
 
 			Button highScores1Button = new Button("Level 1 High Scores");
 			highScores1Button.setOnAction(eventHS1 -> {
-				HighScoreTableManager.displayHighScoreTable(1);
-				dialog.close();
+				Stage highScoreDialog = new Stage();
+				highScoreDialog.setTitle("Level 1 High Scores");
+				highScoreDialog.initModality(Modality.APPLICATION_MODAL);
+
+				// Create a VBox layout to hold the high scores
+				VBox scoreBox = new VBox(10);
+				scoreBox.setStyle("-fx-padding: 20; -fx-alignment: center;");
+
+				// Add each high score to the VBox
+				ArrayList<HighScore> highScores = HighScoreTableManager.getHighScores(1);
+				for (HighScore highScore : highScores) {
+					Label scoreLabel = new Label(highScore.getName() + " : " + highScore.getScore());
+					scoreLabel.setStyle("-fx-font-size: 18px; -fx-text-alignment: center;");
+					scoreBox.getChildren().add(scoreLabel);
+				}
+
+				Button backButton = new Button("Back To Highscores");
+				backButton.setOnAction(event -> {
+					highScoreDialog.close();
+					dialog.show();
+				});
+
+				scoreBox.getChildren().add(backButton);
+
+				Scene dialogScene = new Scene(scoreBox, 400, 500);
+				highScoreDialog.setScene(dialogScene);
+				highScoreDialog.showAndWait();
 			});
 
 			Button highScores2Button = new Button("Level 2 High Scores");
 			highScores2Button.setOnAction(eventHS2 -> {
-				HighScoreTableManager.displayHighScoreTable(2);
-				dialog.close();
+				Stage highScoreDialog = new Stage();
+				highScoreDialog.setTitle("Level 2 High Scores");
+				highScoreDialog.initModality(Modality.APPLICATION_MODAL);
+
+				// Create a VBox layout to hold the high scores
+				VBox scoreBox = new VBox(10);
+				scoreBox.setStyle("-fx-padding: 20; -fx-alignment: center;");
+
+				// Add each high score to the VBox
+				ArrayList<HighScore> highScores = HighScoreTableManager.getHighScores(2);
+				for (HighScore highScore : highScores) {
+					Label scoreLabel = new Label(highScore.getName() + " : " + highScore.getScore());
+					scoreLabel.setStyle("-fx-font-size: 18px; -fx-text-alignment: center;");
+					scoreBox.getChildren().add(scoreLabel);
+				}
+
+				Button backButton = new Button("Back To Highscores");
+				backButton.setOnAction(event -> {
+					highScoreDialog.close();
+					dialog.show();
+				});
+
+				scoreBox.getChildren().add(backButton);
+
+				Scene dialogScene = new Scene(scoreBox, 400, 500);
+				highScoreDialog.setScene(dialogScene);
+				highScoreDialog.showAndWait();
 			});
 
 			Button highScores3Button = new Button("Level 3 High Scores");
 			highScores3Button.setOnAction(eventHS3 -> {
-				HighScoreTableManager.displayHighScoreTable(3);
-				dialog.close();
+				Stage highScoreDialog = new Stage();
+				highScoreDialog.setTitle("Level 3 High Scores");
+				highScoreDialog.initModality(Modality.APPLICATION_MODAL);
+
+				// Create a VBox layout to hold the high scores
+				VBox scoreBox = new VBox(10);
+				scoreBox.setStyle("-fx-padding: 20; -fx-alignment: center;");
+
+				// Add each high score to the VBox
+				ArrayList<HighScore> highScores = HighScoreTableManager.getHighScores(3);
+				for (HighScore highScore : highScores) {
+					Label scoreLabel = new Label(highScore.getName() + " : " + highScore.getScore());
+					scoreLabel.setStyle("-fx-font-size: 18px; -fx-text-alignment: center;");
+					scoreBox.getChildren().add(scoreLabel);
+				}
+
+				Button backButton = new Button("Back To Highscores");
+				backButton.setOnAction(event -> {
+					highScoreDialog.close();
+					dialog.show();
+				});
+
+				scoreBox.getChildren().add(backButton);
+
+				Scene dialogScene = new Scene(scoreBox, 400, 500);
+				highScoreDialog.setScene(dialogScene);
+				highScoreDialog.showAndWait();
 			});
 
 			VBox dialogBox = new VBox(10, highScores1Button, highScores2Button, highScores3Button);

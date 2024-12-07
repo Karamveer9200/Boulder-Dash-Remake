@@ -51,7 +51,7 @@ public class HighScoreTableManager {
         saveHighScoreTable(highScores, level);
     }
 
-    private static ArrayList<HighScore> getHighScores(int level) {
+    public static ArrayList<HighScore> getHighScores(int level) {
         String folderPath = "txt";
         ArrayList<HighScore> highScores = new ArrayList<>();
 
