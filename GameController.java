@@ -20,6 +20,8 @@ public class GameController {
     private static boolean waitingForExplosionAfterMath = false;
     private static boolean waitingForExplosion = false;
 
+    public static int diamondsRequired;
+
     /**
      * Represents possible inputs for the player.
      */
@@ -298,6 +300,10 @@ public class GameController {
     // allows the player being managed by Game Controller to be retrieved
     public Player getPlayer() {
         return gridManager.getPlayer();
+    }
+
+    public void setDiamondsRequired(int diamondsRequired) {
+        this.diamondsRequired = diamondsRequired;
     }
 
 }

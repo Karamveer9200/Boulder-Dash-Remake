@@ -51,7 +51,7 @@ public class Player extends Element {
     }
 
     public void checkDiamonds() {
-        if (getDiamondCount() >= 0) {
+        if (getDiamondCount() >= GameController.diamondsRequired) {
             setHasEnoughDiamonds(true);
             System.out.println("You have enough Diamonds to finish the level!");
         }

@@ -243,6 +243,8 @@ public class Main extends Application {
 		// Initialize the game controller with the grid and canvas
 		GameController gameController = new GameController(initialGrid, canvas);
 
+		gameController.setDiamondsRequired(FileHandler.readRequiredDiamondsFromLevelFile(levelFile));
+
 		// Build the GUI
 		Pane root = buildGUI(gameController);
 
