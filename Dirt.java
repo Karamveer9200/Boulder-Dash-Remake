@@ -5,7 +5,7 @@ import javafx.scene.image.Image;
  * This tile can explode and be entered/walked over.
  * It's represented by an image found at "images/dirt.png".
  */
-public class Dirt extends Tile {
+public class Dirt extends Element {
 
     /**
      * Creates new Dirt tiles at the specified row and column.

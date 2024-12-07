@@ -5,7 +5,7 @@ import javafx.scene.image.Image;
  * This tile cannot be entered until it is unlocked.
  * It is represented by an image based on the key colour.
  */
-public class LockedDoor extends Tile {
+public class LockedDoor extends Element {
     /**
      * The colour of the key required to unlock this door.
      */

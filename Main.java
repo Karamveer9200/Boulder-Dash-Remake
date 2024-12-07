@@ -378,7 +378,7 @@ public class Main extends Application {
 			resetGridButton.setDisable(false);
 		});
 
-		
+
 
 		Button testExplosionButton = new Button("Test Explosion");
 		testExplosionButton.setOnAction(e -> {

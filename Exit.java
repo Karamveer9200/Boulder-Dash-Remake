@@ -6,7 +6,7 @@ import javafx.scene.image.Image;
  * Initially, cannot be entered/walked over or exploded.
  * It is represented by an image located at "images/Exit.png".
  */
-public class Exit extends Tile {
+public class Exit extends Element {
     /**
      * Allows us to keep track of whether an exit has already been created.
      */

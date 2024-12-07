@@ -5,7 +5,7 @@ import javafx.scene.image.Image;
  * This tile cannot be entered/walked over but can explode.
  * It is represented by an image found at "images/MagicWall.png".
  */
-public class MagicWall extends Tile {
+public class MagicWall extends Element {
 
     /**
      * Creates a new Magic Wall tile at the specified row and column.

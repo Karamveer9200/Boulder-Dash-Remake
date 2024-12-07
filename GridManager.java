@@ -322,22 +322,47 @@ public class GridManager {
         return diamonds;
     }
 
+    /**
+     * Retrieves the list of Firefly elements in the grid.
+     *
+     * @return the ArrayList of Firefly elements
+     */
     public ArrayList<Firefly> getFireflies() {
         return fireflies;
     }
 
+    /**
+     * Retrieves the list of Butterfly elements in the grid.
+     *
+     * @return the ArrayList of Butterfly elements
+     */
     public ArrayList<Butterfly> getButterflies() {
         return butterflies;
     }
 
+    /**
+     * Retrieves the list of Frog elements in the grid.
+     *
+     * @return the ArrayList of Frog elements
+     */
     public ArrayList<Frog> getFrogs() {
         return frogs;
     }
 
+    /**
+     * Retrieves the current Player object in the grid.
+     *
+     * @return the Player object representing the player character in the grid
+     */
     public Player getPlayer() {
         return player;
     }
 
+    /**
+     * Retrieves the list of Amoeba elements in the grid.
+     *
+     * @return the ArrayList of Amoeba elements
+     */
     public ArrayList<Amoeba> getAmoebas() {
         return amoebas;
     }

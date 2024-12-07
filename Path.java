@@ -2,7 +2,7 @@
  * Represents a Path tile in the game.
  * This tile can be entered/walked over and can explode.
  */
-public class Path extends Tile {
+public class Path extends Element {
 
     /**
      * Creates a new Path tile at the specified row and column.

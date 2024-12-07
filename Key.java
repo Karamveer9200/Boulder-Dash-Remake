@@ -5,7 +5,7 @@ import javafx.scene.image.Image;
  * This tile can be entered/walked over and is
  * represented by an image based on the colour of the key.
  */
-public class Key extends Tile {
+public class Key extends Element {
     /**
      * The colour of the key.
      */

@@ -5,7 +5,7 @@ import javafx.scene.image.Image;
  * This tile cannot be entered/walked over but can explode.
  * It is represented by an image located at "images/normalwall.png".
  */
-public class NormalWall extends Tile {
+public class NormalWall extends Element {
 
     /**
      * Creates a new Normal Wall tile at the specified row(X co-ord) and column(Y co-ord).

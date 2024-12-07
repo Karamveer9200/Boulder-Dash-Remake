@@ -5,7 +5,7 @@ import javafx.scene.image.Image;
  * This tile cannot be entered or exploded.
  * It is represented by an image located at "images/TitaniumWall.png".
  */
-public class TitaniumWall extends Tile {
+public class TitaniumWall extends Element {
 
     /**
      * Creates a new Titanium Wall tile at the specified row and column.
