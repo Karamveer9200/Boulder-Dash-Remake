@@ -22,6 +22,8 @@ public class GameController {
 
     public static int diamondsRequired;
 
+    public static int amoebaLimit;
+
     /**
      * Represents possible inputs for the player.
      */
@@ -304,6 +306,10 @@ public class GameController {
 
     public void setDiamondsRequired(int diamondsRequired) {
         this.diamondsRequired = diamondsRequired;
+    }
+
+    public void setAmoebaLimit(int amoebaLimit) {
+        this.amoebaLimit = amoebaLimit;
     }
 
 }

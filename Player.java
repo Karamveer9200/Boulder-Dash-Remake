@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Player extends Element {
 
-    private final ArrayList<KeyColour> keyInventory;
+    private ArrayList<KeyColour> keyInventory;
     public static int diamondCount = 0;
     private boolean hasEnoughDiamonds;
     private boolean hasPlayerWon;
@@ -165,6 +165,14 @@ public class Player extends Element {
 
     public boolean hasPlayerWon() {
         return hasPlayerWon;
+    }
+
+    public ArrayList<KeyColour> getKeyInventory() {
+        return keyInventory;
+    }
+
+    public void setKeyInventory(ArrayList<KeyColour> keyInventory) {
+        this.keyInventory = keyInventory;
     }
 
 

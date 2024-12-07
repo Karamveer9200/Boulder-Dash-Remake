@@ -1,7 +1,7 @@
 5 5
 300
 0 2
-2 8
+1000 8
 
 NW NW NW NW NW
 NW P P E NW

@@ -240,6 +240,9 @@ public class Main extends Application {
 		final int canvasWidth = initialGrid[0].length * GRID_CELL_WIDTH;
 		final int canvasHeight = initialGrid.length * GRID_CELL_HEIGHT;
 
+		int amoebaGrowthRate = FileHandler.readAmoebaGrowthRateFromLevelFile(levelFile); //Read amoeba growth rate
+
+
 		// Create the canvas
 		Canvas canvas = new Canvas(canvasWidth, canvasHeight);
 
@@ -248,6 +251,8 @@ public class Main extends Application {
 
 		gameController.setDiamondsRequired(FileHandler.readRequiredDiamondsFromLevelFile(levelFile));
 		gameController.getPlayer().setDiamondCount(FileHandler.readDiamondsCollectedFromLevelFile(levelFile));
+		gameController.getPlayer().setKeyInventory(FileHandler.readKeyInventoryFromLevelFile(levelFile));
+		gameController.setAmoebaLimit(FileHandler.readAmoebaSizeLimitFromLevelFile(levelFile));
 
 		// Build the GUI
 		Pane root = buildGUI(gameController);
@@ -288,7 +293,7 @@ public class Main extends Application {
 			gameController.frogTick();
 		});
 
-		KeyFrame amoebaKeyFrame = new KeyFrame(Duration.millis(1000), event -> {
+		KeyFrame amoebaKeyFrame = new KeyFrame(Duration.millis(amoebaGrowthRate), event -> {
 			gameController.amoebaTick();
 		});
 
@@ -359,7 +364,8 @@ public class Main extends Application {
 		});
 
 		saveButton.setOnAction(e -> {
-			FileHandler.writeFile(gameController.getGridManager(), currentProfile, secondsRemaining);
+			ArrayList<KeyColour> keyInventory = gameController.getPlayer().getKeyInventory();
+			FileHandler.writeFile(gameController.getGridManager(), currentProfile, secondsRemaining, keyInventory);
 			closeGame();
 		});
 
