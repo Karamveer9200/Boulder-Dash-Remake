@@ -50,8 +50,11 @@ public class Main extends Application {
 	private ArrayList<PlayerProfile> profiles = new ArrayList<>();
 	private PlayerProfile currentProfile;
 
+	private Stage primaryStage;
+
 	@Override
 	public void start(Stage primaryStage) {
+		this.primaryStage = primaryStage; // Store the primary stage
 		primaryStage.setTitle("BOULDER DASH");
 
 		VBox menuBox = new VBox(10);
@@ -64,7 +67,7 @@ public class Main extends Application {
 		// Set up menu buttons
 		Button newGameButton = new Button("Start New Game");
 		newGameButton.setOnAction(e -> {
-            currentProfile = ProfileManager.promptForProfile();
+			currentProfile = ProfileManager.promptForProfile();
 			String levelFile = "txt/Level1.txt";
 			secondsRemaining = FileHandler.readSecondsFromLevelFile(levelFile);
 			setupGame(primaryStage, levelFile);
@@ -337,7 +340,7 @@ public class Main extends Application {
 			String levelFile = "txt/Level" + levelReached + ".txt";
 			String[][] initialGrid = FileHandler.readElementGridFromLevelFile(levelFile);
 			gameController.getGridManager().reinitializeGrid(initialGrid);
-		    gameController.getGridManager().initializePlayer(initialGrid);
+			gameController.getGridManager().initializePlayer(initialGrid);
 			gameController.draw();
 		});
 
@@ -380,6 +383,10 @@ public class Main extends Application {
 			resetGridButton.setDisable(false);
 		});
 
+		Button nextLevelButton = new Button("Next Level");
+		nextLevelButton.setOnAction(e -> {
+			levelCompleted(gameController);
+		});
 
 		Button testExplosionButton = new Button("Test Explosion");
 		testExplosionButton.setOnAction(e -> {
@@ -409,7 +416,7 @@ public class Main extends Application {
 		Text levelText = new Text ("Current Level: " + currentProfile.getMaxLevelReached());
 
 		toolbar.getChildren().addAll(startTickButton, stopTickButton, resetGridButton,
-				saveButton, timerText, diamondCountText, levelText);
+				saveButton, timerText, diamondCountText, levelText, nextLevelButton);
 		root.setTop(toolbar);
 
 		return root;
@@ -420,6 +427,42 @@ public class Main extends Application {
 	 */
 	private void closeGame() {
 		System.exit(0);
+	}
+
+	public void levelCompleted(GameController gameController) {
+		// Stop all timelines
+		playerTickTimeline.stop();
+		killPlayerTickTimeLine.stop();
+		dangerousRockFallTickTimeline.stop();
+		dangerousRockRollTimeline.stop();
+		flyTickTimeline.stop();
+		frogTickTimeline.stop();
+		amoebaTickTimeline.stop();
+		explosionTickTimeLine.stop();
+		timerTimeline.stop();
+
+		// Show the high score table for the current level
+		int currentLevel = currentProfile.getMaxLevelReached();
+		HighScoreTableManager.displayHighScoreTable(currentLevel);
+
+		// Check if there’s a next level
+		int nextLevel = currentLevel + 1;
+		String nextLevelFile = "txt/Level" + nextLevel + ".txt";
+		if (nextLevel <= 3) {
+			currentProfile.setMaxLevelReached(nextLevel); // Update player's progress
+			profiles.set(profiles.indexOf(currentProfile), currentProfile); // Update profile list
+			ProfileManager.saveProfileToFile(currentProfile); // Persist changes
+
+			secondsRemaining = FileHandler.readSecondsFromLevelFile(nextLevelFile);
+			setupGame(primaryStage, nextLevelFile);
+		} else {
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			alert.setTitle("Game Over");
+			alert.setHeaderText("Congratulations!");
+			alert.setContentText("You have completed all levels!");
+			alert.showAndWait();
+			start(primaryStage);
+		}
 	}
 
 	public static void main(String[] args) {
