@@ -25,7 +25,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 /**
- * Main sets up the GUI and initialises everything for a game to take place
+ * Main sets up the GUI and initialises everything for a game to take place.
  */
 public class Main extends Application {
 	public static final int WINDOW_WIDTH = 800;
@@ -54,6 +54,7 @@ public class Main extends Application {
 	private PlayerProfile currentProfile;
 
 	private Stage primaryStage;
+
 	@Override
 	public void start(Stage primaryStage) {
 		this.primaryStage = primaryStage; // Store the primary stage
@@ -375,16 +376,7 @@ public class Main extends Application {
 		checkLevelWinTimeline = new Timeline(checkLevelWinKeyFrame);
 
 		// Set the cycle count to Animation.INDEFINITE
-		playerTickTimeline.setCycleCount(Animation.INDEFINITE);
-		killPlayerTickTimeLine.setCycleCount(Animation.INDEFINITE);
-		dangerousRockFallTickTimeline.setCycleCount(Animation.INDEFINITE);
-		dangerousRockRollTimeline.setCycleCount(Animation.INDEFINITE);
-		flyTickTimeline.setCycleCount(Animation.INDEFINITE);
-		frogTickTimeline.setCycleCount(Animation.INDEFINITE);
-		amoebaTickTimeline.setCycleCount(Animation.INDEFINITE);
-		timerTimeline.setCycleCount(Animation.INDEFINITE);
-		explosionTickTimeLine.setCycleCount(Animation.INDEFINITE);
-		checkLevelWinTimeline.setCycleCount(Animation.INDEFINITE);
+		setTimelinesToIndefinite();
 
 		// Draw the initial grid
 		gameController.draw();
@@ -561,6 +553,19 @@ public class Main extends Application {
 
 	public static void main(String[] args) {
 		launch(args);
+	}
+
+	private void setTimelinesToIndefinite() {
+		playerTickTimeline.setCycleCount(Animation.INDEFINITE);
+		killPlayerTickTimeLine.setCycleCount(Animation.INDEFINITE);
+		dangerousRockFallTickTimeline.setCycleCount(Animation.INDEFINITE);
+		dangerousRockRollTimeline.setCycleCount(Animation.INDEFINITE);
+		flyTickTimeline.setCycleCount(Animation.INDEFINITE);
+		frogTickTimeline.setCycleCount(Animation.INDEFINITE);
+		amoebaTickTimeline.setCycleCount(Animation.INDEFINITE);
+		timerTimeline.setCycleCount(Animation.INDEFINITE);
+		explosionTickTimeLine.setCycleCount(Animation.INDEFINITE);
+		checkLevelWinTimeline.setCycleCount(Animation.INDEFINITE);
 	}
 
 }
