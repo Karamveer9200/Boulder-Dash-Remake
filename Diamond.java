@@ -8,6 +8,7 @@ public class Diamond extends DangerousRock {
         name = "Diamond";
     }
 
+
     @Override
     public String toString() {
         return "Diamond";

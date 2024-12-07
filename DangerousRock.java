@@ -1,5 +1,6 @@
 public abstract class DangerousRock extends Element {
 
+
     private boolean hasMomentum = false;
 
     public DangerousRock(int row, int column) {
@@ -7,18 +8,22 @@ public abstract class DangerousRock extends Element {
         canExplode = true;
         canBeEntered = false;
     }
+
     /**
      * Gains momentum when the boulder falls.
      */
+
     public void gainMomentum() {
         hasMomentum = true;
     }
+
 
     /**
      * Handles the falling logic for the diamond.
      *
      * @param gridManager the grid manager to access and update the grid
      */
+
     public void fall(GridManager gridManager) {
         Element[][] grid = gridManager.getElementGrid();
         int newRow = this.getRow() + 1;
@@ -83,8 +88,8 @@ public abstract class DangerousRock extends Element {
         }
     }
 
+
     /**
-     * Gains momentum when the object falls.
      * Handles the rolling logic for the diamond.
      *
      * @param gridManager the grid manager to access and update the grid

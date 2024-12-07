@@ -43,10 +43,7 @@ public class GameController {
         this.canvas = canvas;
         this.gridManager = new GridManager(gridTemplate);
         this.renderer = new Renderer();
-//        this.player = gridManager.getPlayer();
         this.inputHandler = new InputHandler();
-//        gridManager.initializePlayer(gridTemplate);
-
     }
 
     private void replaceTargetWithPath(int targetRow, int targetColumn) {
@@ -179,10 +176,10 @@ public class GameController {
     }
 
     public void amoebaTick() {
-        if (!AmoebaManager.isEmpty()) { // Check if there are any active amoeba groups
-            AmoebaManager.updateAll(gridManager); // Update all amoeba groups
+        if (gridManager.getAmoebas().size() > 0) {
+            AmoebaManager.spreadAll(gridManager);
         }
-        draw(); // Redraw the grid after updating
+        draw();
     }
 
     public void butterflyTick() {
@@ -200,6 +197,7 @@ public class GameController {
         }
         draw();
     }
+
 
     /**
      * Executes the player tick, handling input and updating the player's position on the grid.
@@ -333,9 +331,4 @@ public class GameController {
                 gridManager
         );
     }
-    // allows the player being managed by Game Controller to be retrieved
-    public Player getPlayer() {
-        return gridManager.getPlayer();
-    }
-
 }
