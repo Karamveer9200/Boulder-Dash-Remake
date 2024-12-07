@@ -18,8 +18,8 @@ public class GameController {
 
     private static int nextExplosionRow;
     private static int nextExplosionCol;
-    private static boolean waitingForExplosionAfterMath = false;
-    private static boolean waitingForExplosion = false;
+    public static boolean waitingForExplosionAfterMath = false;
+    public static boolean waitingForExplosion = false;
     private static boolean transformToDiamonds;
 
     /**
@@ -46,16 +46,27 @@ public class GameController {
         this.inputHandler = new InputHandler();
     }
 
-    private void replaceTargetWithPath(int targetRow, int targetColumn) {
+    private void replaceEnemyWithPath(int targetRow, int targetColumn) {
+        // Remove the target from the game
+        gridManager.explosionRemoveFromList(gridManager.getElement(targetRow, targetColumn));
+
         // Replace the target with a Path in the grid
         gridManager.setElement(targetRow, targetColumn, new Path(targetRow, targetColumn));
 
-        // Remove the target from the game
-        gridManager.removeFromList(gridManager.getElement(targetRow, targetColumn));
+        System.out.println( gridManager.getElement(targetRow,targetColumn).toString()+" has been replaced with Path at row: " + targetRow + ", col: " + targetColumn);
 
+    }
 
-        System.out.println("Target has been replaced with Path at row: " + targetRow + ", col: " + targetColumn);
+    private void replacePlayerWithPath(int playerRow, int playerCol) {
+        // Replace the player with a Path in the grid
+        gridManager.setElement(playerRow, playerCol, new Path(playerRow, playerCol));
 
+        // Remove the player from the game
+        gridManager.removeFromList(gridManager.getPlayer());
+
+        // Optional: Stop input handling and end the game
+        System.out.println("Player has been replaced with Path at row: " + playerRow + ", col: " + playerCol);
+        gameOver();
     }
 
 
@@ -69,13 +80,13 @@ public class GameController {
         Element currentUpNeighbor = (enemyRow - 1 >= 0) ? grid[enemyRow - 1][enemyCol] : null;
 
         if (currentUpNeighbor instanceof Player) {
-            replaceTargetWithPath(enemyRow - 1, enemyCol); // Replace player at the UP position
+            replacePlayerWithPath(enemyRow - 1, enemyCol); // Replace player at the UP position
         } else if (currentDownNeighbor instanceof Player) {
-            replaceTargetWithPath(enemyRow + 1, enemyCol); // Replace player at the DOWN position
+            replacePlayerWithPath(enemyRow + 1, enemyCol); // Replace player at the DOWN position
         } else if (currentRightNeighbor instanceof Player) {
-            replaceTargetWithPath(enemyRow, enemyCol + 1); // Replace player at the RIGHT position
+            replacePlayerWithPath(enemyRow, enemyCol + 1); // Replace player at the RIGHT position
         } else if (currentLeftNeighbor instanceof Player) {
-            replaceTargetWithPath(enemyRow, enemyCol - 1); // Replace player at the LEFT position
+            replacePlayerWithPath(enemyRow, enemyCol - 1); // Replace player at the LEFT position
         }
     }
 
@@ -89,13 +100,13 @@ public class GameController {
         Element currentUpNeighbor = (enemyRow - 1 >= 0) ? grid[enemyRow - 1][enemyCol] : null;
 
         if (currentUpNeighbor instanceof Amoeba) {
-            replaceTargetWithPath(enemyRow, enemyCol); // Replace Enemy if UP position is amoeba
+            replaceEnemyWithPath(enemyRow, enemyCol); // Replace Enemy if UP position is amoeba
         } else if (currentDownNeighbor instanceof Amoeba) {
-            replaceTargetWithPath(enemyRow, enemyCol); // Replace Enemy if DOWN position is amoeba
+            replaceEnemyWithPath(enemyRow, enemyCol); // Replace Enemy if DOWN position is amoeba
         } else if (currentRightNeighbor instanceof Amoeba) {
-            replaceTargetWithPath(enemyRow, enemyCol); // Replace Enemy if RIGHT position is amoeba
+            replaceEnemyWithPath(enemyRow, enemyCol); // Replace Enemy if RIGHT position is amoeba
         } else if (currentLeftNeighbor instanceof Amoeba) {
-            replaceTargetWithPath(enemyRow, enemyCol); // Replace Enemy if LEFT position is amoeba
+            replaceEnemyWithPath(enemyRow, enemyCol); // Replace Enemy if LEFT position is amoeba
         }
     }
 
@@ -274,6 +285,7 @@ public class GameController {
 
     public static void gameOver() {
         gameStatus = false;
+        System.out.println("GAME OVER");
     }
 
     public static void gameStart() {

@@ -59,6 +59,9 @@ public class GridManager {
      * @param gridTemplate the 2D array representing the initial grid setup
      */
     public void reinitializeGrid(int[][] gridTemplate) {
+        GameController.waitingForExplosion = false;
+        GameController.waitingForExplosionAfterMath = false;
+
         initializePlayer(gridTemplate);
         Exit.toggleFalseExitExists();
         getBoulders().clear();

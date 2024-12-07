@@ -21,6 +21,7 @@ public class Explosion extends Element {
                 if (i >= 0 && i < grid.length && j >= 0 && j < grid[0].length) {
                     if (gridManager.getElement(i,j).isCanExplode()) {
                         gridManager.explosionRemoveFromList(gridManager.getElement(i,j));
+                        System.out.println(gridManager.getElement(i,j).toString());
                         Explosion explosion = new Explosion(i, j);
                         gridManager.setElement(i, j, explosion);
                     }

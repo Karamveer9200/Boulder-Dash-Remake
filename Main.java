@@ -94,7 +94,7 @@ public class Main extends Application {
 			gameController.amoebaTick();
 		});
 
-		KeyFrame explosionKeyFrame = new KeyFrame(Duration.millis(1000), event -> {
+		KeyFrame explosionKeyFrame = new KeyFrame(Duration.millis(500), event -> {
 			gameController.explosionTick();
 		});
 
