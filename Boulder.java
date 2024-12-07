@@ -5,8 +5,8 @@ public class Boulder extends  DangerousRock {
 
     public Boulder(int row ,int column) {
         super(row,column);
-        canExplode = true;
         image = new Image("images/boulder.png");
+
         name = "Boulder";
     }
 

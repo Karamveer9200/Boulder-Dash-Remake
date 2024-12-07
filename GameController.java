@@ -43,21 +43,18 @@ public class GameController {
         this.canvas = canvas;
         this.gridManager = new GridManager(gridTemplate);
         this.renderer = new Renderer();
-//        this.player = gridManager.getPlayer();
         this.inputHandler = new InputHandler();
-//        gridManager.initializePlayer(gridTemplate);
-
     }
 
-    private void replacePlayerWithPath(int playerRow, int playerCol) {
-        // Replace the player with a Path in the grid
-        gridManager.setElement(playerRow, playerCol, new Path(playerRow, playerCol));
+    private void replaceTargetWithPath(int targetRow, int targetColumn) {
+        // Replace the target with a Path in the grid
+        gridManager.setElement(targetRow, targetColumn, new Path(targetRow, targetColumn));
 
-        // Remove the player from the game
-        gridManager.removeFromList(gridManager.getPlayer());
+        // Remove the target from the game
+        gridManager.removeFromList(gridManager.getElement(targetRow, targetColumn));
 
-        // Optional: Stop input handling and end the game
-        System.out.println("Player has been replaced with Path at row: " + playerRow + ", col: " + playerCol);
+
+        System.out.println("Target has been replaced with Path at row: " + targetRow + ", col: " + targetColumn);
 
     }
 
@@ -72,13 +69,33 @@ public class GameController {
         Element currentUpNeighbor = (enemyRow - 1 >= 0) ? grid[enemyRow - 1][enemyCol] : null;
 
         if (currentUpNeighbor instanceof Player) {
-            replacePlayerWithPath(enemyRow - 1, enemyCol); // Replace player at the UP position
+            replaceTargetWithPath(enemyRow - 1, enemyCol); // Replace player at the UP position
         } else if (currentDownNeighbor instanceof Player) {
-            replacePlayerWithPath(enemyRow + 1, enemyCol); // Replace player at the DOWN position
+            replaceTargetWithPath(enemyRow + 1, enemyCol); // Replace player at the DOWN position
         } else if (currentRightNeighbor instanceof Player) {
-            replacePlayerWithPath(enemyRow, enemyCol + 1); // Replace player at the RIGHT position
+            replaceTargetWithPath(enemyRow, enemyCol + 1); // Replace player at the RIGHT position
         } else if (currentLeftNeighbor instanceof Player) {
-            replacePlayerWithPath(enemyRow, enemyCol - 1); // Replace player at the LEFT position
+            replaceTargetWithPath(enemyRow, enemyCol - 1); // Replace player at the LEFT position
+        }
+    }
+
+    private void checkNeighboursForAmoeba(Element enemy, Element [][] grid) {
+        // Check bounds and get neighbors safely
+        int enemyRow = enemy.getRow();
+        int enemyCol = enemy.getColumn();
+        Element currentRightNeighbor = (enemyCol + 1 < grid[0].length) ? grid[enemyRow][enemyCol + 1] : null;
+        Element currentLeftNeighbor = (enemyCol - 1 >= 0) ? grid[enemyRow][enemyCol - 1] : null;
+        Element currentDownNeighbor = (enemyRow + 1 < grid.length) ? grid[enemyRow + 1][enemyCol] : null;
+        Element currentUpNeighbor = (enemyRow - 1 >= 0) ? grid[enemyRow - 1][enemyCol] : null;
+
+        if (currentUpNeighbor instanceof Amoeba) {
+            replaceTargetWithPath(enemyRow, enemyCol); // Replace Enemy if UP position is amoeba
+        } else if (currentDownNeighbor instanceof Amoeba) {
+            replaceTargetWithPath(enemyRow, enemyCol); // Replace Enemy if DOWN position is amoeba
+        } else if (currentRightNeighbor instanceof Amoeba) {
+            replaceTargetWithPath(enemyRow, enemyCol); // Replace Enemy if RIGHT position is amoeba
+        } else if (currentLeftNeighbor instanceof Amoeba) {
+            replaceTargetWithPath(enemyRow, enemyCol); // Replace Enemy if LEFT position is amoeba
         }
     }
 
@@ -97,6 +114,13 @@ public class GameController {
 //           System.out.println("Checking enemy at row: " + enemy.getRow() + ", col: " + enemy.getColumn());
             checkNeighboursForPlayer(enemy, gridManager.getElementGrid());
         }
+
+        // Iterate through all entities
+        for (Element enemy : enemies) {
+//           System.out.println("Checking enemy at row: " + enemy.getRow() + ", col: " + enemy.getColumn());
+            checkNeighboursForAmoeba(enemy, gridManager.getElementGrid());
+        }
+
     }
 
     /**

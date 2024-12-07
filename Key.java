@@ -8,6 +8,7 @@ public class Key extends Tile {
         this.colour = colour;
         canBeEntered = true;
         name = "Key";
+        canExplode = true;
 
         switch (colour) {
             case RED -> image = new Image("images/RedKey.png");

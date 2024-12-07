@@ -6,6 +6,7 @@ public abstract class DangerousRock extends Element {
     public DangerousRock(int row, int column) {
         super(row, column);
         canExplode = true;
+        canBeEntered = false;
     }
 
     /**
@@ -98,7 +99,7 @@ public abstract class DangerousRock extends Element {
         int newRow = this.getRow() + 1; // Row below the current position
         int col = this.getColumn();
 
-        // Check if below is a surface rock can roll on Boulder, Diamond, or NormalWall, and check that the
+        // Check if below is a surface rock can roll on Boulder, Diamond, or NormalWall, and check that the magic wall isnt blocked by something a rock can not crush AKA player,enemy
         if (newRow < grid.length &&
                 (grid[newRow][col] instanceof Boulder ||
                         grid[newRow][col] instanceof Diamond ||
