@@ -2,6 +2,7 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -43,10 +44,10 @@ public class Main extends Application {
 	private Timeline explosionTickTimeLine;
 	private Timeline timerTimeline;
 	private Timeline diamondCountTimeline;
+	private Timeline checkLevelWinTimeline;
 
-
+	private boolean levelWon;
 	private int secondsRemaining;
-
 	private ArrayList<PlayerProfile> profiles = new ArrayList<>();
 	private PlayerProfile currentProfile;
 
@@ -289,6 +290,12 @@ public class Main extends Application {
 			gameController.explosionTick();
 		});
 
+		KeyFrame checkLevelWinKeyFrame = new KeyFrame(Duration.millis(49), event -> {
+			if (gameController.checkLevelWinTick()) {
+				levelCompleted(gameController);
+			}
+		});
+
 		// Set up the periodic tick timeline
 		playerTickTimeline = new Timeline(playerKeyFrame);
 		dangerousRockFallTickTimeline = new Timeline(dangerousRocksFallKeyFrame);
@@ -298,8 +305,7 @@ public class Main extends Application {
 		amoebaTickTimeline = new Timeline(amoebaKeyFrame);
 		killPlayerTickTimeLine = new Timeline(killPlayerKeyFrame);
 		explosionTickTimeLine = new Timeline(explosionKeyFrame);
-
-
+		checkLevelWinTimeline = new Timeline(checkLevelWinKeyFrame);
 
 		// Set the cycle count to Animation.INDEFINITE
 		playerTickTimeline.setCycleCount(Animation.INDEFINITE);
@@ -311,6 +317,7 @@ public class Main extends Application {
 		amoebaTickTimeline.setCycleCount(Animation.INDEFINITE);
 		timerTimeline.setCycleCount(Animation.INDEFINITE);
 		explosionTickTimeLine.setCycleCount(Animation.INDEFINITE);
+		checkLevelWinTimeline.setCycleCount(Animation.INDEFINITE);
 
 		// Draw the initial grid
 		gameController.draw();
@@ -361,6 +368,7 @@ public class Main extends Application {
 			amoebaTickTimeline.play();
 			killPlayerTickTimeLine.play();
 			explosionTickTimeLine.play();
+			checkLevelWinTimeline.play();
 			startTickButton.setDisable(true);
 			stopTickButton.setDisable(false);
 			saveButton.setDisable(true);
@@ -378,6 +386,7 @@ public class Main extends Application {
 			amoebaTickTimeline.stop();
 			killPlayerTickTimeLine.stop();
 			explosionTickTimeLine.stop();
+			checkLevelWinTimeline.stop();
 			stopTickButton.setDisable(true);
 			startTickButton.setDisable(false);
 			saveButton.setDisable(false);
@@ -394,6 +403,7 @@ public class Main extends Application {
 			gameController.applyExplosion(2,2);
 			gameController.draw();
 		});
+
 		// adds timer to the toolbar
 		Text timerText = new Text("Time Remaining: " + secondsRemaining + "s");
 		timerTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
@@ -451,7 +461,9 @@ public class Main extends Application {
 		int currentLevel = currentProfile.getMaxLevelReached();
 		String currentPlayerName = currentProfile.getName();
 		HighScoreTableManager.updateHighScoreTable(currentPlayerName,500,currentLevel);
-		HighScoreTableManager.displayHighScoresAfterLevel(currentLevel, 500);
+		Platform.runLater(() -> {
+			HighScoreTableManager.displayHighScoresAfterLevel(currentLevel, 500);
+		});
 
 		// Check if there’s a next level
 		int nextLevel = currentLevel + 1;

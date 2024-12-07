@@ -248,6 +248,10 @@ public class GameController {
         }
     }
 
+    public boolean checkLevelWinTick() {
+        return gridManager.getPlayer().hasPlayerWon();
+    }
+
 
     public static void gameOver() {
         gameStatus = false;
@@ -291,23 +295,6 @@ public class GameController {
         return gridManager;
     }
 
-    /**
-     * Resets the player's location to the top-left corner of the grid (0, 0).
-     */
-    public void resetPlayerLocation() {
-        gridManager.getPlayer().movePlayer(0, 0, gridManager);
-    }
-
-    /**
-     * Moves the player to the center of the grid.
-     */
-    public void movePlayerToCenter() {
-        gridManager.getPlayer().movePlayer(
-                gridManager.getElementGrid().length / 2,
-                gridManager.getElementGrid()[0].length / 2,
-                gridManager
-        );
-    }
     // allows the player being managed by Game Controller to be retrieved
     public Player getPlayer() {
         return gridManager.getPlayer();

@@ -17,10 +17,7 @@ public class Exit extends Tile {
     public static void toggleFalseExitExists() {
         exitExists = false;
     }
-    // Notifies the player that they have completed the level
-    public void announceLevelWin() {
-        System.out.println("Level Completed!");
-    }
+
     // Method to unlock the Exit so it can be entered
     public void unlock() {
         this.canBeEntered = true;
