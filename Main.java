@@ -227,7 +227,7 @@ public class Main extends Application {
 	 */
 	public void setupGame(Stage primaryStage, String levelFile) {
 		// Load the initial grid from a file
-		int[][] initialGrid = FileHandler.readFile("PlaceHolder.txt");
+		String[][] initialGrid = FileHandler.readFile("PlaceHolder.txt");
 
 		final int canvasWidth = initialGrid[0].length * GRID_CELL_WIDTH;
 		final int canvasHeight = initialGrid.length * GRID_CELL_HEIGHT;

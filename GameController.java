@@ -39,7 +39,7 @@ public class GameController {
      * @param gridTemplate the 2D array representing the initial grid layout
      * @param canvas       the Canvas object used for rendering the game
      */
-    public GameController(int[][] gridTemplate, Canvas canvas) {
+    public GameController(String[][] gridTemplate, Canvas canvas) {
         this.canvas = canvas;
         this.gridManager = new GridManager(gridTemplate);
         this.renderer = new Renderer();
