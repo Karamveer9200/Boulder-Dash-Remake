@@ -138,7 +138,6 @@ public class GridManager {
             case "F" -> new Frog(row, col);
             case "A" -> new Amoeba(row, col);
 
-
             case "FFL" -> new Firefly(row,col,true);
             case "FFR" -> new Firefly(row,col,false);
             case "BFL" -> new Butterfly(row,col,true);

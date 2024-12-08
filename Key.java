@@ -28,8 +28,8 @@ public class Key extends Element {
 
         switch (colour) {
             case RED -> image = new Image("images/RedKey.png");
-            case GREEN -> image = new Image("images/KeyGreen.png");
-            case YELLOW -> image = new Image("images/KeyYellow.png");
+            case GREEN -> image = new Image("images/GreenKey.png");
+            case YELLOW -> image = new Image("images/YellowKey.png");
             case BLUE -> image = new Image("images/BlueKey.png");
         }
     }
