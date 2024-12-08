@@ -8,6 +8,7 @@ public class Player extends Element {
     private final List<KeyColour> keyInventory;
     private int diamondCount = 0;
     private boolean hasEnoughDiamonds;
+    public boolean lookingRight;
 
     public Player(int row, int column){
         super(row, column);
@@ -19,6 +20,14 @@ public class Player extends Element {
         hasEnoughDiamonds = false;
     }
 
+    public void imageAnimation(){
+        lookingRight= !lookingRight;
+        if(lookingRight){
+            image = new Image("images/playerLookingRight.png");
+        } else if (!lookingRight) {
+            image = new Image("images/player.png");
+        }
+    }
     public void collectKey(Key key) {
         System.out.println(key);
         keyInventory.add(key.getColour());
