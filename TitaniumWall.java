@@ -13,7 +13,7 @@ public class TitaniumWall extends Element {
      */
     public TitaniumWall(final int row, final int column) {
         super(row, column);
-        image = new Image("images/normalwall.png");
+        image = new Image("images/TitaniumWall.png");
         canBeEntered = false;
         canExplode = false;
         name = "TitaniumWall";
