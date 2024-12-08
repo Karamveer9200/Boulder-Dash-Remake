@@ -92,8 +92,6 @@ public class Explosion extends Element {
      * @param col the column index of the grid's center tile where the diamond effect is to be applied
      * @param gridManager the grid manager that manages the grid of elements
      */
-    // SHOULD ONLY HAPPEN AFTER 'createExplosion'
-    // In the 3x3 around the selected index replace the explosions that were there with paths.
     public static void createDiamondExplosionAfterMath (int row, int col, GridManager gridManager) {
         Element[][] grid = gridManager.getElementGrid();
         for (int i = row - 1; i <= row + 1; i++) {

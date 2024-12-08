@@ -16,6 +16,8 @@ import java.util.Scanner;
 /**
  * Manages the high scores for the game. Allows new entries to be added
  * and saved to a level's high score table.
+ * @author Alex Vesely
+ * @author Tahi Rahman
  */
 public class HighScoreTableManager {
     private static final int MAX_HIGH_SCORES = 10;
@@ -25,11 +27,11 @@ public class HighScoreTableManager {
     private static final int SPACING = 10;
 
     /**
-     * Displays the high score table for a specific level when accessed from the main menu.
+     * Displays a level's high score table when accessed from the main menu.
      * @param level        The level's high score table.
-     * @param parentDialog The parent dialog that will be shown again when this one is closed.
+     * @param parentDialog The dialog that will be shown when this is closed.
      */
-    public static void displayHighScoresInMainMenu(final int level, final Stage parentDialog) {
+    public static void displayHighScoresInMainMenu(int level, Stage parentDialog) {
         Stage dialog = new Stage();
         dialog.setTitle("High Score Table for Level " + level);
         dialog.initModality(Modality.APPLICATION_MODAL);
@@ -64,7 +66,7 @@ public class HighScoreTableManager {
      * @param level        The level for which to display the high scores.
      * @param scoreAchieved The score the player achieved in the level.
      */
-    public static void displayHighScoresAfterLevel(final int level, final int scoreAchieved) {
+    public static void displayHighScoresAfterLevel(int level, int scoreAchieved) {
         Stage dialog = new Stage();
         dialog.setTitle("High Score Table for Level " + level);
         dialog.initModality(Modality.APPLICATION_MODAL);
@@ -116,7 +118,7 @@ public class HighScoreTableManager {
      * @param score      The score achieved by the player.
      * @param level      The level for which the high score table should be updated.
      */
-    public static void updateHighScoreTable(final String playerName, final int score, final int level) {
+    public static void updateHighScoreTable(String playerName, int score, int level) {
         HighScore newHighScore = new HighScore(playerName, score);
         ArrayList<HighScore> highScores = getHighScores(level);
         highScores.add(newHighScore);
@@ -133,7 +135,7 @@ public class HighScoreTableManager {
      * @param level The level for which to retrieve the high scores.
      * @return A list of high scores for the specified level.
      */
-    public static ArrayList<HighScore> getHighScores(final int level) {
+    public static ArrayList<HighScore> getHighScores(int level) {
         String folderPath = "txt";
         ArrayList<HighScore> highScores = new ArrayList<>();
 
@@ -145,7 +147,6 @@ public class HighScoreTableManager {
             return highScores;
         }
 
-        // Find the High Score Table for this level
         File[] files = folder.listFiles((dir, name) -> name.matches("HighScoreTable" + level + ".txt"));
         if (files == null || files.length == 0) {
             System.out.println("No matching file found for level " + level);
@@ -168,11 +169,11 @@ public class HighScoreTableManager {
     }
 
     /**
-     * Saves the high score table of a specific level to its high score table file.
+     * Saves a level's high score table to its high score table file.
      * @param highScores The list of high scores to save.
      * @param level      The level for which the High Score Table is of
      */
-    public static void saveHighScoreTable(final ArrayList<HighScore> highScores, final int level) {
+    public static void saveHighScoreTable(ArrayList<HighScore> highScores, int level) {
         try {
             String outputFile = "txt/HighScoreTable" + level + ".txt";
             PrintWriter out = new PrintWriter(outputFile);
