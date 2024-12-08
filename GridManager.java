@@ -200,6 +200,7 @@ public class GridManager {
             players.remove(player);
             System.out.println("Player removed");
             GameController.gameOver();
+            GameController.applyExplosion(element.row, element.column, Player.dropDiamond);
         } else if (element instanceof NormalWall wall) {
             walls.remove(wall);
         } else if (element instanceof Boulder boulder) {
