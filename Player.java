@@ -9,6 +9,7 @@ public class Player extends Element {
     private int diamondCount = 0;
     private boolean hasEnoughDiamonds;
     private boolean hasPlayerWon;
+    private int diamondsRequired;
 
     public Player(int row, int column){
         super(row, column);
@@ -55,7 +56,7 @@ public class Player extends Element {
     }
 
     public void checkDiamonds() {
-        if (getDiamondCount() >= GameController.diamondsRequired) {
+        if (getDiamondCount() >= diamondsRequired) {
             setHasEnoughDiamonds(true);
             System.out.println("You have enough Diamonds to finish the level!");
         }
@@ -173,6 +174,14 @@ public class Player extends Element {
 
     public void setKeyInventory(ArrayList<KeyColour> keyInventory) {
         this.keyInventory = keyInventory;
+    }
+
+    public void setDiamondsRequired(int diamondsRequired) {
+        this.diamondsRequired = diamondsRequired;
+    }
+
+    public int getDiamondsRequired() {
+        return diamondsRequired;
     }
 
 

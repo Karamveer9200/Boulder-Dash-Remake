@@ -118,19 +118,6 @@ public class FileHandler {
             in.nextLine(); //Skip line containing amoeba information
             in.nextLine(); //skip line containing key inventory information
 
-//            int secondsLeft = Integer.parseInt(in.nextLine());
-//            int diamondsToCollect = Integer.parseInt(in.nextLine());
-//
-//            String[] splitAmoebaInfo = in.nextLine().split(" ");
-//            int amoebaGrowthRate = Integer.parseInt(splitAmoebaInfo[0]);
-//            int amoebaSizeLimit = Integer.parseInt(splitAmoebaInfo[1]);
-//
-//            String[] splitCollectedKeys = in.nextLine().split(" ");
-//            for (int i = 0; i < splitCollectedKeys.length; i++)
-//            {
-//                // Have to write code here that reads in collected keys so far
-//            }
-
             String[][] initialGrid = new String[height][width];
             int i = 0;
             while (in.hasNextLine()) {
@@ -151,10 +138,11 @@ public class FileHandler {
         return null;
     }
 
-    public static void writeFile(GridManager gridManager, PlayerProfile currentProfile, int secondsRemaining,
+    public static void writeFile(GameController gameController, PlayerProfile currentProfile, int secondsRemaining,
                                  ArrayList<KeyColour> keyInventory) {
-        Element[][] currentGrid = gridManager.getElementGrid();
-        int diamondCount = gridManager.getPlayer().getDiamondCount();
+
+        Element[][] currentGrid = gameController.getGridManager().getElementGrid();
+        int diamondCount = gameController.getGridManager().getPlayer().getDiamondCount();
 
         int id = currentProfile.getPlayerId();
         String fileName = "Save" + id + ".txt";
@@ -166,14 +154,14 @@ public class FileHandler {
             out.println(currentGrid[0].length + " " + currentGrid.length);
             out.println(secondsRemaining); //Pass seconds left and output it here
 
-            out.println(diamondCount + " " + GameController.diamondsRequired); //Pass diamonds collected and how many diamonds left to collect and output it here
+            out.println(diamondCount + " " + gameController.getDiamondsRequired()); //Pass diamonds collected and how many diamonds left to collect and output it here
             out.println(2 + " " + 8); //Pass Amoeba growth rate and size limit and output it here
 
             out.println(createKeyInventoryString(keyInventory)); //Code here to output all the player's collected keys so far.
 
             for (int i = 0; i < currentGrid.length; i++) {
                 for (int j = 0; j < currentGrid[i].length; j++) {
-                    switch (gridManager.getElement(i,j).getName()) {
+                    switch (gameController.getGridManager().getElement(i,j).getName()) {
                         case "Player" -> out.print("*");
 
                         case "Path" -> out.print("P");
@@ -286,24 +274,27 @@ public class FileHandler {
             in.nextLine(); // Skip second line about seconds left
             in.nextLine(); // Skip third line about diamond information
             in.nextLine(); // Skip fourth line about amoeba information
-            String[] splitKeyInformation = in.nextLine().split(" ");
-            for (String key : splitKeyInformation) {
-                switch (key) {
-                    case "RK":
-                        keyInventory.add(KeyColour.RED);
-                        break;
-                    case "BK":
-                        keyInventory.add(KeyColour.BLUE);
-                        break;
-                    case "YK":
-                        keyInventory.add(KeyColour.YELLOW);
-                        break;
-                    case "GK":
-                        keyInventory.add(KeyColour.GREEN);
-                        break;
-                    default:
-                        System.out.println("Error can't read key " + key);
-                        break;
+            String keyInfo = in.nextLine();
+            if (!keyInfo.isBlank()) { // Check if the input line is not blank
+                String[] splitKeyInformation = keyInfo.split(" ");
+                for (String key : splitKeyInformation) {
+                    switch (key) {
+                        case "RK":
+                            keyInventory.add(KeyColour.RED);
+                            break;
+                        case "BK":
+                            keyInventory.add(KeyColour.BLUE);
+                            break;
+                        case "YK":
+                            keyInventory.add(KeyColour.YELLOW);
+                            break;
+                        case "GK":
+                            keyInventory.add(KeyColour.GREEN);
+                            break;
+                        default:
+                            System.out.println("Error: can't read key " + key);
+                            break;
+                    }
                 }
             }
             return keyInventory;

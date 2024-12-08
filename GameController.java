@@ -11,17 +11,17 @@ public class GameController {
     private final Canvas canvas;
     private final GridManager gridManager;
     private final Renderer renderer;
-//    private Player player ;
     private final InputHandler inputHandler;
-    public static boolean gameStatus = true;
 
     private static int nextExplosionRow;
     private static int nextExplosionCol;
     private static boolean waitingForExplosionAfterMath = false;
     private static boolean waitingForExplosion = false;
 
-    public static int diamondsRequired;
-    public static int amoebaLimit;
+    private int amoebaLimit;
+    private int diamondsRequired;
+
+    public static boolean gameStatus = true;
 
     /**
      * Represents possible inputs for the player.
@@ -305,10 +305,20 @@ public class GameController {
 
     public void setDiamondsRequired(int diamondsRequired) {
         this.diamondsRequired = diamondsRequired;
+        this.gridManager.getPlayer().setDiamondsRequired(diamondsRequired); //Tell the player the diamonds required
+
+    }
+
+    public int getDiamondsRequired() {
+        return diamondsRequired;
     }
 
     public void setAmoebaLimit(int amoebaLimit) {
         this.amoebaLimit = amoebaLimit;
+    }
+
+    public int getAmoebaLimit() {
+        return amoebaLimit;
     }
 
 }

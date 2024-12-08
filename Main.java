@@ -408,7 +408,7 @@ public class Main extends Application {
 
 		saveButton.setOnAction(e -> {
 			ArrayList<KeyColour> keyInventory = gameController.getPlayer().getKeyInventory();
-			FileHandler.writeFile(gameController.getGridManager(), currentProfile, secondsRemaining, keyInventory);
+			FileHandler.writeFile(gameController, currentProfile, secondsRemaining, keyInventory);
 			closeGame();
 		});
 
