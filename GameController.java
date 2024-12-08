@@ -15,8 +15,9 @@ public class GameController {
 
     private static int nextExplosionRow;
     private static int nextExplosionCol;
-    private static boolean waitingForExplosionAfterMath = false;
-    private static boolean waitingForExplosion = false;
+    public static boolean waitingForExplosionAfterMath = false;
+    public static boolean waitingForExplosion = false;
+    private static boolean transformToDiamonds;
 
     private int amoebaLimit;
     private int diamondsRequired;
@@ -44,9 +45,17 @@ public class GameController {
         this.canvas = canvas;
         this.gridManager = new GridManager(gridTemplate);
         this.renderer = new Renderer();
-//        this.player = gridManager.getPlayer();
         this.inputHandler = new InputHandler();
-//        gridManager.initializePlayer(gridTemplate);
+    }
+
+    private void replaceEnemyWithPath(int targetRow, int targetColumn) {
+        // Remove the target from the game
+        gridManager.destroyRemoveFromList(gridManager.getElement(targetRow, targetColumn));
+
+        // Replace the target with a Path in the grid
+        gridManager.setElement(targetRow, targetColumn, new Path(targetRow, targetColumn));
+
+        System.out.println( gridManager.getElement(targetRow,targetColumn).toString()+" has been replaced with Path at row: " + targetRow + ", col: " + targetColumn);
 
     }
 
@@ -59,7 +68,7 @@ public class GameController {
 
         // Optional: Stop input handling and end the game
         System.out.println("Player has been replaced with Path at row: " + playerRow + ", col: " + playerCol);
-
+        gameOver();
     }
 
 
@@ -83,6 +92,26 @@ public class GameController {
         }
     }
 
+    private void checkNeighboursForAmoeba(Element enemy, Element [][] grid) {
+        // Check bounds and get neighbors safely
+        int enemyRow = enemy.getRow();
+        int enemyCol = enemy.getColumn();
+        Element currentRightNeighbor = (enemyCol + 1 < grid[0].length) ? grid[enemyRow][enemyCol + 1] : null;
+        Element currentLeftNeighbor = (enemyCol - 1 >= 0) ? grid[enemyRow][enemyCol - 1] : null;
+        Element currentDownNeighbor = (enemyRow + 1 < grid.length) ? grid[enemyRow + 1][enemyCol] : null;
+        Element currentUpNeighbor = (enemyRow - 1 >= 0) ? grid[enemyRow - 1][enemyCol] : null;
+
+        if (currentUpNeighbor instanceof Amoeba) {
+            replaceEnemyWithPath(enemyRow, enemyCol); // Replace Enemy if UP position is amoeba
+        } else if (currentDownNeighbor instanceof Amoeba) {
+            replaceEnemyWithPath(enemyRow, enemyCol); // Replace Enemy if DOWN position is amoeba
+        } else if (currentRightNeighbor instanceof Amoeba) {
+            replaceEnemyWithPath(enemyRow, enemyCol); // Replace Enemy if RIGHT position is amoeba
+        } else if (currentLeftNeighbor instanceof Amoeba) {
+            replaceEnemyWithPath(enemyRow, enemyCol); // Replace Enemy if LEFT position is amoeba
+        }
+    }
+
 
     public void killPlayerTick() {
         ArrayList<Frog> frogs = gridManager.getFrogs();
@@ -98,64 +127,56 @@ public class GameController {
 //           System.out.println("Checking enemy at row: " + enemy.getRow() + ", col: " + enemy.getColumn());
             checkNeighboursForPlayer(enemy, gridManager.getElementGrid());
         }
-    }
 
-    /**
-     * Executes the boulder tick, triggering all boulders to perform their movement logic.
-     * Updates the grid and redraws the game.
-     */
-    public void boulderFallTick() {
-        // Making a copy of the boulders Arraylist,
-        // avoids problems with concurrently changing the arraylist when a boulder passes through magic wall
-        ArrayList<Boulder> boulders = new ArrayList<>(gridManager.getBoulders());
-        for (Boulder boulder : boulders) {
-            boulder.fall(gridManager);
+        // Iterate through all entities
+        for (Element enemy : enemies) {
+//           System.out.println("Checking enemy at row: " + enemy.getRow() + ", col: " + enemy.getColumn());
+            checkNeighboursForAmoeba(enemy, gridManager.getElementGrid());
         }
-        draw();
+
     }
 
     /**
      * Executes the boulder tick, triggering all boulders to perform their movement logic.
      * Updates the grid and redraws the game.
      */
-    public void boulderRollTick() {
+    public void dangerousRockRollTick() {
         // Making a copy of the boulders Arraylist,
         // avoids problems with concurrently changing the arraylist when a diamond passes through magic wall
         ArrayList<Boulder> boulders = new ArrayList<>(gridManager.getBoulders());
+        ArrayList<Diamond> diamonds = new ArrayList<>(gridManager.getDiamonds());
+
         for (Boulder boulder : boulders) {
             boulder.roll(gridManager);
         }
-        draw();
-    }
 
-    /**
-     * Executes the boulder tick, triggering all boulders to perform their movement logic.
-     * Updates the grid and redraws the game.
-     */
-    public void diamondFallTick() {
-        // Making a copy of the boulders Arraylist,
-        // avoids problems with concurrently changing the arraylist when a boulder passes through magic wall
-        ArrayList<Diamond> diamonds = new ArrayList<>(gridManager.getDiamonds());
-        for (Diamond diamond : diamonds) {
-            diamond.fall(gridManager);
-        }
-        draw();
-    }
-
-
-    /**
-     * Executes the boulder tick, triggering all boulders to perform their movement logic.
-     * Updates the grid and redraws the game.
-     */
-    public void diamondRollTick() {
-        // Making a copy of the boulders Arraylist,
-        // avoids problems with concurrency
-        ArrayList<Diamond> diamonds = new ArrayList<>(gridManager.getDiamonds());
         for (Diamond diamond : diamonds) {
             diamond.roll(gridManager);
         }
+
         draw();
     }
+
+    /**
+     * Executes the boulder tick, triggering all boulders to perform their movement logic.
+     * Updates the grid and redraws the game.
+     */
+    public void dangerousRockFallTick() {
+        // Making a copy of the boulders Arraylist,
+        // avoids problems with concurrently changing the arraylist when a boulder passes through magic wall
+        ArrayList<Diamond> diamonds = new ArrayList<>(gridManager.getDiamonds());
+        ArrayList<Boulder> boulders = new ArrayList<>(gridManager.getBoulders());
+
+        for (Diamond diamond : diamonds) {
+            diamond.fall(gridManager);
+        }
+
+        for (Boulder boulder : boulders) {
+            boulder.fall(gridManager);
+        }
+            draw();
+    }
+
 
     public void frogTick() {
         // Making a copy of the boulders Arraylist,
@@ -167,11 +188,12 @@ public class GameController {
         draw();
     }
 
+
     public void amoebaTick() {
-        if (gridManager.getAmoebas().size() > 0) {
-            AmoebaManager.spreadAll(gridManager);
+        if (!AmoebaManager.isEmpty()) { // Check if there are any active amoeba groups
+            AmoebaManager.updateAll(gridManager); // Update all amoeba groups
         }
-        draw();
+        draw(); // Redraw the grid after updating
     }
 
     public void butterflyTick() {
@@ -189,6 +211,7 @@ public class GameController {
         }
         draw();
     }
+
 
     /**
      * Executes the player tick, handling input and updating the player's position on the grid.
@@ -221,6 +244,7 @@ public class GameController {
                                 gridManager
                         );
                     }
+                    getPlayer().imageAnimation();
                 }
             }
             draw();
@@ -228,15 +252,18 @@ public class GameController {
     }
 
     // Select an index in the ElementGrid and create a 3x3 Explosion and then AfterMath at that spot
-    public static  void applyExplosion(int row, int column) {
+    public static void applyExplosion(int row, int column, boolean dropsDiamonds) {
         waitingForExplosion = true;
         nextExplosionRow = row;
         nextExplosionCol = column;
+        transformToDiamonds = dropsDiamonds;
+
     }
 
     //Explosion Tick Method, if an applyExplosion has occurred then it is waiting for explosion, after an explosion
     // the next tick cycle and explosion aftermath should occur
     public void explosionTick() {
+
         if (waitingForExplosion) {
             // Create the initial explosion
             Explosion.createExplosion(nextExplosionRow, nextExplosionCol,gridManager);
@@ -244,7 +271,15 @@ public class GameController {
             waitingForExplosionAfterMath = true;
             waitingForExplosion= false;
         } else if // Create the aftermath
+        (waitingForExplosionAfterMath && transformToDiamonds) {
+            // if dropsDiamonds
+            Explosion.createDiamondExplosionAfterMath(nextExplosionRow, nextExplosionCol,gridManager);
+            draw();
+            waitingForExplosionAfterMath = false;
+            transformToDiamonds = false;
+        } else if // Create the aftermath
          (waitingForExplosionAfterMath) {
+          // if dropsDiamonds
             Explosion.createExplosionAfterMath(nextExplosionRow, nextExplosionCol,gridManager);
             draw();
             waitingForExplosionAfterMath = false;
@@ -256,8 +291,10 @@ public class GameController {
     }
 
 
+
     public static void gameOver() {
         gameStatus = false;
+        System.out.println("GAME OVER");
     }
 
     public static void gameStart() {

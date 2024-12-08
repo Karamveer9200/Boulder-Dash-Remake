@@ -1,0 +1,5 @@
+PlayerID:1
+Name:Aaa
+MaxLevelReached:0
+HighScore:0
+CurrentScore:0

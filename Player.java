@@ -10,6 +10,7 @@ public class Player extends Element {
     private boolean hasEnoughDiamonds;
     private boolean hasPlayerWon;
     private int diamondsRequired;
+    public boolean lookingRight;
 
     public Player(int row, int column){
         super(row, column);
@@ -21,6 +22,14 @@ public class Player extends Element {
         hasEnoughDiamonds = false;
     }
 
+    public void imageAnimation(){
+        lookingRight= !lookingRight;
+        if(lookingRight){
+            image = new Image("images/playerLookingRight.png");
+        } else if (!lookingRight) {
+            image = new Image("images/player.png");
+        }
+    }
     public void collectKey(Key key) {
         System.out.println(key);
         keyInventory.add(key.getColour());
@@ -144,6 +153,7 @@ public class Player extends Element {
         }
         if (grid[targetRow][targetColumn] instanceof Exit exit) {
             if (isHasEnoughDiamonds()) {
+                // If the player has enough diamonds, unlock the Exit and announce level win
                 exit.unlock();
                 hasPlayerWon = true;
                 return true;

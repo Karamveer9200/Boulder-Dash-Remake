@@ -298,6 +298,7 @@ public class Main extends Application {
 
 		final int canvasWidth = initialGrid[0].length * GRID_CELL_WIDTH;
 		final int canvasHeight = initialGrid.length * GRID_CELL_HEIGHT;
+
 		Canvas canvas = new Canvas(canvasWidth, canvasHeight);
 
 		//Initialise the gameController
@@ -322,14 +323,12 @@ public class Main extends Application {
 			gameController.killPlayerTick();
 		});
 
-		KeyFrame dangerousRocksRollKeyFrame = new KeyFrame(Duration.millis(1500), event -> {
-			gameController.boulderRollTick();
-			gameController.diamondRollTick();
+		KeyFrame dangerousRocksRollKeyFrame = new KeyFrame(Duration.millis(800), event -> {
+			gameController.dangerousRockRollTick();
 		});
 
 		KeyFrame dangerousRocksFallKeyFrame = new KeyFrame(Duration.millis(500), event -> {
-			gameController.boulderFallTick();
-			gameController.diamondFallTick();
+			gameController.dangerousRockFallTick();
 
 		});
 
@@ -447,6 +446,7 @@ public class Main extends Application {
 			saveButton.setDisable(false);
 			resetGridButton.setDisable(false);
 		});
+
 
 		// adds timer to the toolbar
 		Text timerText = new Text("Time Remaining: " + secondsRemaining + "s");

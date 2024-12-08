@@ -17,8 +17,10 @@ public class GridManager {
     final ArrayList<Firefly> fireflies = new ArrayList<>();
     final ArrayList<Frog> frogs = new ArrayList<>();
     final ArrayList<Amoeba> amoebas = new ArrayList<>();
+    private final ArrayList<AmoebaGroup> amoebaGroups = new ArrayList<>();
     private  Player player;
     private Exit exit;
+
 
     /**
      * Constructs a GridManager with a grid template.
@@ -58,6 +60,9 @@ public class GridManager {
      * @param gridTemplate the 2D array representing the initial grid setup
      */
     public void reinitializeGrid(String[][] gridTemplate) {
+        GameController.waitingForExplosion = false;
+        GameController.waitingForExplosionAfterMath = false;
+
         initializePlayer(gridTemplate);
         Exit.toggleFalseExitExists();
         getBoulders().clear();
@@ -79,7 +84,7 @@ public class GridManager {
                 addToList(element);
             }
         }
-
+        identifyAmoebaGroups();
     }
 
     /**
@@ -106,6 +111,7 @@ public class GridManager {
                 addToList(element);
             }
         }
+        identifyAmoebaGroups();
     }
     /**
      * Creates an element based on the provided code and its position in the grid.
@@ -205,7 +211,7 @@ public class GridManager {
         } else if (element instanceof Frog frog) {
             frogs.remove(frog);
             System.out.println("Frog removed");
-            GameController.applyExplosion(element.row, element.column);
+            GameController.applyExplosion(element.row, element.column, Frog.dropDiamond);
         } else if (element instanceof Amoeba amoeba) {
             amoebas.remove(amoeba);
         } else if (element instanceof Diamond diamond) {
@@ -214,47 +220,41 @@ public class GridManager {
         } else if (element instanceof Butterfly butterfly) {
             butterflies.remove(butterfly);
             System.out.println("Butterfly removed");
-            GameController.applyExplosion(element.row, element.column);
+            GameController.applyExplosion(element.row, element.column, Butterfly.dropDiamond);
         } else if (element instanceof Firefly firefly) {
             fireflies.remove(firefly);
             System.out.println("Firefly removed");
-            GameController.applyExplosion(element.row, element.column);
+            GameController.applyExplosion(element.row, element.column, Firefly.dropDiamond);
         }
     }
 
     /**
      * Removes an element from its corresponding list based on its type.
-     * Objects here only get destroyed, thus avoiding a chain reaction.
+     * Objects here only get destroyed, thus avoiding an explosion and chain reaction.
      * @param element the Element to be removed
      */
-    public void explosionRemoveFromList(Element element) {
+    public void destroyRemoveFromList(Element element) {
         if (element instanceof Path path) {
             paths.remove(path);
         } else if (element instanceof Dirt dirt) {
             dirts.remove(dirt);
         } else if (element instanceof Player player) {
             players.remove(player);
-            System.out.println("Player removed");
             GameController.gameOver();
         } else if (element instanceof NormalWall wall) {
             walls.remove(wall);
         } else if (element instanceof Boulder boulder) {
             boulders.remove(boulder);
-            System.out.println("Boulder removed");
         } else if (element instanceof Frog frog) {
             frogs.remove(frog);
-            System.out.println("Frog removed");
         } else if (element instanceof Amoeba amoeba) {
             amoebas.remove(amoeba);
         } else if (element instanceof Diamond diamond) {
             diamonds.remove(diamond);
-            System.out.println("Diamond removed");
         } else if (element instanceof Butterfly butterfly) {
             butterflies.remove(butterfly);
-            System.out.println("Butterfly removed");
         } else if (element instanceof Firefly firefly) {
             fireflies.remove(firefly);
-            System.out.println("Firefly removed");
         }
     }
 
@@ -320,22 +320,47 @@ public class GridManager {
         return diamonds;
     }
 
+    /**
+     * Retrieves the list of Firefly elements in the grid.
+     *
+     * @return the ArrayList of Firefly elements
+     */
     public ArrayList<Firefly> getFireflies() {
         return fireflies;
     }
 
+    /**
+     * Retrieves the list of Butterfly elements in the grid.
+     *
+     * @return the ArrayList of Butterfly elements
+     */
     public ArrayList<Butterfly> getButterflies() {
         return butterflies;
     }
 
+    /**
+     * Retrieves the list of Frog elements in the grid.
+     *
+     * @return the ArrayList of Frog elements
+     */
     public ArrayList<Frog> getFrogs() {
         return frogs;
     }
 
+    /**
+     * Retrieves the current Player object in the grid.
+     *
+     * @return the Player object representing the player character in the grid
+     */
     public Player getPlayer() {
         return player;
     }
 
+    /**
+     * Retrieves the list of Amoeba elements in the grid.
+     *
+     * @return the ArrayList of Amoeba elements
+     */
     public ArrayList<Amoeba> getAmoebas() {
         return amoebas;
     }
@@ -346,4 +371,71 @@ public class GridManager {
         elementGrid[player.row][player.column] = path;
     }
 
+    /**
+     * Returns the list of AmoebaGroup objects, each representing a group of connected
+     * Amoeba elements in the grid.
+     *
+     * @return the list of AmoebaGroup objects
+     */
+    public ArrayList<AmoebaGroup> getAmoebaGroups() {
+        return amoebaGroups;
+    }
+    /**
+     * Identifies all the groups of connected amoebas in the grid and
+     * stores them in the local list and the global manager.
+     */
+    private void identifyAmoebaGroups() {
+        boolean[][] visited = new boolean[elementGrid.length][elementGrid[0].length];
+        AmoebaManager.clearGroups(); // Clear previous groups
+
+        for (int row = 0; row < elementGrid.length; row++) {
+            for (int col = 0; col < elementGrid[row].length; col++) {
+                if (elementGrid[row][col] instanceof Amoeba && !visited[row][col]) {
+                    // Start a new group if an unvisited amoeba is found
+                    AmoebaGroup group = new AmoebaGroup();
+                    exploreAmoebaGroup(row, col, group, visited);
+                    amoebaGroups.add(group); // Add to the local list
+                    AmoebaManager.addAmoebaGroup(group); // Add to the global manager
+                }
+            }
+        }
+    }
+
+    /**
+     * Explores a group of connected amoebas by performing a depth-first search.
+     * @param row the row of the cell to explore
+     * @param col the column of the cell to explore
+     * @param group the group of amoebas to add to
+     * @param visited a 2D boolean array to mark visited cells
+     */
+    private void exploreAmoebaGroup(int row, int col, AmoebaGroup group, boolean[][] visited) {
+        // Boundary check
+        if (row < 0 || row >= elementGrid.length || col < 0 || col >= elementGrid[0].length) return;
+
+        // Check if the cell is already visited or not an amoeba
+        if (visited[row][col] || !(elementGrid[row][col] instanceof Amoeba)) return;
+
+        // Mark the cell as visited and add the amoeba to the group
+        visited[row][col] = true;
+        Amoeba amoeba = (Amoeba) elementGrid[row][col];
+        group.addAmoeba(amoeba);
+
+        // Explore all four directions
+        exploreAmoebaGroup(row - 1, col, group, visited); // Up
+        exploreAmoebaGroup(row + 1, col, group, visited); // Down
+        exploreAmoebaGroup(row, col - 1, group, visited); // Left
+        exploreAmoebaGroup(row, col + 1, group, visited); // Right
+    }
+
+
+    // built for debugging purpose
+    public void printGridState() {
+        for (int row = 0; row < elementGrid.length; row++) {
+            for (int col = 0; col < elementGrid[row].length; col++) {
+                System.out.print(elementGrid[row][col] + " ");
+            }
+            System.out.println();
+        }
+        System.out.println("---------------------------------------------------------------------------------");
+    }
 }
