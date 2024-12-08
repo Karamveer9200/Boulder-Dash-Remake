@@ -6,7 +6,7 @@ import java.util.List;
 public class AmoebaGroup {
     private List<Amoeba> amoebas; // All amoebas in this group
     private boolean isGrowing;
-    private static final int amoebaSizeLimit = 4;
+    private int amoebaSizeLimit;
 
     /**
      * Constructor for the AmoebaGroup class.
@@ -16,6 +16,13 @@ public class AmoebaGroup {
         this.isGrowing = true;
     }
 
+    public int getAmoebaSizeLimit() {
+        return amoebaSizeLimit;
+    }
+
+    public void setAmoebaSizeLimit(int amoebaSizeLimit) {
+        this.amoebaSizeLimit = amoebaSizeLimit;
+    }
 
     /**
      * Adds an amoeba to the group.
@@ -31,7 +38,7 @@ public class AmoebaGroup {
      * @param gridManager the grid manager to access and update the grid
      */
     public void spread(final GridManager gridManager) {
-        if (amoebas.size() > amoebaSizeLimit) {
+        if (amoebas.size() >= amoebaSizeLimit) {
             transformToBoulders(gridManager);
         } else {
             if (!isGrowing) {

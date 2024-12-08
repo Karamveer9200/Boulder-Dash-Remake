@@ -352,6 +352,9 @@ public class GameController {
 
     public void setAmoebaLimit(int amoebaLimit) {
         this.amoebaLimit = amoebaLimit;
+        for(int i = 0; i < gridManager.getAmoebaGroups().size(); i++) {
+            gridManager.getAmoebaGroups().get(i).setAmoebaSizeLimit(amoebaLimit);
+        }
     }
 
     public int getAmoebaLimit() {
