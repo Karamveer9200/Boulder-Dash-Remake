@@ -166,9 +166,12 @@ public class Player extends Element {
             return true;
         }
         if (grid[targetRow][targetColumn] instanceof LockedDoor lockedDoor) {
-            System.out.println(hasKey(KeyColour.RED));
             if (hasKey(lockedDoor.getColour())) {
                 useKey(lockedDoor.getColour());
+                lockedDoor.unlock();
+                return true;
+            } else if (hasKey(KeyColour.RAINBOW)) {
+                useKey(KeyColour.RAINBOW);
                 lockedDoor.unlock();
                 return true;
             } else {

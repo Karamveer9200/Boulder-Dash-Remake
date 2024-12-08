@@ -152,6 +152,7 @@ public class GridManager {
             case "YK" -> new Key(row, col, KeyColour.YELLOW);
             case "BLD" -> new LockedDoor(row, col, KeyColour.BLUE);
             case "BK" -> new Key(row, col, KeyColour.BLUE);
+            case "RBK" -> new Key(row, col, KeyColour.RAINBOW);
 
             default -> throw new IllegalArgumentException("Unknown element: " + code);
         };

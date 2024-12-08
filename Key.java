@@ -31,6 +31,7 @@ public class Key extends Element {
             case GREEN -> image = new Image("images/GreenKey.png");
             case YELLOW -> image = new Image("images/YellowKey.png");
             case BLUE -> image = new Image("images/BlueKey.png");
+            case RAINBOW -> image = new Image("images/RainbowKey.png");
         }
     }
 

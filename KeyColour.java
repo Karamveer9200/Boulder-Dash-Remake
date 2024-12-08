@@ -3,7 +3,7 @@
  * Each colour corresponds to a different type of key.
  */
 public enum KeyColour {
-    RED, GREEN, YELLOW, BLUE;
+    RED, GREEN, YELLOW, BLUE, RAINBOW;
 
     /**
      * Gets name of key colour.
