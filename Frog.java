@@ -69,7 +69,7 @@ public class Frog extends Element {
             if (visited[currRow][currCol]) {
                 continue;
             }
-            visited[currRow][currCol] = true;
+            visited[currRow][currCol] = false;
 
             // Stop if we reach the player
             if (currRow == playerRow && currCol == playerCol) {
