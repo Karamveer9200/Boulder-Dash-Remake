@@ -1,4 +1,5 @@
 /**
+ * @author Omar & Alex
  * Represents a Path tile in the game.
  * This tile can be entered/walked over and can explode.
  */
