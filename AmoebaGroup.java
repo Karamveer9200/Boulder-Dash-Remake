@@ -91,7 +91,6 @@ public class AmoebaGroup {
                 Amoeba newAmoeba = new Amoeba(targetRow, targetCol);
                 gridManager.setElement(targetRow, targetCol, newAmoeba);
                 this.addAmoeba(newAmoeba);
-                System.out.println("Amoeba spread to (" + targetRow + ", " + targetCol + ")!");
             }
         }
     }
@@ -112,7 +111,6 @@ public class AmoebaGroup {
             gridManager.addToList(newDiamond);
         }
         amoebas.clear();
-        System.out.println("All Amoebas in the group transformed into diamonds!");
     }
 
     /**
@@ -130,7 +128,6 @@ public class AmoebaGroup {
             gridManager.addToList(newBoulder);
         }
         amoebas.clear();
-        System.out.println("All Amoebas in the group transformed into boulders!");
     }
 
     /**

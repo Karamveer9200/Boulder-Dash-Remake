@@ -10,17 +10,13 @@ public class Renderer {
     private static final int GRID_CELL_HEIGHT = Main.GRID_CELL_HEIGHT;
 
     /**
-     * Renders the provided grid of elements onto the canvas using the specified GraphicsContext.
-     * Clears the existing canvas before drawing and fills the background with a gray color.
-     * Each element in the grid is drawn at its respective grid position if it has an image associated with it.
-     *
-     * @param gc the GraphicsContext object used for drawing operations.
-     * @param elementGrid a 2D array of Element objects representing the grid to be drawn.
+     * Renders the provided grid of elements onto the canvas.
+     * Each element in the grid is drawn at its respective grid position.
+     * @param gc the GraphicsContext object used for drawing.
+     * @param elementGrid 2D array of Element objects representing the grid to be drawn.
      */
     public void draw(GraphicsContext gc, Element[][] elementGrid) {
         gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
-
-        // Set background color
         gc.setFill(Color.GRAY);
         gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 

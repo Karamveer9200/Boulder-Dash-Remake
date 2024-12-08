@@ -3,13 +3,11 @@ import javafx.scene.image.Image;
 /**
  * Represents a Titanium Wall tile in the game.
  * This tile cannot be entered or exploded.
- * It is represented by an image located at "images/TitaniumWall.png".
  */
 public class TitaniumWall extends Element {
 
     /**
      * Creates a new Titanium Wall tile at the specified row and column.
-     *
      * @param row the row position of the tile
      * @param column the column position of the tile
      */
@@ -23,7 +21,6 @@ public class TitaniumWall extends Element {
 
     /**
      * Returns the name of the tile as a string.
-     *
      * @return the name "TitaniumWall"
      */
     @Override
