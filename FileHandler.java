@@ -122,9 +122,7 @@ public class FileHandler {
             int i = 0;
             while (in.hasNextLine()) {
                 String[] elements = in.nextLine().split(" ");
-                for (int j = 0; j < elements.length; j++) {
-                    initialGrid[i][j] = elements[j];
-                }
+                System.arraycopy(elements, 0, initialGrid[i], 0, elements.length);
                 i++;
             }
             in.close();

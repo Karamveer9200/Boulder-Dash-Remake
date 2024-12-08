@@ -13,8 +13,7 @@ public class GridManager {
     private final ArrayList<NormalWall> walls = new ArrayList<>();
     final ArrayList<Boulder> boulders = new ArrayList<>();
     final ArrayList<Diamond> diamonds = new ArrayList<>();
-    final ArrayList<Butterfly> butterflies = new ArrayList<>();
-    final ArrayList<Firefly> fireflies = new ArrayList<>();
+    final ArrayList<Fly> flies = new ArrayList<>();
     final ArrayList<Frog> frogs = new ArrayList<>();
     final ArrayList<Amoeba> amoebas = new ArrayList<>();
     private final ArrayList<AmoebaGroup> amoebaGroups = new ArrayList<>();
@@ -69,8 +68,7 @@ public class GridManager {
         getDiamonds().clear();
         getFrogs().clear();
         getAmoebas().clear();
-        getButterflies().clear();
-        getFireflies().clear();
+        getFlies().clear();
         GameController.gameStart();
 
         // Clear specific references
@@ -100,8 +98,7 @@ public class GridManager {
         getDiamonds().clear();
         getFrogs().clear();
         getAmoebas().clear();
-        getButterflies().clear();
-        getFireflies().clear();
+        getFlies().clear();
         GameController.gameStart();
         // follows LeftEdge is true by default
         for (int row = 0; row < gridTemplate.length; row++) {
@@ -177,9 +174,9 @@ public class GridManager {
         } else if (element instanceof Boulder boulder) {
             boulders.add(boulder);
         } else if (element instanceof Butterfly butterfly) {
-            butterflies.add(butterfly);
+            flies.add(butterfly);
         } else if (element instanceof Firefly firefly) {
-            fireflies.add(firefly);
+            flies.add(firefly);
         } else if (element instanceof Frog frog) {
             frogs.add(frog);
         } else if (element instanceof Amoeba amoeba) {
@@ -218,11 +215,11 @@ public class GridManager {
             diamonds.remove(diamond);
             System.out.println("Diamond removed");
         } else if (element instanceof Butterfly butterfly) {
-            butterflies.remove(butterfly);
+            flies.remove(butterfly);
             System.out.println("Butterfly removed");
             GameController.applyExplosion(element.row, element.column, Butterfly.dropDiamond);
         } else if (element instanceof Firefly firefly) {
-            fireflies.remove(firefly);
+            flies.remove(firefly);
             System.out.println("Firefly removed");
             GameController.applyExplosion(element.row, element.column, Firefly.dropDiamond);
         }
@@ -252,9 +249,9 @@ public class GridManager {
         } else if (element instanceof Diamond diamond) {
             diamonds.remove(diamond);
         } else if (element instanceof Butterfly butterfly) {
-            butterflies.remove(butterfly);
+            flies.remove(butterfly);
         } else if (element instanceof Firefly firefly) {
-            fireflies.remove(firefly);
+            flies.remove(firefly);
         }
     }
 
@@ -321,21 +318,12 @@ public class GridManager {
     }
 
     /**
-     * Retrieves the list of Firefly elements in the grid.
+     * Retrieves the list of Butterfly and Fireflies elements in the grid.
      *
-     * @return the ArrayList of Firefly elements
+     * @return the ArrayList of Butterfly and Fireflies elements
      */
-    public ArrayList<Firefly> getFireflies() {
-        return fireflies;
-    }
-
-    /**
-     * Retrieves the list of Butterfly elements in the grid.
-     *
-     * @return the ArrayList of Butterfly elements
-     */
-    public ArrayList<Butterfly> getButterflies() {
-        return butterflies;
+    public ArrayList<Fly> getFlies() {
+        return flies;
     }
 
     /**
@@ -413,11 +401,10 @@ public class GridManager {
         if (row < 0 || row >= elementGrid.length || col < 0 || col >= elementGrid[0].length) return;
 
         // Check if the cell is already visited or not an amoeba
-        if (visited[row][col] || !(elementGrid[row][col] instanceof Amoeba)) return;
+        if (visited[row][col] || !(elementGrid[row][col] instanceof Amoeba amoeba)) return;
 
         // Mark the cell as visited and add the amoeba to the group
         visited[row][col] = true;
-        Amoeba amoeba = (Amoeba) elementGrid[row][col];
         group.addAmoeba(amoeba);
 
         // Explore all four directions

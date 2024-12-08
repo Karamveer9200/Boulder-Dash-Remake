@@ -333,8 +333,7 @@ public class Main extends Application {
 		});
 
 		KeyFrame flyKeyFrame = new KeyFrame(Duration.millis(1000), event -> {
-			gameController.butterflyTick();
-			gameController.fireflyTick();
+			gameController.flyTick();
 		});
 
 		KeyFrame frogKeyFrame = new KeyFrame(Duration.millis(1000), event -> {
