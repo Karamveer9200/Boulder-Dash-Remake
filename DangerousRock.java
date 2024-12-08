@@ -18,7 +18,7 @@ public class DangerousRock extends Element {
      *
      * @param gridManager the grid manager to access and update the grid
      */
-    public void fall(GridManager gridManager) {
+    public void fall(final GridManager gridManager) {
         Element[][] grid = gridManager.getElementGrid();
         int newRow = this.getRow() + 1;
         int col = this.getColumn();
@@ -36,11 +36,16 @@ public class DangerousRock extends Element {
             this.setRow(newRow);
             gainMomentum();
 
-        } else if (newRow < grid.length && (grid[newRow][col] instanceof Player || grid[newRow][col] instanceof Frog || grid[newRow][col] instanceof Fly)) {
+        } else if (newRow < grid.length && (grid[newRow][col] instanceof Player
+                || grid[newRow][col] instanceof Frog
+                || grid[newRow][col] instanceof Firefly)) {
             // If the boulder lands on a player and has momentum
             if (hasMomentum) {
                 gridManager.removeFromList(grid[newRow][col]); // Remove the player or enemy
-                gridManager.setElement(newRow, col, this);     // Replace player with the diamond
+                gridManager.setElement(newRow, col, this);
+
+                // Create an explosion at the current position
+                Explosion.createExplosion(newRow, col, gridManager);
 
                 Element p = new Path(this.getRow(), this.getColumn());
                 gridManager.setElement(this.getRow(), this.getColumn(), p);

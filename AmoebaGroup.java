@@ -2,11 +2,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+
 public class AmoebaGroup {
     private List<Amoeba> amoebas; // All amoebas in this group
     private boolean isGrowing;
     private static final int amoebaSizeLimit = 4;
 
+    /**
+     * Constructor for the AmoebaGroup class.
+     */
     public AmoebaGroup() {
         this.amoebas = new ArrayList<>();
         this.isGrowing = true;
@@ -18,18 +22,21 @@ public class AmoebaGroup {
      *
      * @param amoeba the Amoeba to be added to the group
      */
-    public void addAmoeba(Amoeba amoeba) {
+    public void addAmoeba(final Amoeba amoeba) {
         amoebas.add(amoeba);
     }
 
     /**
      * Spreads the amoeba group by one cell if possible.
+     * @param gridManager the grid manager to access and update the grid
      */
-    public void spread(GridManager gridManager) {
+    public void spread(final GridManager gridManager) {
         if (amoebas.size() > amoebaSizeLimit) {
             transformToBoulders(gridManager);
         } else {
-            if (!isGrowing) return;
+            if (!isGrowing) {
+                return;
+            }
 
             Element[][] grid = gridManager.getElementGrid();
             int rows = grid.length;
@@ -47,11 +54,14 @@ public class AmoebaGroup {
                     int newRow = amoeba.getRow() + direction[0];
                     int newCol = amoeba.getColumn() + direction[1];
 
-                    // Check grid boundaries and if the cell contains dirt, path or an enemy
-                    if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < cols) {
+                    // Check grid boundaries,
+                    // and if the cell contains dirt, path or an enemy.
+                    if (newRow >= 0 && newRow < rows
+                            && newCol >= 0 && newCol < cols) {
                         Element target = grid[newRow][newCol];
-                        if (target instanceof Dirt || target instanceof Path ||
-                                target instanceof Butterfly || target instanceof Firefly) {
+                        if (target instanceof Dirt || target instanceof Path
+                                || target instanceof Butterfly
+                                || target instanceof Firefly) {
                             validPositions.add(new int[]{newRow, newCol});
                         }
                     }
@@ -80,16 +90,18 @@ public class AmoebaGroup {
     }
 
     /**
-     * Replaces all amoebas in the group with diamonds and removes them from the list.
+     * Replaces all amoebas in the group with diamonds
+     * and removes them from the list.
      *
      * @param gridManager the grid manager to access and update the grid
      */
-    private void transformToDiamonds(GridManager gridManager) {
+    private void transformToDiamonds(final GridManager gridManager) {
         for (Amoeba amoeba : amoebas) {
             int row = amoeba.getRow();
             int col = amoeba.getColumn();
             Diamond newDiamond = new Diamond(row, col);
-            gridManager.setElement(row, col, newDiamond); // Replace amoeba with a diamond
+            // Replace amoeba with a diamond
+            gridManager.setElement(row, col, newDiamond);
             gridManager.addToList(newDiamond);
         }
         amoebas.clear();
@@ -97,11 +109,12 @@ public class AmoebaGroup {
     }
 
     /**
-     * Replaces all amoebas in the group with boulders and removes them from the list.
+     * Replaces all amoebas in the group with boulders
+     * and removes them from the list.
      *
      * @param gridManager the grid manager to access and update the grid
      */
-    private void transformToBoulders(GridManager gridManager) {
+    private void transformToBoulders(final GridManager gridManager) {
         for (Amoeba amoeba : amoebas) {
             int row = amoeba.getRow();
             int col = amoeba.getColumn();
@@ -135,7 +148,7 @@ public class AmoebaGroup {
      * Removes the given amoeba from the group.
      * @param amoeba the Amoeba to be removed from the group
      */
-    public void removeAmoeba(Amoeba amoeba) {
+    public void removeAmoeba(final Amoeba amoeba) {
         amoebas.remove(amoeba);
     }
 
@@ -145,7 +158,7 @@ public class AmoebaGroup {
      * @param amoeba the Amoeba to be checked
      * @return true if the amoeba is in the group, false otherwise
      */
-    public boolean contains(Amoeba amoeba) {
+    public boolean contains(final Amoeba amoeba) {
         return amoebas.contains(amoeba);
     }
 }

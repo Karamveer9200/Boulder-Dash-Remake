@@ -5,7 +5,6 @@ public class Fly extends Element {
     public boolean followsLeftEdge;
     private int currentDirection;
 
-    // Directions represented as (rowDelta, colDelta)
     private static final int[][] DIRECTIONS = {
             {-1, 0}, // Up
             {0, 1},  // Right
@@ -13,7 +12,14 @@ public class Fly extends Element {
             {0, -1}  // Left
     };
 
-    public Fly(int row, int column, boolean followsLeftEdge) {
+    /**
+     * Creates a new Fly object at the specified row and column.
+     *
+     * @param row the row of the new Fly
+     * @param column the column of the new Fly
+     * @param followsLeftEdge whether the Fly follows the left edge
+     */
+    public Fly(final int row, final int column, final boolean followsLeftEdge) {
         super(row, column);
         image = new Image("images/butterfly.png");
         canBeEntered = false;
@@ -23,7 +29,17 @@ public class Fly extends Element {
         this.currentDirection = 0; // Start with "Up" direction
     }
 
-    public void move(GridManager gridManager, Player player) {
+    /**
+     * Moves the Fly to the next valid position in the grid,
+     * based on its current direction and the grid's contents.
+     * If the Fly reaches a Path, it moves to the new position.
+     * If the Fly reaches a Player, it kills the player and replaces
+     * it with a new Path. If the Fly reaches an Amoeba, it explodes.
+     *
+     * @param gridManager the grid manager to update the Fly's position
+     * @param player the player to check for collision
+     */
+    public void move(final GridManager gridManager, final Player player) {
         Element[][] grid = gridManager.getElementGrid();
 
         // Determine the next valid direction
@@ -37,20 +53,24 @@ public class Fly extends Element {
             Element target = grid[newRow][newCol];
 
             // Move to new position if the target is a Path
-            // we are going to need to change how flies/enemies kill a neighboring Player
-            if (target instanceof Path ) {
-                gridManager.setElement(this.getRow(), this.getColumn(), new Path(this.getRow(), this.getColumn()));
-                gridManager.setElement(newRow, newCol, this); // Move to new position
+            if (target instanceof Path) {
+                gridManager.setElement(this.getRow(), this.getColumn(),
+                        new Path(this.getRow(), this.getColumn()));
+                // Move to new position
+                gridManager.setElement(newRow, newCol, this);
                 this.setRow(newRow);
                 this.setColumn(newCol);
                 // Update the current direction
                 this.currentDirection = nextDirection;
 
                 // If the target is a Player, kill the player
-            } else if (target instanceof Player ) {
-                gridManager.setElement(this.getRow(), this.getColumn(), new Path(this.getRow(), this.getColumn()));
-                gridManager.setElement(newRow, newCol, this); // Replace player with Frog
-                gridManager.removeFromList(player); // Remove player from the game
+            } else if (target instanceof Player) {
+                gridManager.setElement(this.getRow(), this.getColumn(),
+                        new Path(this.getRow(), this.getColumn()));
+                // Replace player with Frog
+                gridManager.setElement(newRow, newCol, this);
+                // Remove player from the game
+                gridManager.removeFromList(player);
                 this.setRow(newRow);
                 this.setColumn(newCol);
                 System.out.println("Player has been killed by the fly!");
@@ -64,12 +84,22 @@ public class Fly extends Element {
 
 
 
-    private int getNextDirection(Element[][] grid) {
+    /**
+     * Determines the next direction for the fly to move based on the rule.
+     * The fly will follow either the left or right edge,
+     * depending on the configuration.
+     *
+     * @param grid the 2D array representing the current state of the grid
+     * @return the next direction index for the fly to move,
+     * or -1 if no valid move is found
+     */
+    private int getNextDirection(final Element[][] grid) {
         int direction = currentDirection;
 
         // Check the wall-following rule
         for (int i = 0; i < 4; i++) {
-            int checkDirection = followsLeftEdge ? (direction + 3) % 4 : (direction + 1) % 4; // Left or Right turn
+            int checkDirection = followsLeftEdge ? (direction + 3)
+                    % 4 : (direction + 1) % 4; // Left or Right turn
             int row = this.getRow() + DIRECTIONS[checkDirection][0];
             int col = this.getColumn() + DIRECTIONS[checkDirection][1];
 
@@ -78,8 +108,9 @@ public class Fly extends Element {
                 return checkDirection;
             }
 
-            // Rotate direction clockwise or counterclockwise
-            direction = followsLeftEdge ? (direction + 1) % 4 : (direction + 3) % 4;
+            // Rotate fly's direction clockwise or counterclockwise
+            direction = followsLeftEdge ? (direction + 1)
+                    % 4 : (direction + 3) % 4;
         }
 
         // No valid move found
@@ -87,7 +118,16 @@ public class Fly extends Element {
     }
 
 
-    private boolean isValidMove(Element[][] grid, int row, int col) {
+    /**
+     * Determines if the fly can move to the specified position in the grid.
+     *
+     * @param grid the 2D array representing the current state of the grid
+     * @param row  the row index of the target position
+     * @param col  the column index of the target position
+     * @return true if the fly can move to the target position, false otherwise
+     */
+    private boolean isValidMove(final Element[][] grid,
+                                final int row, final int col) {
         // Check boundaries
         if (row < 0 || row >= grid.length || col < 0 || col >= grid[0].length) {
             return false;
@@ -95,9 +135,15 @@ public class Fly extends Element {
 
         // Tile must be a Path, Player, or Amoeba
         Element target = grid[row][col];
-        return (target instanceof Path || target instanceof Player || target instanceof Amoeba);
+        return (target instanceof Path
+                || target instanceof Player || target instanceof Amoeba);
     }
 
+    /**
+     * Returns a string representation of the Fly object.
+     *
+     * <p>Returns "fly" for Fly objects.
+     */
     @Override
     public String toString() {
         return "fly";

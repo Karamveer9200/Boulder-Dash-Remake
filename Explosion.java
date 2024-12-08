@@ -2,8 +2,8 @@ import javafx.scene.image.Image;
 
 public class Explosion extends Element {
 
-    public Explosion(int row, int column) {
-        super(row, column );
+    public Explosion(final int row, final int column) {
+        super(row, column);
         image = new Image("images/explosion.png");
         canBeEntered = false;
         canExplode = true;
@@ -13,7 +13,8 @@ public class Explosion extends Element {
 
 
     // In the 3x3 around the selected index replace explodable tiles with explosion tiles
-    public static void createExplosion(int row, int col, GridManager gridManager) {
+    public static void createExplosion(final int row, final int col,
+                                       final GridManager gridManager) {
         Element[][] grid = gridManager.getElementGrid();
 
         for (int i = row - 1; i <= row + 1; i++) {
@@ -44,9 +45,11 @@ public class Explosion extends Element {
      *
      * @param amoeba the Amoeba object to search for
      * @param gridManager the GridManager containing the list of AmoebaGroups
-     * @return the AmoebaGroup containing the amoeba, or null if no such group exists
+     * @return the AmoebaGroup containing the amoeba,
+     * or null if no such group exists
      */
-    private static AmoebaGroup findAmoebaGroup(Amoeba amoeba, GridManager gridManager) {
+    private static AmoebaGroup findAmoebaGroup(final Amoeba amoeba,
+                                               final GridManager gridManager) {
         for (AmoebaGroup group : gridManager.getAmoebaGroups()) {
             if (group.contains(amoeba)) {
                 return group;
@@ -58,7 +61,7 @@ public class Explosion extends Element {
 
     // SHOULD ONLY HAPPEN AFTER 'createExplosion'
     // In the 3x3 around the selected index replace the explosions that were there with paths.
-    public static void createExplosionAfterMath(int row, int col, GridManager gridManager) {
+    public static void createExplosionAfterMath(final int row, final int col, final GridManager gridManager) {
         Element[][] grid = gridManager.getElementGrid();
         for (int i = row - 1; i <= row + 1; i++) {
             for (int j = col - 1; j <= col + 1; j++) {
