@@ -6,7 +6,7 @@ import java.util.*;
  * @author Karamveer Singh
  */
 public class Frog extends Element {
-    public static boolean dropDiamond = true;
+    public static boolean dropDiamond = false;
 
     /**
      * Constructor for the Frog class.
