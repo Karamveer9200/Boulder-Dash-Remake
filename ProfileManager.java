@@ -11,7 +11,7 @@ import java.util.*;
 
 /**
  * Manages player profiles for Boulder Dash.
- * Handles profile creation, saving, loading, deletion, and ID management.
+ * Handles profile creation, saving, loading and deletion.
  */
 public class ProfileManager {
 
@@ -73,24 +73,6 @@ public class ProfileManager {
     }
 
     /**
-     * Creates a player profile from specified file.
-     * @param fileName The name of the file to load.
-     * @return The created PlayerProfile, or null if an error occurs.
-     */
-    public static PlayerProfile loadProfileFromFile(final String fileName) {
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(fileName));
-            int playerId = Integer.parseInt(reader.readLine());
-            String playerName = reader.readLine();
-            int maxLevelReached = Integer.parseInt(reader.readLine());
-            return new PlayerProfile(playerId, playerName, maxLevelReached);
-        } catch (IOException | NumberFormatException e) {
-            System.err.println("Error loading profile from file: " + e.getMessage());
-        }
-        return null;
-    }
-
-    /**
      * Retrieves all available player profiles from the text files.
      * @return An Arraylist of PlayerProfile objects.
      */
@@ -108,7 +90,7 @@ public class ProfileManager {
                         int maxLevelReached = Integer.parseInt(scanner.nextLine());
                         profiles.add(new PlayerProfile(playerId, name, maxLevelReached));
                     } catch (IOException | NumberFormatException e) {
-                        System.err.println("Error reading profile file: " + file.getName());
+                        System.out.println("Error reading profile file: " + file.getName());
                     }
                 }
             }
