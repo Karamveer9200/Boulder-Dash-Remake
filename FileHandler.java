@@ -154,6 +154,7 @@ public class FileHandler {
     public static void writeFile(GridManager gridManager, PlayerProfile currentProfile, int secondsRemaining,
                                  ArrayList<KeyColour> keyInventory) {
         Element[][] currentGrid = gridManager.getElementGrid();
+        int diamondCount = gridManager.getPlayer().getDiamondCount();
 
         int id = currentProfile.getPlayerId();
         String fileName = "Save" + id + ".txt";
@@ -165,7 +166,7 @@ public class FileHandler {
             out.println(currentGrid[0].length + " " + currentGrid.length);
             out.println(secondsRemaining); //Pass seconds left and output it here
 
-            out.println(Player.diamondCount + " " + GameController.diamondsRequired); //Pass diamonds collected and how many diamonds left to collect and output it here
+            out.println(diamondCount + " " + GameController.diamondsRequired); //Pass diamonds collected and how many diamonds left to collect and output it here
             out.println(2 + " " + 8); //Pass Amoeba growth rate and size limit and output it here
 
             out.println(createKeyInventoryString(keyInventory)); //Code here to output all the player's collected keys so far.

@@ -21,7 +21,6 @@ public class GameController {
     private static boolean waitingForExplosion = false;
 
     public static int diamondsRequired;
-
     public static int amoebaLimit;
 
     /**

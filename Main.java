@@ -293,23 +293,15 @@ public class Main extends Application {
 	public void setupGame(Stage primaryStage, String levelFile) {
 		// Load the initial grid from a file
 		String[][] initialGrid = FileHandler.readElementGridFromLevelFile(levelFile);
-
-		final int canvasWidth = initialGrid[0].length * GRID_CELL_WIDTH;
-		final int canvasHeight = initialGrid.length * GRID_CELL_HEIGHT;
-
 		int amoebaGrowthRate = FileHandler.readAmoebaGrowthRateFromLevelFile(levelFile); //Read amoeba growth rate
 		secondsRemaining = FileHandler.readSecondsFromLevelFile(levelFile);
 
-		// Create the canvas
+		final int canvasWidth = initialGrid[0].length * GRID_CELL_WIDTH;
+		final int canvasHeight = initialGrid.length * GRID_CELL_HEIGHT;
 		Canvas canvas = new Canvas(canvasWidth, canvasHeight);
 
-		// Initialize the game controller with the grid and canvas
-		GameController gameController = new GameController(initialGrid, canvas);
-
-		gameController.setDiamondsRequired(FileHandler.readRequiredDiamondsFromLevelFile(levelFile));
-		gameController.getPlayer().setDiamondCount(FileHandler.readDiamondsCollectedFromLevelFile(levelFile));
-		gameController.getPlayer().setKeyInventory(FileHandler.readKeyInventoryFromLevelFile(levelFile));
-		gameController.setAmoebaLimit(FileHandler.readAmoebaSizeLimitFromLevelFile(levelFile));
+		//Initialise the gameController
+		GameController gameController = initializeGameController(initialGrid, canvas, levelFile);
 
 		// Build the GUI
 		Pane root = buildGUI(gameController);
@@ -566,6 +558,20 @@ public class Main extends Application {
 		timerTimeline.setCycleCount(Animation.INDEFINITE);
 		explosionTickTimeLine.setCycleCount(Animation.INDEFINITE);
 		checkLevelWinTimeline.setCycleCount(Animation.INDEFINITE);
+	}
+
+	/**
+	 * Initializes the game controller and sets its properties.
+	 */
+	private GameController initializeGameController(String[][] initialGrid, Canvas canvas, String levelFile) {
+		GameController gameController = new GameController(initialGrid, canvas);
+
+		gameController.setDiamondsRequired(FileHandler.readRequiredDiamondsFromLevelFile(levelFile));
+		gameController.getPlayer().setDiamondCount(FileHandler.readDiamondsCollectedFromLevelFile(levelFile));
+		gameController.getPlayer().setKeyInventory(FileHandler.readKeyInventoryFromLevelFile(levelFile));
+		gameController.setAmoebaLimit(FileHandler.readAmoebaSizeLimitFromLevelFile(levelFile));
+
+		return gameController;
 	}
 
 }
