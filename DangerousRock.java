@@ -44,9 +44,6 @@ public class DangerousRock extends Element {
                 gridManager.removeFromList(grid[newRow][col]); // Remove the player or enemy
                 gridManager.setElement(newRow, col, this);
 
-                // Create an explosion at the current position
-                Explosion.createExplosion(newRow, col, gridManager);
-
                 Element p = new Path(this.getRow(), this.getColumn());
                 gridManager.setElement(this.getRow(), this.getColumn(), p);
                 gridManager.addToList(p);
