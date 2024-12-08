@@ -12,6 +12,8 @@ import javafx.scene.image.Image;
  */
 public class Player extends Element {
 
+    public static boolean dropDiamond = true;
+
     private ArrayList<KeyColour> keyInventory;
     private int diamondCount = 0;
     private boolean hasEnoughDiamonds;
