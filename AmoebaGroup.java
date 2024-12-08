@@ -47,7 +47,7 @@ public class AmoebaGroup {
                     int newRow = amoeba.getRow() + direction[0];
                     int newCol = amoeba.getColumn() + direction[1];
 
-                    // Check grid boundaries and if the cell contains dirt
+                    // Check grid boundaries and if the cell contains dirt, path or an enemy
                     if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < cols) {
                         Element target = grid[newRow][newCol];
                         if (target instanceof Dirt || target instanceof Path ||
@@ -106,7 +106,7 @@ public class AmoebaGroup {
             int row = amoeba.getRow();
             int col = amoeba.getColumn();
             Boulder newBoulder = new Boulder(row, col);
-            gridManager.setElement(row, col, newBoulder); // Replace amoeba with a boulder
+            gridManager.setElement(row, col, newBoulder);
             gridManager.addToList(newBoulder);
         }
         amoebas.clear();
