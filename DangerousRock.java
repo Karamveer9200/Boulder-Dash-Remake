@@ -1,4 +1,5 @@
 /**
+ * @author Omar Sanad
  * Represents a dangerous rock within the grid-based game. This rock
  * can potentially cause harm to entities like players, frogs, or flies
  * when falling or rolling, and can pass through magic walls to transform.

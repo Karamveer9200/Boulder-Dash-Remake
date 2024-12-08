@@ -3,7 +3,8 @@ import javafx.scene.input.KeyCode;
 import java.util.ArrayList;
 
 /**
- * GameController manages the player's movements, interactions,
+ * @author Omar Sanad
+ * GameController manages the element's movements, interactions,
  * and rendering of the grid-based game.
  * It handles key inputs, updates the player's position,
  * manages boulder interactions, and coordinates
@@ -61,6 +62,13 @@ public class GameController {
 
     }
 
+    /**
+     * Replaces the player at the specified grid position with a Path element,
+     * removes the player from the game, and optionally ends the game.
+     *
+     * @param playerRow the row position of the player to be replaced
+     * @param playerCol the column position of the player to be replaced
+     */
     private void replacePlayerWithPath(int playerRow, int playerCol) {
         // Replace the player with a Path in the grid
         gridManager.setElement(playerRow, playerCol, new Path(playerRow, playerCol));
@@ -94,6 +102,9 @@ public class GameController {
         }
     }
 
+    /**
+     * Goes through all enemies on the grid, and checks their neighbours for amoeba.
+     */
     private void checkNeighboursForAmoeba(Element enemy, Element [][] grid) {
         // Check bounds and get neighbors safely
         int enemyRow = enemy.getRow();
@@ -115,6 +126,9 @@ public class GameController {
     }
 
 
+    /**
+     * Goes through all enemies on the grid, and checks their neighbours for player.
+     */
     public void killPlayerTick() {
         ArrayList<Frog> frogs = gridManager.getFrogs();
         ArrayList<Fly> flies = gridManager.getFlies();
@@ -203,7 +217,7 @@ public class GameController {
     }
 
     /**
-     * Executes the butterfly tick, which processes all butterfly movements on the grid.
+     * Executes the fly tick, which processes all butterfly movements on the grid.
      * This method retrieves the current list of butterflies from the grid manager,
      * iterates over each butterfly, and invokes its movement logic.
      * After all butterflies have moved, the game state is redrawn to reflect any changes.

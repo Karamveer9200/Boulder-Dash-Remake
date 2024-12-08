@@ -1,6 +1,7 @@
 import javafx.scene.image.Image;
 
 /**
+ * @author Omar Sanad
  * Represents a diamond within the grid-based game, which is a type of dangerous rock.
  * The diamond can fall and roll within the grid, carrying the potential for momentum and interaction with other elements.
  * It inherits from the DangerousRock class, gaining the ability to transform when interacting with specific game elements.
