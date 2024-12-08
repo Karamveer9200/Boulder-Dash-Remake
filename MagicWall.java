@@ -1,6 +1,7 @@
 import javafx.scene.image.Image;
 
 /**
+ * @author Omar Sanad
  * Represents a Magic Wall tile in the game.
  * This tile cannot be entered/walked over but can explode.
  * It is represented by an image found at "images/MagicWall.png".
