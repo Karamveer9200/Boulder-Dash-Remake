@@ -36,6 +36,7 @@ public class Main extends Application {
 	public static final int DIAMOND_SCORE_VALUE = 100;
 	public static final int TIME_SCORE_VALUE = 25;
 
+
 	// Timeline for periodic ticks
 	private Timeline playerTickTimeline;
 	private Timeline dangerousRockFallTickTimeline;
@@ -315,29 +316,29 @@ public class Main extends Application {
 			event.consume();
 		});
 
-		KeyFrame playerKeyFrame = new KeyFrame(Duration.millis(50), event -> {
+		KeyFrame playerKeyFrame = new KeyFrame(Duration.millis(150), event -> {
 			gameController.playerTick();
 		});
 
 		//add keyframe for checking neighboring tiles to enemies , instance of that method is in flies 12/1/2024 - Omar
-		KeyFrame killPlayerKeyFrame = new KeyFrame(Duration.millis(20), event -> {
+		KeyFrame killPlayerKeyFrame = new KeyFrame(Duration.millis(50), event -> {
 			gameController.killPlayerTick();
 		});
 
-		KeyFrame dangerousRocksRollKeyFrame = new KeyFrame(Duration.millis(800), event -> {
+		KeyFrame dangerousRocksRollKeyFrame = new KeyFrame(Duration.millis(120), event -> {
 			gameController.dangerousRockRollTick();
 		});
 
-		KeyFrame dangerousRocksFallKeyFrame = new KeyFrame(Duration.millis(500), event -> {
+		KeyFrame dangerousRocksFallKeyFrame = new KeyFrame(Duration.millis(100), event -> {
 			gameController.dangerousRockFallTick();
 
 		});
 
-		KeyFrame flyKeyFrame = new KeyFrame(Duration.millis(1000), event -> {
+		KeyFrame flyKeyFrame = new KeyFrame(Duration.millis(2000), event -> {
 			gameController.flyTick();
 		});
 
-		KeyFrame frogKeyFrame = new KeyFrame(Duration.millis(1000), event -> {
+		KeyFrame frogKeyFrame = new KeyFrame(Duration.millis(2000), event -> {
 			gameController.frogTick();
 		});
 

@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 
 /**
+ * @author Omar Sanad
  * The GridManager is responsible for managing the grid of elements in the game.
  * It initializes the grid based on a template, provides access to individual elements,
  * manages lists of specific element types, and supports adding, removing, and updating elements.
