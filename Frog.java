@@ -1,6 +1,10 @@
 import javafx.scene.image.Image;
 import java.util.*;
 
+/**
+ * This class represents a frog on the game grid.
+ * @author Karamveer Singh
+ */
 public class Frog extends Element {
     public static boolean dropDiamond = true;
 
@@ -99,7 +103,6 @@ public class Frog extends Element {
 
         // Check if the player is unreachable
         if (distances[playerRow][playerCol] == Integer.MAX_VALUE) {
-//            System.out.println("Player is unreachable by the Frog!");
 
             // Random movement
             List<int[]> validMoves = new ArrayList<>();
@@ -126,7 +129,6 @@ public class Frog extends Element {
                 gridManager.setElement(newRow, newCol, this);
                 this.setRow(newRow);
                 this.setColumn(newCol);
-//                System.out.println("Frog is moving randomly.");
             }
             return;
         }
@@ -140,8 +142,6 @@ public class Frog extends Element {
 
             // Safeguard against invalid paths
             if (current == null) {
-//                System.err.println("Error: Path tracing failed."
-//                + "Aborting movement.");
                 return;
             }
         }
@@ -171,7 +171,6 @@ public class Frog extends Element {
                 gridManager.removeFromList(player);
                 this.setRow(newRow);
                 this.setColumn(newCol);
-//                System.out.println("Player has been killed by the Frog!");
             }
         }
     }

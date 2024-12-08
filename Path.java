@@ -6,7 +6,6 @@ public class Path extends Element {
 
     /**
      * Creates a new Path tile at the specified row and column.
-     *
      * @param row the row position (x co-ord) of the tile
      * @param column the column position(y c-oord)  of the tile
      */
@@ -19,7 +18,6 @@ public class Path extends Element {
 
     /**
      * Returns the name of the tile as a string.
-     *
      * @return the name "Path"
      */
     @Override

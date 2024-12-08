@@ -287,7 +287,6 @@ public class Main extends Application {
 
 	/**
 	 * Sets up the game interface and initializes everything for a game to take place.
-	 *
 	 * @param primaryStage the primary stage for the game
 	 */
 	public void setupGame(Stage primaryStage, String levelFile) {
@@ -376,6 +375,12 @@ public class Main extends Application {
 		primaryStage.show();
 	}
 
+	/**
+	 * Build GUI to visualise the game.
+	 * Sets up layout of game in the center and buttons/game info above it.
+	 * @param gameController  the gameController managing the game logic and state.
+	 * @return the Pane of the GUI layout.
+	 */
 	private Pane buildGUI(GameController gameController) {
 		BorderPane root = new BorderPane();
 
@@ -493,14 +498,21 @@ public class Main extends Application {
 		System.exit(0);
 	}
 
+	/**
+	 * Handles the completion of the current level.
+	 * Displays High score after level complete.
+	 * If there is another level, next level will load.
+	 * If the player has beaten the final level then a victory pop up occurs.
+	 * @param gameController  the gameController managing the game logic and state.
+	 */
 	public void levelCompleted(GameController gameController) {
 		int levelReached = currentProfile.getMaxLevelReached();
 		String levelFile = "txt/Level" + levelReached + ".txt";
 		String[][] initialGrid = FileHandler.readElementGridFromLevelFile(levelFile);
-		int score = calcHighScore(secondsRemaining, gameController.getPlayer().getDiamondCount());
+		int score = calcScore(secondsRemaining, gameController.getPlayer().getDiamondCount());
 		gameController.getGridManager().reinitializeGrid(initialGrid);
 		gameController.getGridManager().initializePlayer(initialGrid);
-		// Stop all timelines
+
 		playerTickTimeline.stop();
 		killPlayerTickTimeLine.stop();
 		dangerousRockFallTickTimeline.stop();
@@ -511,7 +523,7 @@ public class Main extends Application {
 		explosionTickTimeLine.stop();
 		timerTimeline.stop();
 
-		// Show the high score table for the current level
+		// Show the high score table for level just beat
 		int currentLevel = currentProfile.getMaxLevelReached();
 		String currentPlayerName = currentProfile.getName();
 		HighScoreTableManager.updateHighScoreTable(currentPlayerName,score,currentLevel);
@@ -521,8 +533,8 @@ public class Main extends Application {
 
 		// Check if there’s a next level
 		int nextLevel = currentLevel + 1;
-		String nextLevelFile = "txt/Level" + nextLevel + ".txt";
 		if (nextLevel <= 3) {
+			String nextLevelFile = "txt/Level" + nextLevel + ".txt";
 			currentProfile.setMaxLevelReached(nextLevel); // Update player's progress
 			profiles.set(profiles.indexOf(currentProfile), currentProfile); // Update profile list
 			ProfileManager.saveProfileToFile(currentProfile); // Persist changes
@@ -542,14 +554,19 @@ public class Main extends Application {
 		}
 	}
 
-	public int calcHighScore(int secondsRemaining, int diamondsCollected) {
+	/**
+	 * Calculates the score for the level the player just beat
+	 * @param secondsRemaining the remaining seconds on the timer when the level is completed.
+	 * @param diamondsCollected the number of diamonds collected by the player when the level is completed.
+	 * @return the calculated score as an integer value.
+	 */
+	public int calcScore(int secondsRemaining, int diamondsCollected) {
 		return (diamondsCollected * DIAMOND_SCORE_VALUE) + (secondsRemaining * TIME_SCORE_VALUE);
 	}
 
-	public static void main(String[] args) {
-		launch(args);
-	}
-
+	/**
+	 * Sets all the timelines associated with game events to cycle indefinitely.
+	 */
 	private void setTimelinesToIndefinite() {
 		playerTickTimeline.setCycleCount(Animation.INDEFINITE);
 		killPlayerTickTimeLine.setCycleCount(Animation.INDEFINITE);
@@ -565,6 +582,10 @@ public class Main extends Application {
 
 	/**
 	 * Initializes the game controller and sets its properties.
+	 * @param initialGrid the 2D array of the initial state of the game grid.
+	 * @param canvas the canvas used for drawing the game.
+	 * @param levelFile the file containing the level's data.
+	 * @return the GameController with key data set.
 	 */
 	private GameController initializeGameController(String[][] initialGrid, Canvas canvas, String levelFile) {
 		GameController gameController = new GameController(initialGrid, canvas);
@@ -577,4 +598,7 @@ public class Main extends Application {
 		return gameController;
 	}
 
+	public static void main(String[] args) {
+		launch(args);
+	}
 }

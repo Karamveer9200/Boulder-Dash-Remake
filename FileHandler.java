@@ -1,108 +1,26 @@
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 
 /**
- * FileHandler handles reading and writing grid templates to and from files.
+ * This class handles reading and writing information from level files.
+ * @author Alex Vesely
  */
 public class FileHandler {
+    private static final int DIAMOND_COUNT_INDEX = 0;
+    private static final int DIAMONDS_REQUIRED_INDEX = 1;
+    private static final int AMOEBA_GROWTH_RATE_INDEX = 0;
+    private static final int AMOEBA_SIZE_LIMIT_INDEX = 1;
 
-
-//             case 0 -> new Path(row, col);
-//            case 1 -> new Dirt(row, col);
-//            case 2 -> player = new Player(row, col);
-//            case 3 -> new NormalWall(row, col);
-//            case 4 -> new Boulder(row, col);
-//            case 5 -> new Frog(row, col);
-//            case 6 -> new Amoeba(row, col);
-//            case 7 -> new Diamond(row, col);
-//            case 8 -> new TitaniumWall(row, col);
-//            case 9 -> new MagicWall(row, col);
-//            case 10 -> new LockedDoor(row, col, KeyColour.RED);
-//            case 11 -> new Key(row, col, KeyColour.RED);
-//            case 12 -> new LockedDoor(row, col, KeyColour.GREEN);
-//            case 13 -> new Key(row, col, KeyColour.GREEN);
-//            case 14 -> new LockedDoor(row, col, KeyColour.YELLOW);
-//            case 15 -> new Key(row, col, KeyColour.YELLOW);
-//            case 16 -> new LockedDoor(row, col, KeyColour.BLUE);
-//            case 17 -> new Key(row, col, KeyColour.BLUE);
-//            case 18 ->  exit = new Exit(row, col);
-//            case 19 -> new Butterfly(row, col, followsLeftEdge);
-//            case 20 -> new Firefly(row, col, followsLeftEdge);
-
-//    public static int [][] level1Grid = {
-//            {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,},
-//            {3, 19, 0, 1, 4, 1, 1, 0, 1, 1, 7, 1, 4, 0, 1, 1, 1, 1, 1, 4, 1, 4, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 4, 1, 4, 4, 1, 3,},
-//            {3, 5, 8, 0, 0, 0, 1, 1, 4, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 7, 1, 1, 4, 2, 1, 1, 1, 0, 1, 1, 1, 1, 1, 7, 1, 1, 3,},
-//            {3, 9, 20, 1, 5, 1, 1, 4, 7, 4, 1, 4, 1, 1, 0, 1, 1, 9, 1, 1, 4, 1, 4, 1, 1, 4, 1, 1, 1, 1, 4, 1, 1, 1, 4, 1, 1, 4, 4, 3,},
-//            {3, 4, 1, 0, 9, 1, 1, 1, 4, 1, 1, 1, 9, 1, 4, 1, 1, 1, 1, 1, 9, 4, 1, 1, 4, 1, 1, 1, 1, 4, 1, 1, 1, 4, 1, 1, 1, 1, 4, 3,},
-//            {3, 4, 1, 4, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 4, 1, 1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 1, 1, 1, 1, 1, 4, 1, 4, 17, 1, 3,},
-//            {3, 1, 1, 1, 4, 1, 1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 1, 1, 1, 1, 4, 1, 0, 4, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 4, 4, 1, 3,},
-//            {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1, 4, 1, 1, 4, 1, 3,},
-//            {3, 1, 0, 4, 1, 4, 4, 1, 1, 7, 1, 0, 1, 1, 4, 1, 4, 1, 1, 1, 1, 1, 4, 4, 1, 1, 1, 7, 1, 4, 0, 1, 1, 4, 1, 1, 4, 1, 1, 3,},
-//            {3, 7, 4,11, 1, 4, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 4, 0, 0, 4, 1, 1, 7, 1, 4, 1, 1, 7, 1, 1, 1, 3,},
-//            {3, 1, 1, 4, 4, 1, 4, 4, 0, 4, 19, 4, 1, 4, 1, 1, 1, 1, 1,1 ,1 ,1 , 1,1 , 4, 4, 1, 4, 1, 1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 3,},
-//            {3, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 4, 4, 1, 1, 4, 4, 0, 1, 1, 1, 1, 1, 1, 1, 4, 1, 1, 4, 1, 4, 1, 1, 1, 1, 0, 1, 3,},
-//            {3, 1, 4, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 4, 1, 1, 4, 1, 4, 7, 1, 1, 7, 1, 1, 1, 1, 4, 1, 1, 4, 4, 1, 1, 1, 1, 4, 1, 3,},
-//            {3, 1, 7, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 4, 4, 4, 1, 1, 4, 1, 1, 1, 1, 1, 1, 1, 4, 7, 1, 1, 1, 1, 1, 4, 3,},
-//            {3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,},
-//            {3, 0, 0, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 0, 1, 1, 1, 7, 1, 1, 1, 1, 4, 1, 1, 1, 1, 1, 4, 1, 1, 1, 4, 1, 1, 1, 10, 1, 1, 3,},
-//            {3, 4, 0, 1, 1, 1, 1, 4, 1, 1, 3, 4, 1, 4, 4, 1, 1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 1, 1, 1, 1, 1, 4, 1, 4, 4, 1, 18, 3,},
-//            {3, 1, 4, 1, 1, 4, 1, 1, 4, 1, 3, 4, 1, 1, 1, 4, 1, 1, 1, 1, 1, 4, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 4, 7, 4, 4, 1, 1, 3,},
-//            {3, 1, 1, 1, 1, 4, 7, 1, 1, 0, 16, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 1, 1, 1, 1, 1, 4, 1, 4, 1, 1, 4, 4, 1, 4, 1, 4, 1, 1, 3,},
-//            {3, 1, 1, 1, 0, 1, 1, 0, 1, 4, 3, 1, 4, 1, 4, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 4, 1, 1, 1, 7, 1, 1, 4, 4, 1, 4, 3,},
-//            {3, 1, 7, 1, 1, 1, 1, 4, 1, 1, 3, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 4, 1, 1, 4, 1, 1, 1, 1, 4, 1, 4, 1, 1, 3,},
-//            {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,},
-//    };
-//
-//    public static int [][] level2Grid = {
-//            {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,},
-//            {3, 18, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,},
-//            {3, 0, 0, 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,},
-//            {3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,},
-//            {3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,},
-//            {3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,},
-//            {3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,},
-//            {3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,},
-//            {3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,},
-//            {3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,},
-//            {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 16, 3, 3,},
-//            {3, 0, 0, 0, 0, 0, 0, 0, 19, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,},
-//            {3, 0, 1, 4, 1, 1, 1, 4, 4, 1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,},
-//            {3, 0, 1, 1, 4, 4, 4, 1, 11, 4, 4, 1, 1, 1, 4, 4, 1, 1, 1, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,},
-//            {3, 0, 1, 4, 1, 7, 4, 1, 4, 1, 4, 1, 1, 1, 1, 7, 4, 1, 1, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,},
-//            {3, 2, 1, 1, 1, 4, 1, 4, 1, 1, 1, 4, 1, 1, 1, 4, 1, 1, 1, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,},
-//            {3, 0, 1, 1, 1, 1,4, 1, 1, 1, 1, 1, 4, 4, 1, 1, 1, 1, 1, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,},
-//            {3, 0, 1, 4, 1, 1, 4, 4, 1, 4, 1, 4, 4, 1, 1, 1, 7, 1, 1, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,},
-//            {3, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,},
-//            {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,},
-//    };
-//
-//    public static int [][] level3Grid = {
-//            {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,},
-//            {3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,},
-//            {3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,},
-//            {3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,},
-//            {3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,},
-//            {3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,},
-//            {3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,},
-//            {3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,},
-//            {3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,},
-//            {3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,},
-//            {3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,},
-//            {3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,},
-//            {3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,},
-//            {3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,},
-//            {3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,},
-//            {3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,},
-//            {3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,},
-//            {3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,},
-//            {3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,},
-//            {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,},
-//    };
-
+    /**
+     * Reads a grid of elements from a level file.
+     * @param fileName the name of the level file containing the grid data.
+     * @return a 2D array of strings representing the grid.
+     */
     public static String[][] readElementGridFromLevelFile(String fileName) {
         File readFile = new File(fileName);
         try {
@@ -121,37 +39,49 @@ public class FileHandler {
             int i = 0;
             while (in.hasNextLine()) {
                 String[] elements = in.nextLine().split(" ");
-                System.arraycopy(elements, 0, initialGrid[i], 0, elements.length);
+                for (int j = 0; j < elements.length; j++) {
+                    initialGrid[i][j] = elements[j];
+                }
                 i++;
             }
             in.close();
             return initialGrid;
         } catch (FileNotFoundException exception) {
             System.out.println("Error in finding file");
-
         }
         return null;
     }
 
+    /**
+     * Saves the game state to a save file associated to current player playing.
+     * @param gameController the game controller.
+     * @param currentProfile the profile of the current player.
+     * @param secondsRemaining the remaining seconds of the level.
+     * @param keyInventory the keys currently held by the player.
+     */
     public static void writeFile(GameController gameController, PlayerProfile currentProfile, int secondsRemaining,
                                  ArrayList<KeyColour> keyInventory) {
 
         Element[][] currentGrid = gameController.getGridManager().getElementGrid();
         int diamondCount = gameController.getGridManager().getPlayer().getDiamondCount();
+        int currentLevel = currentProfile.getMaxLevelReached();
 
         int id = currentProfile.getPlayerId();
+        int amoebaGrowthRate = readAmoebaGrowthRateFromLevelFile("txt/Level" + currentLevel + ".txt");
+        int amoebaSizeLimit = readAmoebaSizeLimitFromLevelFile("txt/Level" + currentLevel + ".txt");
+
         String fileName = "Save" + id + ".txt";
 
         try {
             String outputFile = "txt/" + fileName;
             PrintWriter out = new PrintWriter(outputFile);
             out.println(currentGrid[0].length + " " + currentGrid.length);
-            out.println(secondsRemaining); //Pass seconds left and output it here
+            out.println(secondsRemaining);
 
-            out.println(diamondCount + " " + gameController.getDiamondsRequired()); //Pass diamonds collected and how many diamonds left to collect and output it here
-            out.println(2 + " " + 8); //Pass Amoeba growth rate and size limit and output it here
+            out.println(diamondCount + " " + gameController.getDiamondsRequired());
+            out.println(amoebaGrowthRate + " " + amoebaSizeLimit);
 
-            out.println(createKeyInventoryString(keyInventory)); //Code here to output all the player's collected keys so far.
+            out.println(createKeyInventoryString(keyInventory));
 
             for (int i = 0; i < currentGrid.length; i++) {
                 for (int j = 0; j < currentGrid[i].length; j++) {
@@ -181,12 +111,14 @@ public class FileHandler {
                         case "BLUEKey" -> out.print("BK");
                         case "BLUELockedDoor" -> out.print("BLD");
 
-                        case "Explosion" -> out.print("P"); // If there is an explosion when we want to save, load a path in its place when the save is loaded
+                        // If there is an explosion, load a path in its place when the save is loaded
+                        case "Explosion" -> out.print("P");
 
                         case "FireflyLeft" -> out.print("FFL");
                         case "FireflyRight" -> out.print("FFR");
                         case "ButterflyLeft" -> out.print("BFL");
                         case "ButterflyRight" -> out.print("BFR");
+                        default -> System.out.println("Error in reading Symbol");
                     }
                     if (!(j == currentGrid[i].length - 1)) {
                         out.print(" ");
@@ -202,25 +134,50 @@ public class FileHandler {
         }
     }
 
+    /**
+     * Reads the remaining time in seconds from a level file.
+     * @param fileName the name of the file containing the level data.
+     * @return the remaining time in seconds.
+     * @throws RuntimeException if the file is not found.
+     */
     public static int readSecondsFromLevelFile(String fileName) {
         File readFile = new File(fileName);
         try {
             Scanner in = new Scanner(readFile);
-            in.nextLine(); // Skip first line
+            in.nextLine(); // Skip first line about grid dimensions
             return Integer.parseInt(in.nextLine()); // Return seconds
         } catch (FileNotFoundException e) {
             throw new RuntimeException("File not found: " + fileName, e);
         }
     }
 
+    /**
+     * Reads the number of diamonds collected so far from a level file.
+     * If its from the base level file it is always 0
+     * If its from a level save then it's the number of diamonds collected so far
+     * @param fileName the level file.
+     * @return the number of diamonds collected so far.
+     */
     public static int readDiamondsCollectedFromLevelFile(String fileName) {
-        return readDiamondsInformationFromLevelFile(fileName, 0); // Index 0 for diamonds collected
+        return readDiamondsInformationFromLevelFile(fileName, DIAMOND_COUNT_INDEX);
     }
 
+    /**
+     * Reads the number of diamonds required to complete a specific level from the level file.
+     * @param fileName the level file.
+     * @return the number of diamonds required to complete the level.
+     */
     public static int readRequiredDiamondsFromLevelFile(String fileName) {
-        return readDiamondsInformationFromLevelFile(fileName, 1); // Index 1 for required diamonds
+        return readDiamondsInformationFromLevelFile(fileName, DIAMONDS_REQUIRED_INDEX);
     }
 
+    /**
+     * Reads information about diamonds from a level file.
+     * Can read the diamonds collected or a level's required diamonds from here.
+     * @param fileName the level file.
+     * @param index the index specifying the type of diamond information (0 for collected, 1 for required).
+     * @return the requested diamond information.
+     */
     private static int readDiamondsInformationFromLevelFile(String fileName, int index) {
         File readFile = new File(fileName);
         try {
@@ -234,14 +191,30 @@ public class FileHandler {
         }
     }
 
+    /**
+     * Reads the amoeba growth rate from a level file.
+     * @param fileName the level file.
+     * @return the level's amoeba growth rate.
+     */
     public static int readAmoebaGrowthRateFromLevelFile(String fileName) {
-        return readAmoebaInformationFromLevelFile(fileName, 0); // Index 0 for amoeba growth rate
+        return readAmoebaInformationFromLevelFile(fileName, AMOEBA_GROWTH_RATE_INDEX);
     }
 
+    /**
+     * Reads the amoeba size limit from the level file.
+     * @param fileName the level file.
+     * @return the level's amoeba size limit.
+     */
     public static int readAmoebaSizeLimitFromLevelFile(String fileName) {
-        return readAmoebaInformationFromLevelFile(fileName, 1); // Index 1 for amoeba size limit
+        return readAmoebaInformationFromLevelFile(fileName, AMOEBA_SIZE_LIMIT_INDEX);
     }
 
+    /**
+     * Reads amoeba-related information from the level file.
+     * @param fileName the level file.
+     * @param index    the index specifying the type of amoeba information (0 for growthRate, 1 for sizeLimit).
+     * @return the requested amoeba information as an integer.
+     */
     private static int readAmoebaInformationFromLevelFile(String fileName, int index) {
         File readFile = new File(fileName);
         try (Scanner in = new Scanner(readFile)) {
@@ -257,6 +230,11 @@ public class FileHandler {
         }
     }
 
+    /**
+     * Reads the key inventory from the level file.
+     * @param fileName the level file.
+     * @return the key inventory.
+     */
     public static ArrayList<KeyColour> readKeyInventoryFromLevelFile(String fileName) {
         File readFile = new File(fileName);
         ArrayList<KeyColour> keyInventory = new ArrayList<>();
@@ -267,7 +245,7 @@ public class FileHandler {
             in.nextLine(); // Skip third line about diamond information
             in.nextLine(); // Skip fourth line about amoeba information
             String keyInfo = in.nextLine();
-            if (!keyInfo.isBlank()) { // Check if the input line is not blank
+            if (!keyInfo.isBlank()) {
                 String[] splitKeyInformation = keyInfo.split(" ");
                 for (String key : splitKeyInformation) {
                     switch (key) {
@@ -295,6 +273,11 @@ public class FileHandler {
         }
     }
 
+    /**
+     * Creates a string representation of the key inventory.
+     * @param keyInventory the key inventory.
+     * @return a space-separated string of key codes.
+     */
     public static String createKeyInventoryString(ArrayList<KeyColour> keyInventory) {
         StringBuilder keyInventoryString = new StringBuilder();
         for (int i = 0; i < keyInventory.size(); i++) {
@@ -312,16 +295,13 @@ public class FileHandler {
                 case GREEN:
                     keyInventoryString.append("GK");
                     break;
+                default:
+                    System.out.println("Error in reading symbol: " + key);
             }
-
-            // Add a space if it's not the last element
             if (i < keyInventory.size() - 1) {
                 keyInventoryString.append(" ");
             }
         }
-
         return keyInventoryString.toString();
     }
-
 }
-

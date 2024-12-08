@@ -2,31 +2,41 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-
+/**
+ * This class represents all the amoeba groups on the game's grid.
+ * @author Karamveer Singh
+ */
 public class AmoebaGroup {
-    private final List<Amoeba> amoebas; // All amoebas in this group
+    private final List<Amoeba> amoebas;
     private boolean isGrowing;
     private int amoebaSizeLimit;
 
     /**
-     * Constructor for the AmoebaGroup class.
+     * Create an AmoebaGroup.
      */
     public AmoebaGroup() {
         this.amoebas = new ArrayList<>();
         this.isGrowing = true;
     }
 
+    /**
+     * Gets the size limit of the amoeba.
+     * @return the size limit of the amoeba.
+     */
     public int getAmoebaSizeLimit() {
         return amoebaSizeLimit;
     }
 
+    /**
+     * Sets the size limit of the amoeba.
+     * @param amoebaSizeLimit the new size limit of the amoeba.
+     */
     public void setAmoebaSizeLimit(int amoebaSizeLimit) {
         this.amoebaSizeLimit = amoebaSizeLimit;
     }
 
     /**
      * Adds an amoeba to the group.
-     *
      * @param amoeba the Amoeba to be added to the group
      */
     public void addAmoeba(final Amoeba amoeba) {
@@ -98,7 +108,6 @@ public class AmoebaGroup {
     /**
      * Replaces all amoebas in the group with diamonds
      * and removes them from the list.
-     *
      * @param gridManager the grid manager to access and update the grid
      */
     private void transformToDiamonds(final GridManager gridManager) {
@@ -116,7 +125,6 @@ public class AmoebaGroup {
     /**
      * Replaces all amoebas in the group with boulders
      * and removes them from the list.
-     *
      * @param gridManager the grid manager to access and update the grid
      */
     private void transformToBoulders(final GridManager gridManager) {
@@ -132,7 +140,6 @@ public class AmoebaGroup {
 
     /**
      * Returns the number of amoebas in this group.
-     *
      * @return the number of amoebas in this group
      */
     public int size() {
@@ -141,7 +148,6 @@ public class AmoebaGroup {
 
     /**
      * Checks if the amoeba group is empty.
-     *
      * @return true if there are no amoebas in the group, false otherwise
      */
     public boolean isEmpty() {
@@ -158,7 +164,6 @@ public class AmoebaGroup {
 
     /**
      * Checks if the specified amoeba is part of this group.
-     *
      * @param amoeba the Amoeba to be checked
      * @return true if the amoeba is in the group, false otherwise
      */
