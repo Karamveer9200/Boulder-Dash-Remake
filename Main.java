@@ -392,6 +392,9 @@ public class Main extends Application {
 		stopTickButton.setDisable(true);
 		Button saveButton = new Button("Save Game");
 
+		Text timerText = new Text("Time Remaining: " + secondsRemaining + "s");
+
+
 		Button resetGridButton = new Button("Reset Level");
 		resetGridButton.setOnAction(e -> {
 			int levelReached = currentProfile.getMaxLevelReached();
@@ -402,6 +405,7 @@ public class Main extends Application {
 			String[][] initialGrid = FileHandler.readElementGridFromLevelFile(levelFile);
 			gameController.getGridManager().reinitializeGrid(initialGrid);
 			gameController.getGridManager().initializePlayer(initialGrid);
+			timerText.setText("Time Remaining: " + secondsRemaining + "s");
 			gameController.draw();
 		});
 
@@ -449,7 +453,6 @@ public class Main extends Application {
 
 
 		// adds timer to the toolbar
-		Text timerText = new Text("Time Remaining: " + secondsRemaining + "s");
 		timerTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
 			secondsRemaining--;
 			timerText.setText("Time Remaining: " + secondsRemaining + "s");
@@ -463,12 +466,13 @@ public class Main extends Application {
 
 		// adds diamond count to the toolbar, displays as zero if player has not been initialised
 		int diamondsCollected = gameController.getPlayer().getDiamondCount();
-		Text diamondCountText = new Text("Diamonds Collected: " + diamondsCollected);
-		diamondCountTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+		int diamondsRequired = FileHandler.readRequiredDiamondsFromLevelFile("txt/Level" + currentProfile.getMaxLevelReached() + ".txt");
+		Text diamondCountText = new Text("Diamonds Collected: " + diamondsCollected + " / " + diamondsRequired);
+		diamondCountTimeline = new Timeline(new KeyFrame(Duration.millis(49), event -> {
 			if (gameController.getPlayer() != null) {
-				diamondCountText.setText("Diamonds collected: " + gameController.getPlayer().getDiamondCount());
+				diamondCountText.setText("Diamonds collected: " + gameController.getPlayer().getDiamondCount() + " / " + diamondsRequired);
 			} else {
-				diamondCountText.setText("Diamonds collected: 0");
+				diamondCountText.setText("Diamonds collected: 0 / " + diamondsRequired);
 			}
 		}));
 		diamondCountTimeline.setCycleCount(Animation.INDEFINITE);

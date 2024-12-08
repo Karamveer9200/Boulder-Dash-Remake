@@ -185,7 +185,7 @@ public class FileHandler {
                         case "YELLOWKey" -> out.print("YK");
                         case "YELLOWLockedDoor" -> out.print("YLD");
                         case "BLUEKey" -> out.print("BK");
-                        case "BLUELockedDoor" -> out.print("BLK");
+                        case "BLUELockedDoor" -> out.print("BLD");
 
                         case "Explosion" -> out.print("P"); // If there is an explosion when we want to save, load a path in its place when the save is loaded
 
