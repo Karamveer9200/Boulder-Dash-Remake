@@ -1,5 +1,6 @@
 /**
- * Represents a player's profile in the game, storing the player's name, maximum level reached, high score, and current score.
+ * Represents a PlayerProfile, storing the player's name, id and max level reached.
+ * @author Tahi Rahman
  */
 public class PlayerProfile {
 
@@ -10,7 +11,6 @@ public class PlayerProfile {
     /**
      * Constructs a new PlayerProfile with the specified name, maximum level reached, and high score.
      * Each profile is assigned a unique player ID.
-     *
      * @param name the name of the player
      */
     public PlayerProfile(String name) {
@@ -22,7 +22,6 @@ public class PlayerProfile {
     /**
      * Constructs a new PlayerProfile with the specified name, maximum level reached, and high score.
      * Each profile is assigned a unique player ID.
-     *
      */
     public PlayerProfile() {
         this.playerId = ProfileManager.getNextPlayerId();
@@ -42,7 +41,6 @@ public class PlayerProfile {
 
     /**
      * Gets the player's unique ID.
-     *
      * @return the player's ID
      */
     public int getPlayerId() {
@@ -51,7 +49,6 @@ public class PlayerProfile {
 
     /**
      * Gets the player's name.
-     *
      * @return the player's name
      */
     public String getName() {
@@ -60,7 +57,6 @@ public class PlayerProfile {
 
     /**
      * Sets the player's name.
-     *
      * @param name the new name of the player
      */
     public void setName(String name) {
@@ -69,7 +65,6 @@ public class PlayerProfile {
 
     /**
      * Gets the maximum level reached by the player.
-     *
      * @return the maximum level reached
      */
     public int getMaxLevelReached() {
@@ -78,7 +73,6 @@ public class PlayerProfile {
 
     /**
      * Sets the maximum level reached by the player.
-     *
      * @param maxLevelReached the new maximum level reached
      */
     public void setMaxLevelReached(int maxLevelReached) {
