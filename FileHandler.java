@@ -105,8 +105,7 @@ public class FileHandler {
 
     public static String[][] readElementGridFromLevelFile(String fileName) {
         File readFile = new File(fileName);
-        try
-        {
+        try {
             Scanner in = new Scanner(readFile);
 
             String[] splitGridDimensions = in.nextLine().split(" ");
@@ -127,9 +126,7 @@ public class FileHandler {
             }
             in.close();
             return initialGrid;
-        }
-        catch (FileNotFoundException exception)
-        {
+        } catch (FileNotFoundException exception) {
             System.out.println("Error in finding file");
 
         }
@@ -145,8 +142,7 @@ public class FileHandler {
         int id = currentProfile.getPlayerId();
         String fileName = "Save" + id + ".txt";
 
-        try
-        {
+        try {
             String outputFile = "txt/" + fileName;
             PrintWriter out = new PrintWriter(outputFile);
             out.println(currentGrid[0].length + " " + currentGrid.length);
@@ -159,7 +155,7 @@ public class FileHandler {
 
             for (int i = 0; i < currentGrid.length; i++) {
                 for (int j = 0; j < currentGrid[i].length; j++) {
-                    switch (gameController.getGridManager().getElement(i,j).getName()) {
+                    switch (gameController.getGridManager().getElement(i, j).getName()) {
                         case "Player" -> out.print("*");
 
                         case "Path" -> out.print("P");
@@ -201,9 +197,7 @@ public class FileHandler {
                 }
             }
             out.close();
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             System.out.println("Cannot write file");
         }
     }
@@ -306,16 +300,16 @@ public class FileHandler {
         for (int i = 0; i < keyInventory.size(); i++) {
             KeyColour key = keyInventory.get(i);
             switch (key) {
-                case KeyColour.RED:
+                case RED:
                     keyInventoryString.append("RK");
                     break;
-                case KeyColour.BLUE:
+                case BLUE:
                     keyInventoryString.append("BK");
                     break;
-                case KeyColour.YELLOW:
+                case YELLOW:
                     keyInventoryString.append("YK");
                     break;
-                case KeyColour.GREEN:
+                case GREEN:
                     keyInventoryString.append("GK");
                     break;
             }
@@ -330,3 +324,4 @@ public class FileHandler {
     }
 
 }
+
