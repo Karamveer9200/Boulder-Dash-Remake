@@ -20,6 +20,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import java.util.ArrayList;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 /**
  * Main sets up the GUI and initialises everything for a game to take place
@@ -38,15 +40,12 @@ public class Main extends Application {
 	private Timeline amoebaTickTimeline;
 	private Timeline flyTickTimeline;
 	private Timeline killPlayerTickTimeLine;
-
 	private Timeline explosionTickTimeLine;
-
-
 	private Timeline timerTimeline;
 	private Timeline diamondCountTimeline;
-	private int secondsRemaining = 120;
 
-	public static Player player;
+
+	private int secondsRemaining;
 
 	private ArrayList<PlayerProfile> profiles = new ArrayList<>();
 	private PlayerProfile currentProfile;
@@ -65,8 +64,9 @@ public class Main extends Application {
 		// Set up menu buttons
 		Button newGameButton = new Button("Start New Game");
 		newGameButton.setOnAction(e -> {
-            currentProfile = ProfileManager.promptForProfile();
+			currentProfile = ProfileManager.promptForProfile();
 			String levelFile = "txt/Level1.txt";
+			secondsRemaining = FileHandler.readSecondsFromLevelFile(levelFile);
 			setupGame(primaryStage, levelFile);
 		});
 
@@ -96,10 +96,12 @@ public class Main extends Application {
 						int playerID = currentProfile.getPlayerId();
 						if (ProfileManager.doesPlayerSaveFileExist(playerID)) {
 							String levelFile = "txt/Save" + playerID + ".txt";
+							secondsRemaining = FileHandler.readSecondsFromLevelFile(levelFile);
 							setupGame(primaryStage, levelFile);
 						} else {
 							int level = profileToSelect.getMaxLevelReached();
 							String levelFile = "txt/Level" + level + ".txt";
+							secondsRemaining = FileHandler.readSecondsFromLevelFile(levelFile);
 							setupGame(primaryStage, levelFile);
 						}
 					}
@@ -176,21 +178,21 @@ public class Main extends Application {
 			dialog.initModality(Modality.APPLICATION_MODAL);
 
 			Button highScores1Button = new Button("Level 1 High Scores");
-			highScores1Button.setOnAction(eventHS1 -> {
-				HighScoreTableManager.displayHighScoreTable(1);
-				dialog.close();
+			highScores1Button.setOnAction(event -> {
+				dialog.hide();
+				HighScoreTableManager.displayHighScoreTable(1, dialog);
 			});
 
 			Button highScores2Button = new Button("Level 2 High Scores");
-			highScores2Button.setOnAction(eventHS2 -> {
-				HighScoreTableManager.displayHighScoreTable(2);
-				dialog.close();
+			highScores2Button.setOnAction(event -> {
+				dialog.hide();
+				HighScoreTableManager.displayHighScoreTable(2, dialog);
 			});
 
 			Button highScores3Button = new Button("Level 3 High Scores");
-			highScores3Button.setOnAction(eventHS3 -> {
-				HighScoreTableManager.displayHighScoreTable(3);
-				dialog.close();
+			highScores3Button.setOnAction(event -> {
+				dialog.hide();
+				HighScoreTableManager.displayHighScoreTable(3, dialog);
 			});
 
 			VBox dialogBox = new VBox(10, highScores1Button, highScores2Button, highScores3Button);
@@ -204,7 +206,14 @@ public class Main extends Application {
 		Button quitButton = new Button("Quit Game");
 		quitButton.setOnAction(e -> closeGame());
 
-		menuBox.getChildren().addAll(newGameButton, loadGameButton, profileButton, highScoresButton, quitButton);
+
+		Image logoImage = new Image("images/BoulderDashTitle.png");
+		ImageView logoImageView = new ImageView(logoImage);
+
+		logoImageView.setFitWidth(700);
+		logoImageView.setPreserveRatio(true);
+
+		menuBox.getChildren().addAll(logoImageView, newGameButton, loadGameButton, profileButton, highScoresButton, quitButton);
 		menuBox.setStyle("-fx-padding: 20; -fx-alignment: center;");
 
 		// Show the menu
@@ -218,7 +227,7 @@ public class Main extends Application {
 	 */
 	public void setupGame(Stage primaryStage, String levelFile) {
 		// Load the initial grid from a file
-		String[][] initialGrid = FileHandler.readFile(levelFile);
+		String[][] initialGrid = FileHandler.readElementGridFromLevelFile(levelFile);
 
 		final int canvasWidth = initialGrid[0].length * GRID_CELL_WIDTH;
 		final int canvasHeight = initialGrid.length * GRID_CELL_HEIGHT;
@@ -248,14 +257,12 @@ public class Main extends Application {
 			gameController.killPlayerTick();
 		});
 
-		KeyFrame dangerousRocksRollKeyFrame = new KeyFrame(Duration.millis(1500), event -> {
-			gameController.boulderRollTick();
-			gameController.diamondRollTick();
+		KeyFrame dangerousRocksRollKeyFrame = new KeyFrame(Duration.millis(800), event -> {
+			gameController.dangerousRockRollTick();
 		});
 
 		KeyFrame dangerousRocksFallKeyFrame = new KeyFrame(Duration.millis(500), event -> {
-			gameController.boulderFallTick();
-			gameController.diamondFallTick();
+			gameController.dangerousRockFallTick();
 
 		});
 
@@ -326,14 +333,14 @@ public class Main extends Application {
 		resetGridButton.setOnAction(e -> {
 			int levelReached = currentProfile.getMaxLevelReached();
 			String levelFile = "txt/Level" + levelReached + ".txt";
-			String[][] initialGrid = FileHandler.readFile(levelFile);
+			String[][] initialGrid = FileHandler.readElementGridFromLevelFile(levelFile);
 			gameController.getGridManager().reinitializeGrid(initialGrid);
-		    gameController.getGridManager().initializePlayer(initialGrid);
+			gameController.getGridManager().initializePlayer(initialGrid);
 			gameController.draw();
 		});
 
 		saveButton.setOnAction(e -> {
-			FileHandler.writeFile(gameController.getGridManager(), currentProfile);
+			FileHandler.writeFile(gameController.getGridManager(), currentProfile, secondsRemaining);
 			closeGame();
 		});
 
@@ -372,13 +379,14 @@ public class Main extends Application {
 		});
 
 
+
 		Button testExplosionButton = new Button("Test Explosion");
 		testExplosionButton.setOnAction(e -> {
-			gameController.applyExplosion(2,2);
+			gameController.applyExplosion(2,2,true);
 			gameController.draw();
 		});
 		// adds timer to the toolbar
-		Text timerText = new Text("Time Remaining: 120s");
+		Text timerText = new Text("Time Remaining: " + secondsRemaining + "s");
 		timerTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
 			secondsRemaining--;
 			timerText.setText("Time Remaining: " + secondsRemaining + "s");
@@ -388,8 +396,8 @@ public class Main extends Application {
 		// adds diamond count to the toolbar, displays as zero if player has not been initialised
 		Text diamondCountText = new Text("Diamonds Collected: 0");
 		diamondCountTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
-			if (Main.player != null) {
-				diamondCountText.setText("Diamonds collected: " + Main.player.getDiamondCount());
+			if (gameController.getPlayer() != null) {
+				diamondCountText.setText("Diamonds collected: " + gameController.getPlayer().getDiamondCount());
 			} else {
 				diamondCountText.setText("Diamonds collected: 0");
 			}
@@ -397,10 +405,10 @@ public class Main extends Application {
 		diamondCountTimeline.setCycleCount(Animation.INDEFINITE);
 
 		// display current level for the player
-		Text levelText = new Text ("Current Level: 1");
+		Text levelText = new Text ("Current Level: " + currentProfile.getMaxLevelReached());
 
-		toolbar.getChildren().addAll(startTickButton, stopTickButton,resetGridButton,
-				testExplosionButton, timerText, diamondCountText, levelText);
+		toolbar.getChildren().addAll(startTickButton, stopTickButton, resetGridButton,
+				saveButton, timerText, diamondCountText, levelText);
 		root.setTop(toolbar);
 
 		return root;

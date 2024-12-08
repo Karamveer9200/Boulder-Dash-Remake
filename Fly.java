@@ -87,6 +87,15 @@ public class Fly extends Element {
     }
 
 
+    /**
+     * Determines if a move to a specified position in a grid is valid.
+     *
+     * @param grid the grid of elements representing the game board.
+     * @param row the row index of the target position.
+     * @param col the column index of the target position.
+     * @return true if the move is within the grid boundaries and the target position
+     *         is a Path, Player, or Amoeba element, false otherwise.
+     */
     private boolean isValidMove(Element[][] grid, int row, int col) {
         // Check boundaries
         if (row < 0 || row >= grid.length || col < 0 || col >= grid[0].length) {
@@ -98,8 +107,5 @@ public class Fly extends Element {
         return (target instanceof Path || target instanceof Player || target instanceof Amoeba);
     }
 
-    @Override
-    public String toString() {
-        return "fly";
-    }
+
 }

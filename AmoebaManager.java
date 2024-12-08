@@ -38,7 +38,8 @@ public class AmoebaManager {
                 // Check grid boundaries and if the cell contains dirt
                 if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < cols) {
                     Element target = grid[newRow][newCol];
-                    if (target instanceof Dirt) {
+                    if (target instanceof Dirt || target instanceof Path ||
+                            target instanceof Butterfly || target instanceof Firefly) {
                         validPositions.add(new int[]{newRow, newCol});
                     }
                 }
@@ -72,4 +73,6 @@ public class AmoebaManager {
             gridManager.addToList(newDiamond);
         }
     }
+
+    // transfroms all ameobas into boulders if the growth is blocked
 }

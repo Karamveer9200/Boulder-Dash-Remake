@@ -2,6 +2,7 @@ import javafx.scene.image.Image;
 import java.util.*;
 
 public class Frog extends Element {
+    public static final Boolean dropDiamond = false;
 
     public Frog(int row, int column) {
         super(row, column );

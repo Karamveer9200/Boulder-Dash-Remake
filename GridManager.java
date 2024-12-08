@@ -20,6 +20,7 @@ public class GridManager {
     private  Player player;
     private Exit exit;
 
+
     /**
      * Constructs a GridManager with a grid template.
      * Initializes the grid based on the provided template and categorizes elements into lists.
@@ -58,6 +59,9 @@ public class GridManager {
      * @param gridTemplate the 2D array representing the initial grid setup
      */
     public void reinitializeGrid(String[][] gridTemplate) {
+        GameController.waitingForExplosion = false;
+        GameController.waitingForExplosionAfterMath = false;
+
         initializePlayer(gridTemplate);
         Exit.toggleFalseExitExists();
         getBoulders().clear();
@@ -74,7 +78,7 @@ public class GridManager {
 
         for (int row = 0; row < gridTemplate.length; row++) {
             for (int col = 0; col < gridTemplate[row].length; col++) {
-                Element element = createElement(this, gridTemplate[row][col], row, col); // i removed false here
+                Element element = createElement(this, gridTemplate[row][col], row, col, false);
                 elementGrid[row][col] = element;
                 addToList(element);
             }
@@ -101,7 +105,7 @@ public class GridManager {
         // follows LeftEdge is true by default
         for (int row = 0; row < gridTemplate.length; row++) {
             for (int col = 0; col < gridTemplate[row].length; col++) {
-                Element element = createElement(this,gridTemplate[row][col], row, col); //I removed false here
+                Element element = createElement(this,gridTemplate[row][col], row, col, false);
                 elementGrid[row][col] = element;
                 addToList(element);
             }
@@ -111,13 +115,13 @@ public class GridManager {
      * Creates an element based on the provided code and its position in the grid.
      *
      * @param gridManager
-     * @param code        the String code representing the type of element
+     * @param code        the integer code representing the type of element
      * @param row         the row position of the element
      * @param col         the column position of the element
      * @return the created Element object
      * @throws IllegalArgumentException if the code does not correspond to a known element type
      */
-    private Element createElement(GridManager gridManager, String code, int row, int col) {
+    private Element createElement(GridManager gridManager, String code, int row, int col, boolean followsLeftEdge) {
         return switch (code) {
             case "*" -> player = new Player(row, col);
 
@@ -205,7 +209,7 @@ public class GridManager {
         } else if (element instanceof Frog frog) {
             frogs.remove(frog);
             System.out.println("Frog removed");
-            GameController.applyExplosion(element.row, element.column);
+            GameController.applyExplosion(element.row, element.column,Frog.dropDiamond );
         } else if (element instanceof Amoeba amoeba) {
             amoebas.remove(amoeba);
         } else if (element instanceof Diamond diamond) {
@@ -214,50 +218,43 @@ public class GridManager {
         } else if (element instanceof Butterfly butterfly) {
             butterflies.remove(butterfly);
             System.out.println("Butterfly removed");
-            GameController.applyExplosion(element.row, element.column);
+            GameController.applyExplosion(element.row, element.column, Butterfly.dropDiamond);
         } else if (element instanceof Firefly firefly) {
             fireflies.remove(firefly);
             System.out.println("Firefly removed");
-            GameController.applyExplosion(element.row, element.column);
+            GameController.applyExplosion(element.row, element.column, Firefly.dropDiamond);
         }
     }
 
     /**
      * Removes an element from its corresponding list based on its type.
-     * Objects here only get destroyed, thus avoiding a chain reaction.
+     * Objects here only get destroyed, thus avoiding an explosion and chain reaction.
      * @param element the Element to be removed
      */
-    public void explosionRemoveFromList(Element element) {
+    public void destroyRemoveFromList(Element element) {
         if (element instanceof Path path) {
             paths.remove(path);
         } else if (element instanceof Dirt dirt) {
             dirts.remove(dirt);
         } else if (element instanceof Player player) {
             players.remove(player);
-            System.out.println("Player removed");
             GameController.gameOver();
         } else if (element instanceof NormalWall wall) {
             walls.remove(wall);
         } else if (element instanceof Boulder boulder) {
             boulders.remove(boulder);
-            System.out.println("Boulder removed");
         } else if (element instanceof Frog frog) {
             frogs.remove(frog);
-            System.out.println("Frog removed");
         } else if (element instanceof Amoeba amoeba) {
             amoebas.remove(amoeba);
         } else if (element instanceof Diamond diamond) {
             diamonds.remove(diamond);
-            System.out.println("Diamond removed");
         } else if (element instanceof Butterfly butterfly) {
             butterflies.remove(butterfly);
-            System.out.println("Butterfly removed");
         } else if (element instanceof Firefly firefly) {
             fireflies.remove(firefly);
-            System.out.println("Firefly removed");
         }
     }
-
     /**
      * Retrieves the 2D array of elements in the grid.
      *
@@ -297,7 +294,7 @@ public class GridManager {
      * @param col the column position of the element to remove
      */
     public void removeElement(int row, int col) {
-        removeFromList(elementGrid[row][col]);
+//        removeFromList(elementGrid[row][col]);
         Path p = new Path(row, col);
         elementGrid[row][col] = p;
     }
@@ -320,24 +317,60 @@ public class GridManager {
         return diamonds;
     }
 
+    /**
+     * Retrieves the list of Firefly elements in the grid.
+     *
+     * @return the ArrayList of Firefly elements
+     */
     public ArrayList<Firefly> getFireflies() {
         return fireflies;
     }
 
+    /**
+     * Retrieves the list of Butterfly elements in the grid.
+     *
+     * @return the ArrayList of Butterfly elements
+     */
     public ArrayList<Butterfly> getButterflies() {
         return butterflies;
     }
 
+    /**
+     * Retrieves the list of Frog elements in the grid.
+     *
+     * @return the ArrayList of Frog elements
+     */
     public ArrayList<Frog> getFrogs() {
         return frogs;
     }
 
+    /**
+     * Retrieves the current Player object in the grid.
+     *
+     * @return the Player object representing the player character in the grid
+     */
     public Player getPlayer() {
         return player;
     }
 
+    /**
+     * Retrieves the list of Amoeba elements in the grid.
+     *
+     * @return the ArrayList of Amoeba elements
+     */
     public ArrayList<Amoeba> getAmoebas() {
         return amoebas;
     }
 
+
+    // built for debugging purpose
+    public void printGridState() {
+        for (int row = 0; row < elementGrid.length; row++) {
+            for (int col = 0; col < elementGrid[row].length; col++) {
+                System.out.print(elementGrid[row][col] + " ");
+            }
+            System.out.println();
+        }
+        System.out.println("---------------------------------------------------------------------------------");
+    }
 }
