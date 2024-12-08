@@ -152,8 +152,8 @@ public class Player extends Element {
             }
         }
         if (grid[targetRow][targetColumn] instanceof Exit exit) {
+            checkDiamonds();
             if (isHasEnoughDiamonds()) {
-                // If the player has enough diamonds, unlock the Exit and announce level win
                 exit.unlock();
                 hasPlayerWon = true;
                 return true;

@@ -1,5 +1,0 @@
-PlayerID:1
-Name:ibby
-MaxLevelReached:0
-HighScore:0
-CurrentScore:0
