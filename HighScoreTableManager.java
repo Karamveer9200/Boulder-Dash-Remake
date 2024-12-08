@@ -19,19 +19,22 @@ import java.util.Scanner;
  */
 public class HighScoreTableManager {
     private static final int MAX_HIGH_SCORES = 10;
-//    private static final
+    private static final int FINAL_LEVEL = 3;
+    private static final int HIGH_SCORE_TABLE_WIDTH = 400;
+    private static final int HIGH_SCORE_TABLE_HEIGHT = 500;
+    private static final int SPACING = 10;
 
     /**
      * Displays the high score table for a specific level when accessed from the main menu.
      * @param level        The level's high score table.
      * @param parentDialog The parent dialog that will be shown again when this one is closed.
      */
-    public static void displayHighScoresInMainMenu(int level, Stage parentDialog) {
+    public static void displayHighScoresInMainMenu(final int level, final Stage parentDialog) {
         Stage dialog = new Stage();
         dialog.setTitle("High Score Table for Level " + level);
         dialog.initModality(Modality.APPLICATION_MODAL);
 
-        VBox vbox = new VBox(10);
+        VBox vbox = new VBox(SPACING);
         vbox.setStyle("-fx-padding: 20; -fx-alignment: center;");
 
         ArrayList<HighScore> highScores = HighScoreTableManager.getHighScores(level);
@@ -49,8 +52,7 @@ public class HighScoreTableManager {
         });
 
         vbox.getChildren().add(backButton);
-        
-        Scene dialogScene = new Scene(vbox, 400, 500);
+        Scene dialogScene = new Scene(vbox, HIGH_SCORE_TABLE_WIDTH, HIGH_SCORE_TABLE_HEIGHT);
         dialog.setScene(dialogScene);
         dialog.showAndWait();
     }
@@ -58,16 +60,16 @@ public class HighScoreTableManager {
 
 
     /**
-     * Displays the high score table for a specific level after the player beats a level
+     * Displays the high score table for a specific level after the player beats a level.
      * @param level        The level for which to display the high scores.
      * @param scoreAchieved The score the player achieved in the level.
      */
-    public static void displayHighScoresAfterLevel(int level, int scoreAchieved) {
+    public static void displayHighScoresAfterLevel(final int level, final int scoreAchieved) {
         Stage dialog = new Stage();
         dialog.setTitle("High Score Table for Level " + level);
         dialog.initModality(Modality.APPLICATION_MODAL);
 
-        VBox vbox = new VBox(10);
+        VBox vbox = new VBox(SPACING);
         vbox.setStyle("-fx-padding: 20; -fx-alignment: center;");
 
         ArrayList<HighScore> highScores = HighScoreTableManager.getHighScores(level);
@@ -79,7 +81,7 @@ public class HighScoreTableManager {
         }
 
         Label addSpace = new Label();
-        addSpace.setMinHeight(20);
+        addSpace.setMinHeight(SPACING);
         vbox.getChildren().add(addSpace);
 
         Label recentScore = new Label("Your Score: " + scoreAchieved);
@@ -89,7 +91,7 @@ public class HighScoreTableManager {
 
         String buttonText;
 
-        if (level == 3) {
+        if (level == FINAL_LEVEL) {
             buttonText = "Close";
         } else {
             buttonText = "Begin Next Level";
@@ -102,7 +104,7 @@ public class HighScoreTableManager {
 
         vbox.getChildren().add(backButton);
 
-        Scene dialogScene = new Scene(vbox, 400, 500);
+        Scene dialogScene = new Scene(vbox, HIGH_SCORE_TABLE_WIDTH, HIGH_SCORE_TABLE_HEIGHT);
         dialog.setScene(dialogScene);
         dialog.showAndWait();
     }
@@ -114,7 +116,7 @@ public class HighScoreTableManager {
      * @param score      The score achieved by the player.
      * @param level      The level for which the high score table should be updated.
      */
-    public static void updateHighScoreTable(String playerName, int score, int level) {
+    public static void updateHighScoreTable(final String playerName, final int score, final int level) {
         HighScore newHighScore = new HighScore(playerName, score);
         ArrayList<HighScore> highScores = getHighScores(level);
         highScores.add(newHighScore);
@@ -131,7 +133,7 @@ public class HighScoreTableManager {
      * @param level The level for which to retrieve the high scores.
      * @return A list of high scores for the specified level.
      */
-    public static ArrayList<HighScore> getHighScores(int level) {
+    public static ArrayList<HighScore> getHighScores(final int level) {
         String folderPath = "txt";
         ArrayList<HighScore> highScores = new ArrayList<>();
 
@@ -166,7 +168,7 @@ public class HighScoreTableManager {
     }
 
     /**
-     * Saves the high score table of a specific level to its high score table file
+     * Saves the high score table of a specific level to its high score table file.
      * @param highScores The list of high scores to save.
      * @param level      The level for which the High Score Table is of
      */
