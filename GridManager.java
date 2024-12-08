@@ -83,7 +83,7 @@ public class GridManager {
                 addToList(element);
             }
         }
-
+        identifyAmoebaGroups();
     }
 
     /**
