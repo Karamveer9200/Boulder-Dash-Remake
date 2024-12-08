@@ -29,8 +29,6 @@ public class MagicWall extends Element {
      */
     public void transformRock(final Element element, final GridManager gridManager) {
         if (element instanceof Boulder) {
-
-            System.out.println("Boulder entered a magic wall");
             //disable old rock from falling
             gridManager.removeFromList(element);
             // replace rock location above the magicWall with a path
@@ -38,10 +36,7 @@ public class MagicWall extends Element {
             Diamond diamond = new Diamond(element.getRow() + 1,element.getColumn() );
             gridManager.addToList(diamond);
             diamond.gainMomentum();
-//            System.out.println(diamond.getRow() + " " + diamond.getColumn());
         } else if (element instanceof Diamond) {
-
-            System.out.println("Diamond entered a magic wall");
             //disable old rock from falling
             gridManager.removeFromList(element);
             // replace rock location above the magicWall with a path
@@ -49,7 +44,6 @@ public class MagicWall extends Element {
             Boulder boulder = new Boulder(element.getRow() + 1,element.getColumn() );
             gridManager.addToList(boulder);
             boulder.gainMomentum();
-//            System.out.println(boulder.getRow() + " " + boulder.getColumn());
         }
     }
 

@@ -322,7 +322,7 @@ public class Main extends Application {
 
 		//add keyframe for checking neighboring tiles to enemies , instance of that method is in flies 12/1/2024 - Omar
 		KeyFrame killPlayerKeyFrame = new KeyFrame(Duration.millis(50), event -> {
-			gameController.killPlayerTick();
+			gameController.killTick();
 		});
 
 		KeyFrame dangerousRocksRollKeyFrame = new KeyFrame(Duration.millis(120), event -> {
