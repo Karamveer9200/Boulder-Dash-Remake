@@ -32,7 +32,7 @@ public class DangerousRock extends Element {
 
             gridManager.setElement(newRow, col, this);
 
-            // Update position
+            // Update the position
             this.setRow(newRow);
             gainMomentum();
 
