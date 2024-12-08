@@ -130,4 +130,22 @@ public class AmoebaGroup {
     public boolean isEmpty() {
         return amoebas.isEmpty();
     }
+
+    /**
+     * Removes the given amoeba from the group.
+     * @param amoeba the Amoeba to be removed from the group
+     */
+    public void removeAmoeba(Amoeba amoeba) {
+        amoebas.remove(amoeba);
+    }
+
+    /**
+     * Checks if the specified amoeba is part of this group.
+     *
+     * @param amoeba the Amoeba to be checked
+     * @return true if the amoeba is in the group, false otherwise
+     */
+    public boolean contains(Amoeba amoeba) {
+        return amoebas.contains(amoeba);
+    }
 }
