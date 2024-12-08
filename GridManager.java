@@ -17,6 +17,7 @@ public class GridManager {
     final ArrayList<Firefly> fireflies = new ArrayList<>();
     final ArrayList<Frog> frogs = new ArrayList<>();
     final ArrayList<Amoeba> amoebas = new ArrayList<>();
+    private final ArrayList<AmoebaGroup> amoebaGroups = new ArrayList<>();
     private  Player player;
     private Exit exit;
 
@@ -78,12 +79,12 @@ public class GridManager {
 
         for (int row = 0; row < gridTemplate.length; row++) {
             for (int col = 0; col < gridTemplate[row].length; col++) {
-                Element element = createElement(this, gridTemplate[row][col], row, col, false);
+                Element element = createElement(this, gridTemplate[row][col], row, col); // i removed false here
                 elementGrid[row][col] = element;
                 addToList(element);
             }
         }
-
+        identifyAmoebaGroups();
     }
 
     /**
@@ -105,23 +106,24 @@ public class GridManager {
         // follows LeftEdge is true by default
         for (int row = 0; row < gridTemplate.length; row++) {
             for (int col = 0; col < gridTemplate[row].length; col++) {
-                Element element = createElement(this,gridTemplate[row][col], row, col, false);
+                Element element = createElement(this,gridTemplate[row][col], row, col); //I removed false here
                 elementGrid[row][col] = element;
                 addToList(element);
             }
         }
+        identifyAmoebaGroups();
     }
     /**
      * Creates an element based on the provided code and its position in the grid.
      *
      * @param gridManager
-     * @param code        the integer code representing the type of element
+     * @param code        the String code representing the type of element
      * @param row         the row position of the element
      * @param col         the column position of the element
      * @return the created Element object
      * @throws IllegalArgumentException if the code does not correspond to a known element type
      */
-    private Element createElement(GridManager gridManager, String code, int row, int col, boolean followsLeftEdge) {
+    private Element createElement(GridManager gridManager, String code, int row, int col) {
         return switch (code) {
             case "*" -> player = new Player(row, col);
 
@@ -139,11 +141,10 @@ public class GridManager {
             case "F" -> new Frog(row, col);
             case "A" -> new Amoeba(row, col);
 
-            //THIS IS WHERE WE SPECIFY IF FIREFLY IS LEFT OR RIGHT EDGE FOLLOWING
-            //case "FFL" -> new FireFly(row,col,LEFT);
-            //case "FFR" -> new FireFly(row,col,RIGHT);
-            //case "BFL" -> new FireFly(row,col,LEFT);
-            //case "BFR" -> new FireFly(row,col,RIGHT);
+            case "FFL" -> new Firefly(row,col,true);
+            case "FFR" -> new Firefly(row,col,false);
+            case "BFL" -> new Butterfly(row,col,true);
+            case "BFR" -> new Butterfly(row,col,false);
 
             case "RLD" -> new LockedDoor(row, col, KeyColour.RED);
             case "RK" -> new Key(row, col, KeyColour.RED);
@@ -209,7 +210,7 @@ public class GridManager {
         } else if (element instanceof Frog frog) {
             frogs.remove(frog);
             System.out.println("Frog removed");
-            GameController.applyExplosion(element.row, element.column,Frog.dropDiamond );
+            GameController.applyExplosion(element.row, element.column, Frog.dropDiamond);
         } else if (element instanceof Amoeba amoeba) {
             amoebas.remove(amoeba);
         } else if (element instanceof Diamond diamond) {
@@ -255,6 +256,7 @@ public class GridManager {
             fireflies.remove(firefly);
         }
     }
+
     /**
      * Retrieves the 2D array of elements in the grid.
      *
@@ -294,7 +296,7 @@ public class GridManager {
      * @param col the column position of the element to remove
      */
     public void removeElement(int row, int col) {
-//        removeFromList(elementGrid[row][col]);
+        removeFromList(elementGrid[row][col]);
         Path p = new Path(row, col);
         elementGrid[row][col] = p;
     }
@@ -360,6 +362,68 @@ public class GridManager {
      */
     public ArrayList<Amoeba> getAmoebas() {
         return amoebas;
+    }
+
+    public void killPlayer() {
+        removeFromList(player);
+        Path path = new Path(player.getRow(), player.getColumn());
+        elementGrid[player.row][player.column] = path;
+    }
+
+    /**
+     * Returns the list of AmoebaGroup objects, each representing a group of connected
+     * Amoeba elements in the grid.
+     *
+     * @return the list of AmoebaGroup objects
+     */
+    public ArrayList<AmoebaGroup> getAmoebaGroups() {
+        return amoebaGroups;
+    }
+    /**
+     * Identifies all the groups of connected amoebas in the grid and
+     * stores them in the local list and the global manager.
+     */
+    private void identifyAmoebaGroups() {
+        boolean[][] visited = new boolean[elementGrid.length][elementGrid[0].length];
+        AmoebaManager.clearGroups(); // Clear previous groups
+
+        for (int row = 0; row < elementGrid.length; row++) {
+            for (int col = 0; col < elementGrid[row].length; col++) {
+                if (elementGrid[row][col] instanceof Amoeba && !visited[row][col]) {
+                    // Start a new group if an unvisited amoeba is found
+                    AmoebaGroup group = new AmoebaGroup();
+                    exploreAmoebaGroup(row, col, group, visited);
+                    amoebaGroups.add(group); // Add to the local list
+                    AmoebaManager.addAmoebaGroup(group); // Add to the global manager
+                }
+            }
+        }
+    }
+
+    /**
+     * Explores a group of connected amoebas by performing a depth-first search.
+     * @param row the row of the cell to explore
+     * @param col the column of the cell to explore
+     * @param group the group of amoebas to add to
+     * @param visited a 2D boolean array to mark visited cells
+     */
+    private void exploreAmoebaGroup(int row, int col, AmoebaGroup group, boolean[][] visited) {
+        // Boundary check
+        if (row < 0 || row >= elementGrid.length || col < 0 || col >= elementGrid[0].length) return;
+
+        // Check if the cell is already visited or not an amoeba
+        if (visited[row][col] || !(elementGrid[row][col] instanceof Amoeba)) return;
+
+        // Mark the cell as visited and add the amoeba to the group
+        visited[row][col] = true;
+        Amoeba amoeba = (Amoeba) elementGrid[row][col];
+        group.addAmoeba(amoeba);
+
+        // Explore all four directions
+        exploreAmoebaGroup(row - 1, col, group, visited); // Up
+        exploreAmoebaGroup(row + 1, col, group, visited); // Down
+        exploreAmoebaGroup(row, col - 1, group, visited); // Left
+        exploreAmoebaGroup(row, col + 1, group, visited); // Right
     }
 
 

@@ -39,16 +39,7 @@ public class Exit extends Element {
         exitExists = false;
     }
 
-    /**
-     * Notifies the player that they have completed the level.
-     */
-    public void announceLevelWin() {
-        System.out.println("Level Completed!");
-    }
-
-    /**
-     * Unlocks the exit, allowing it to be entered.
-     */
+    // Method to unlock the Exit so it can be entered
     public void unlock() {
         this.canBeEntered = true;
         System.out.println("Exit Unlocked!");

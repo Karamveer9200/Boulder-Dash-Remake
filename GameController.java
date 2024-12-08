@@ -11,16 +11,18 @@ public class GameController {
     private final Canvas canvas;
     private final GridManager gridManager;
     private final Renderer renderer;
-//    private Player player ;
     private final InputHandler inputHandler;
-    public static boolean gameStatus = true;
-
 
     private static int nextExplosionRow;
     private static int nextExplosionCol;
     public static boolean waitingForExplosionAfterMath = false;
     public static boolean waitingForExplosion = false;
     private static boolean transformToDiamonds;
+
+    private int amoebaLimit;
+    private int diamondsRequired;
+
+    public static boolean gameStatus = true;
 
     /**
      * Represents possible inputs for the player.
@@ -186,11 +188,12 @@ public class GameController {
         draw();
     }
 
+
     public void amoebaTick() {
-        if (gridManager.getAmoebas().size() > 0) {
-            AmoebaManager.spreadAll(gridManager);
+        if (!AmoebaManager.isEmpty()) { // Check if there are any active amoeba groups
+            AmoebaManager.updateAll(gridManager); // Update all amoeba groups
         }
-        draw();
+        draw(); // Redraw the grid after updating
     }
 
     public void butterflyTick() {
@@ -249,7 +252,7 @@ public class GameController {
     }
 
     // Select an index in the ElementGrid and create a 3x3 Explosion and then AfterMath at that spot
-    public static  void applyExplosion(int row, int column, boolean dropsDiamonds) {
+    public static void applyExplosion(int row, int column, boolean dropsDiamonds) {
         waitingForExplosion = true;
         nextExplosionRow = row;
         nextExplosionCol = column;
@@ -283,7 +286,12 @@ public class GameController {
         }
     }
 
-    
+    public boolean checkLevelWinTick() {
+        return gridManager.getPlayer().hasPlayerWon();
+    }
+
+
+
     public static void gameOver() {
         gameStatus = false;
         System.out.println("GAME OVER");
@@ -327,32 +335,30 @@ public class GameController {
         return gridManager;
     }
 
-    /**
-     * Resets the player's location to the top-left corner of the grid (0, 0).
-     */
-    public void resetPlayerLocation() {
-        gridManager.getPlayer().movePlayer(0, 0, gridManager);
-    }
-
-    /**
-     * Moves the player to the center of the grid.
-     */
-    public void movePlayerToCenter() {
-        gridManager.getPlayer().movePlayer(
-                gridManager.getElementGrid().length / 2,
-                gridManager.getElementGrid()[0].length / 2,
-                gridManager
-        );
-    }
-
-    /**
-     * Retrieves the Player object being managed by the GameController.
-     *
-     * @return the Player object currently managed by the GameController.
-     */
     // allows the player being managed by Game Controller to be retrieved
     public Player getPlayer() {
         return gridManager.getPlayer();
+    }
+
+    public void setDiamondsRequired(int diamondsRequired) {
+        this.diamondsRequired = diamondsRequired;
+        this.gridManager.getPlayer().setDiamondsRequired(diamondsRequired); //Tell the player the diamonds required
+
+    }
+
+    public int getDiamondsRequired() {
+        return diamondsRequired;
+    }
+
+    public void setAmoebaLimit(int amoebaLimit) {
+        this.amoebaLimit = amoebaLimit;
+        for(int i = 0; i < gridManager.getAmoebaGroups().size(); i++) {
+            gridManager.getAmoebaGroups().get(i).setAmoebaSizeLimit(amoebaLimit);
+        }
+    }
+
+    public int getAmoebaLimit() {
+        return amoebaLimit;
     }
 
 }

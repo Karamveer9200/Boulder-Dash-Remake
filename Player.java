@@ -5,9 +5,11 @@ import java.util.List;
 
 public class Player extends Element {
 
-    private final List<KeyColour> keyInventory;
+    private ArrayList<KeyColour> keyInventory;
     private int diamondCount = 0;
     private boolean hasEnoughDiamonds;
+    private boolean hasPlayerWon;
+    private int diamondsRequired;
     public boolean lookingRight;
 
     public Player(int row, int column){
@@ -50,6 +52,10 @@ public class Player extends Element {
         return diamondCount;
     }
 
+    public void setDiamondCount(int diamondCount) {
+        this.diamondCount = diamondCount;
+    }
+
     public boolean isHasEnoughDiamonds() {
         return hasEnoughDiamonds;
     }
@@ -57,8 +63,9 @@ public class Player extends Element {
     public void setHasEnoughDiamonds(boolean hasEnoughDiamonds) {
         this.hasEnoughDiamonds = hasEnoughDiamonds;
     }
+
     public void checkDiamonds() {
-        if (getDiamondCount() >= 1) {
+        if (getDiamondCount() >= diamondsRequired) {
             setHasEnoughDiamonds(true);
             System.out.println("You have enough Diamonds to finish the level!");
         }
@@ -145,10 +152,10 @@ public class Player extends Element {
             }
         }
         if (grid[targetRow][targetColumn] instanceof Exit exit) {
+            checkDiamonds();
             if (isHasEnoughDiamonds()) {
-                // If the player has enough diamonds, unlock the Exit and announce level win
                 exit.unlock();
-                exit.announceLevelWin();
+                hasPlayerWon = true;
                 return true;
             } else {
                 System.out.println("Player needs more diamonds to enter the exit!");
@@ -165,6 +172,26 @@ public class Player extends Element {
         this.diamondCount = 0;
         this.hasEnoughDiamonds = false;
         System.out.println("Diamond count reset to: " + this.diamondCount);
+    }
+
+    public boolean hasPlayerWon() {
+        return hasPlayerWon;
+    }
+
+    public ArrayList<KeyColour> getKeyInventory() {
+        return keyInventory;
+    }
+
+    public void setKeyInventory(ArrayList<KeyColour> keyInventory) {
+        this.keyInventory = keyInventory;
+    }
+
+    public void setDiamondsRequired(int diamondsRequired) {
+        this.diamondsRequired = diamondsRequired;
+    }
+
+    public int getDiamondsRequired() {
+        return diamondsRequired;
     }
 
 
