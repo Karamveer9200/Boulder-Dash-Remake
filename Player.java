@@ -1,7 +1,18 @@
 import java.util.ArrayList;
 import javafx.scene.image.Image;
 
+/**
+ * @author Omar Sanad
+ * The Player class represents a player in the game, managing their position
+ * on the grid, inventory of keys, counting diamonds collected, and game status such as
+ * whether they have won.
+ *
+ * This class extends the Element class, inheriting properties and behaviors
+ * common to all elements on the game grid.
+ */
 public class Player extends Element {
+
+    public static boolean dropDiamond = true;
 
     private ArrayList<KeyColour> keyInventory;
     private int diamondCount = 0;
@@ -20,6 +31,11 @@ public class Player extends Element {
         hasEnoughDiamonds = false;
     }
 
+    /**
+     * updates the player's image at every call of the animation, currently at every valid player move.
+     * If the player is currently facing right, they will be made to face left and
+     * vice versa. The corresponding image for the player's direction will be set.
+     */
     public void imageAnimation(){
         lookingRight= !lookingRight;
         if(lookingRight){
@@ -28,6 +44,7 @@ public class Player extends Element {
             image = new Image("images/player.png");
         }
     }
+
     public void collectKey(Key key) {
         System.out.println(key);
         keyInventory.add(key.getColour());
@@ -149,9 +166,12 @@ public class Player extends Element {
             return true;
         }
         if (grid[targetRow][targetColumn] instanceof LockedDoor lockedDoor) {
-            System.out.println(hasKey(KeyColour.RED));
             if (hasKey(lockedDoor.getColour())) {
                 useKey(lockedDoor.getColour());
+                lockedDoor.unlock();
+                return true;
+            } else if (hasKey(KeyColour.RAINBOW)) {
+                useKey(KeyColour.RAINBOW);
                 lockedDoor.unlock();
                 return true;
             } else {

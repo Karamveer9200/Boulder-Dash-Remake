@@ -1,10 +1,10 @@
 /**
- * @author Omar Sanad
  * Represents a dangerous rock within the grid-based game. This rock
  * can potentially cause harm to entities like players, frogs, or flies
  * when falling or rolling, and can pass through magic walls to transform.
  * The dangerous rock cannot be entered and has the capability to gain
  * momentum during movement.
+ * @author Omar Sanad
  */
 public abstract class DangerousRock extends Element {
 
@@ -13,7 +13,6 @@ public abstract class DangerousRock extends Element {
     /**
      * Constructs a DangerousRock object with specified row and column positions.
      * This rock has potential to explode and cannot be entered.
-     *
      * @param row the row position of the dangerous rock in the grid.
      * @param column the column position of the dangerous rock in the grid.
      */
@@ -31,7 +30,6 @@ public abstract class DangerousRock extends Element {
 
     /**
      * Handles the falling logic for the diamond.
-     *
      * @param gridManager the grid manager to access and update the grid
      */
     public void fall(GridManager gridManager) {
@@ -51,7 +49,7 @@ public abstract class DangerousRock extends Element {
             // Update position
             this.setRow(newRow);
             gainMomentum();
-        }else if (newRow < grid.length && grid[newRow][col] instanceof Path) {
+        } else if (newRow < grid.length && grid[newRow][col] instanceof Path) {
             // Update the grid to move the boulder
             gridManager.removeFromList(grid[newRow][col]);
             Element p = new Path(this.getRow(), this.getColumn());

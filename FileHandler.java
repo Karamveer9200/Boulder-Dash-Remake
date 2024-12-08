@@ -110,6 +110,7 @@ public class FileHandler {
                         case "YELLOWLockedDoor" -> out.print("YLD");
                         case "BLUEKey" -> out.print("BK");
                         case "BLUELockedDoor" -> out.print("BLD");
+                        case "RAINBOWKey" -> out.print("RBK");
 
                         // If there is an explosion, load a path in its place when the save is loaded
                         case "Explosion" -> out.print("P");
@@ -304,4 +305,7 @@ public class FileHandler {
         }
         return keyInventoryString.toString();
     }
+
+
+
 }

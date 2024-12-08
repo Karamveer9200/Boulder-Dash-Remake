@@ -3,6 +3,8 @@ import javafx.scene.image.Image;
 /**
  * Represents a Titanium Wall tile in the game.
  * This tile cannot be entered or exploded.
+ * @author Rhys Llewellyn
+ * @author Joshua Aka
  */
 public class TitaniumWall extends Element {
 
@@ -13,7 +15,7 @@ public class TitaniumWall extends Element {
      */
     public TitaniumWall(final int row, final int column) {
         super(row, column);
-        image = new Image("images/normalwall.png");
+        image = new Image("images/TitaniumWall.png");
         canBeEntered = false;
         canExplode = false;
         name = "TitaniumWall";

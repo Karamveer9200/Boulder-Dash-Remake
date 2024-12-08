@@ -1,6 +1,7 @@
 import javafx.scene.image.Image;
 
 /**
+ * @author Joshua Aka
  * Represents a Key tile in the game.
  * This tile can be entered/walked over and is
  * represented by an image based on the colour of the key.
@@ -31,6 +32,7 @@ public class Key extends Element {
             case GREEN -> image = new Image("images/GreenKey.png");
             case YELLOW -> image = new Image("images/YellowKey.png");
             case BLUE -> image = new Image("images/BlueKey.png");
+            case RAINBOW -> image = new Image("images/RainbowKey.png");
         }
     }
 

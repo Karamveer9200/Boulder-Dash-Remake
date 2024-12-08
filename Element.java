@@ -1,6 +1,8 @@
 import javafx.scene.image.Image;
 
 /**
+ * @author Omar Sanad
+ * @author Alex Vesely
  * Represents an abstract base class for elements within a grid-based game.
  * The Element class maintains attributes for its position, display image,
  * and properties such as whether it can explode or be entered by a player.

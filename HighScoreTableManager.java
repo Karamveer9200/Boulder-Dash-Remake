@@ -59,8 +59,6 @@ public class HighScoreTableManager {
         dialog.showAndWait();
     }
 
-
-
     /**
      * Displays the high score table for a specific level after the player beats a level.
      * @param level        The level for which to display the high scores.

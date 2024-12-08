@@ -1,6 +1,8 @@
 import javafx.scene.input.KeyCode;
 
 /**
+ * @author Omar Sanad
+ * @author Alex Vesely
  * InputHandler processes and manages player inputs in the game.
  * It tracks the most recent input and provides mechanisms to consume and check for pending inputs.
  */

@@ -51,14 +51,19 @@ public class GameController {
         this.inputHandler = new InputHandler();
     }
 
+    /**
+     * Replaces the player at the specified grid position with a Path element,
+     * removes the player from the game, and optionally ends the game.
+     *
+     * @param targetRow the row position of the amoeba to be replaced
+     * @param targetColumn the column position of the amoeba to be replaced
+     */
     private void replaceEnemyWithPath(int targetRow, int targetColumn) {
         // Remove the target from the game
         gridManager.destroyRemoveFromList(gridManager.getElement(targetRow, targetColumn));
 
         // Replace the target with a Path in the grid
         gridManager.setElement(targetRow, targetColumn, new Path(targetRow, targetColumn));
-
-        System.out.println( gridManager.getElement(targetRow,targetColumn).toString()+" has been replaced with Path at row: " + targetRow + ", col: " + targetColumn);
 
     }
 
@@ -76,12 +81,20 @@ public class GameController {
         // Remove the player from the game
         gridManager.removeFromList(gridManager.getPlayer());
 
-        // Optional: Stop input handling and end the game
-        System.out.println("Player has been replaced with Path at row: " + playerRow + ", col: " + playerCol);
+        //Stop input handling and end the game
         gameOver();
     }
 
 
+    /**
+     * Checks the neighboring elements surrounding the specified enemy in the grid
+     * to determine if a neighboring element is a player. If a player is found in
+     * any of the neighboring positions (up, down, left, or right), it replaces the
+     * player with a path element.
+     *
+     * @param enemy the enemy element whose neighbors are to be checked
+     * @param grid a 2D array of elements representing the game grid
+     */
     private void checkNeighboursForPlayer(Element enemy, Element [][] grid) {
         // Check bounds and get neighbors safely
         int enemyRow = enemy.getRow();
@@ -104,6 +117,8 @@ public class GameController {
 
     /**
      * Goes through all enemies on the grid, and checks their neighbours for amoeba.
+     * @param enemy
+     * @param grid
      */
     private void checkNeighboursForAmoeba(Element enemy, Element [][] grid) {
         // Check bounds and get neighbors safely
@@ -127,27 +142,24 @@ public class GameController {
 
 
     /**
-     * Goes through all enemies on the grid, and checks their neighbours for player.
+     * Goes through all enemies on the grid, and checks their neighbours to kill the player or die from amoeba.
      */
-    public void killPlayerTick() {
+    public void killTick() {
         ArrayList<Frog> frogs = gridManager.getFrogs();
         ArrayList<Fly> flies = gridManager.getFlies();
         ArrayList<Element> enemies = new ArrayList<>();
         enemies.addAll(frogs);
         enemies.addAll(flies);
 
-        // Iterate through all entities
+        // Iterate through all enemies to check for neighboring player
         for (Element enemy : enemies) {
-//           System.out.println("Checking enemy at row: " + enemy.getRow() + ", col: " + enemy.getColumn());
             checkNeighboursForPlayer(enemy, gridManager.getElementGrid());
         }
 
-        // Iterate through all entities
+        // Iterate through all enemies to check for neighboring amoeba
         for (Element enemy : enemies) {
-//           System.out.println("Checking enemy at row: " + enemy.getRow() + ", col: " + enemy.getColumn());
             checkNeighboursForAmoeba(enemy, gridManager.getElementGrid());
         }
-
     }
 
     /**
@@ -192,7 +204,6 @@ public class GameController {
             draw();
     }
 
-
     public void frogTick() {
         // Making a copy of the boulders Arraylist,
         // avoids problems with concurrency
@@ -202,7 +213,6 @@ public class GameController {
         }
         draw();
     }
-
 
     /**
      * Executes the amoeba tick, which checks and updates all active amoeba groups on the game grid.
@@ -229,9 +239,6 @@ public class GameController {
         }
         draw();
     }
-
-
-
 
     /**
      * Executes the player tick, handling input and updating the player's position on the grid.
@@ -287,10 +294,12 @@ public class GameController {
 
     }
 
-    //Explosion Tick Method, if an applyExplosion has occurred then it is waiting for explosion, after an explosion
-    // the next tick cycle and explosion aftermath should occur
+    /**
+     * Executes the explosion tick logic for handling explosions and their aftermath on the game grid.
+     */
     public void explosionTick() {
-
+        //Explosion Tick Method, if an applyExplosion has occurred then it is waiting for explosion, after an explosion
+        // the next tick cycle and explosion aftermath should occur
         if (waitingForExplosion) {
             // Create the initial explosion
             Explosion.createExplosion(nextExplosionRow, nextExplosionCol,gridManager);
@@ -321,8 +330,6 @@ public class GameController {
     public boolean checkLevelWinTick() {
         return gridManager.getPlayer().hasPlayerWon();
     }
-
-
 
     /**
      * Ends the current game session by setting the game status to false

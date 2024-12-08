@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 
 /**
+ * @author Omar Sanad
  * The GridManager is responsible for managing the grid of elements in the game.
  * It initializes the grid based on a template, provides access to individual elements,
  * manages lists of specific element types, and supports adding, removing, and updating elements.
@@ -151,6 +152,7 @@ public class GridManager {
             case "YK" -> new Key(row, col, KeyColour.YELLOW);
             case "BLD" -> new LockedDoor(row, col, KeyColour.BLUE);
             case "BK" -> new Key(row, col, KeyColour.BLUE);
+            case "RBK" -> new Key(row, col, KeyColour.RAINBOW);
 
             default -> throw new IllegalArgumentException("Unknown element: " + code);
         };
@@ -199,6 +201,7 @@ public class GridManager {
             players.remove(player);
             System.out.println("Player removed");
             GameController.gameOver();
+            GameController.applyExplosion(element.row, element.column, Player.dropDiamond);
         } else if (element instanceof NormalWall wall) {
             walls.remove(wall);
         } else if (element instanceof Boulder boulder) {

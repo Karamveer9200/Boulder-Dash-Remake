@@ -1,6 +1,8 @@
 import javafx.scene.image.Image;
 
 /**
+ * @author Omar Sanad
+ * @author Alex Vesely
  * Represents an explosion element within a grid-based game.
  * An Explosion object occupies a grid cell and impacts surrounding cells,
  * potentially transforming them into other elements such as paths or diamonds.

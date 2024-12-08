@@ -5,6 +5,8 @@ import javafx.scene.image.Image;
  * Only one exit can be created per level.
  * Initially, cannot be entered/walked over or exploded.
  * It is represented by an image located at "images/Exit.png".
+ * @author Rhys Llewellyn
+ * @author Joshua Aka
  */
 public class Exit extends Element {
     /**
