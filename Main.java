@@ -171,7 +171,9 @@ public class Main extends Application {
 		Button actionButton = new Button(buttonText);
 
 		if (!isLoadGame) {
-			actionButton.setStyle(isLoadGame ? null : "-fx-background-color: red;");
+			actionButton.setStyle("-fx-background-color: red;");
+		} else {
+			actionButton.setStyle(null);
 		}
 
 		actionButton.setOnAction(event -> {
@@ -408,6 +410,7 @@ public class Main extends Application {
 			String[][] initialGrid = FileHandler.readElementGridFromLevelFile(levelFile);
 			gameController.getGridManager().reinitializeGrid(initialGrid);
 			gameController.getGridManager().initializePlayer(initialGrid);
+			gameController.setAmoebaLimit(FileHandler.readAmoebaSizeLimitFromLevelFile(levelFile));
 			timerText.setText("Time Remaining: " + secondsRemaining + "s");
 			gameController.draw();
 		});
