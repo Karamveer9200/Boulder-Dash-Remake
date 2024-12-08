@@ -7,7 +7,7 @@ import javafx.scene.image.Image;
  * when interacting with other elements like magic walls or paths.
  */
 public class Boulder extends  DangerousRock {
-    private boolean hasMomentum = false;
+    private final boolean hasMomentum = false;
 
     /**
      * Constructs a Boulder object positioned at a specified row and column

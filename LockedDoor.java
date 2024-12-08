@@ -23,7 +23,7 @@ public class LockedDoor extends Element {
         super(row, column);
         this.colour = colour;
         canBeEntered = false;
-        name = colour + "LockedDoor";;
+        name = colour + "LockedDoor";
         canExplode = true;
 
         switch (colour) {

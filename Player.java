@@ -1,7 +1,5 @@
-import javafx.scene.image.Image;
-
 import java.util.ArrayList;
-import java.util.List;
+import javafx.scene.image.Image;
 
 public class Player extends Element {
 

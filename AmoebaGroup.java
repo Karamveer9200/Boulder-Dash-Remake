@@ -4,7 +4,7 @@ import java.util.List;
 
 
 public class AmoebaGroup {
-    private List<Amoeba> amoebas; // All amoebas in this group
+    private final List<Amoeba> amoebas; // All amoebas in this group
     private boolean isGrowing;
     private int amoebaSizeLimit;
 
