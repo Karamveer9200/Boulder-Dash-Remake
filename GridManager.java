@@ -111,6 +111,7 @@ public class GridManager {
                 addToList(element);
             }
         }
+        identifyAmoebaGroups();
     }
     /**
      * Creates an element based on the provided code and its position in the grid.
