@@ -391,13 +391,12 @@ public class Main extends Application {
 		HBox toolbar = new HBox(10);
 		toolbar.setPadding(new Insets(10));
 
-		Button startTickButton = new Button("Unpause");
+		Button startTickButton = new Button("Resume");
 		Button stopTickButton = new Button("Pause");
 		stopTickButton.setDisable(true);
 		Button saveButton = new Button("Save Game");
 
 		Text timerText = new Text("Time Remaining: " + secondsRemaining + "s");
-
 
 		Button resetGridButton = new Button("Reset Level");
 		resetGridButton.setOnAction(e -> {
