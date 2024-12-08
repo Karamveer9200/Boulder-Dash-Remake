@@ -9,7 +9,6 @@ public class MagicWall extends Element {
 
     /**
      * Creates a new Magic Wall tile at the specified row and column.
-     *
      * @param row the row (X co-ord)position of the tile
      * @param column the column (Y co-ord) position of the tile
      */

@@ -19,7 +19,7 @@ import java.util.Scanner;
  */
 public class HighScoreTableManager {
     private static final int MAX_HIGH_SCORES = 10;
-
+//    private static final
 
     /**
      * Displays the high score table for a specific level when accessed from the main menu.
@@ -170,7 +170,7 @@ public class HighScoreTableManager {
      * @param highScores The list of high scores to save.
      * @param level      The level for which the High Score Table is of
      */
-    public static void saveHighScoreTable(ArrayList<HighScore> highScores, final int level) {
+    public static void saveHighScoreTable(final ArrayList<HighScore> highScores, final int level) {
         try {
             String outputFile = "txt/HighScoreTable" + level + ".txt";
             PrintWriter out = new PrintWriter(outputFile);
