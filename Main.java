@@ -227,7 +227,7 @@ public class Main extends Application {
 	 */
 	public void setupGame(Stage primaryStage, String levelFile) {
 		// Load the initial grid from a file
-		String[][] initialGrid = FileHandler.readFile("PlaceHolder.txt");
+		String[][] initialGrid = FileHandler.readElementGridFromLevelFile("PlaceHolder.txt");
 
 		final int canvasWidth = initialGrid[0].length * GRID_CELL_WIDTH;
 		final int canvasHeight = initialGrid.length * GRID_CELL_HEIGHT;
@@ -275,7 +275,7 @@ public class Main extends Application {
 			gameController.frogTick();
 		});
 
-		KeyFrame aomeebaKeyFrame = new KeyFrame(Duration.millis(3000), event -> {
+		KeyFrame amoebaKeyFrame = new KeyFrame(Duration.millis(3000), event -> {
 			gameController.amoebaTick();
 		});
 
