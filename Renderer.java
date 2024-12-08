@@ -2,6 +2,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 /**
+ * @author Omar Sanad
+ * @author Alex Vesely
  * Renderer is responsible for rendering the game's grid and its elements onto the canvas.
  */
 public class Renderer {

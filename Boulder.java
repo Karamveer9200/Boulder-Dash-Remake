@@ -1,6 +1,7 @@
 import javafx.scene.image.Image;
 
 /**
+ * @author Omar Sanad
  * The Boulder class represents a boulder in the game, which is an element that extends
  * from DangerousRock. It defines characteristics specific to boulders, such as their image
  * and name. A boulder has the potential to gain momentum and move within a grid-based system

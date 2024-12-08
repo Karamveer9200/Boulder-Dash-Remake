@@ -26,7 +26,7 @@ import javafx.scene.image.ImageView;
 
 /**
  * Main sets up the GUI and initialises everything for a game to take place.
- * @Ibrahim Ibrahim Boukhalfa
+ * @author Ibrahim Boukhalfa
  */
 public class Main extends Application {
 	public static final int WINDOW_WIDTH = 1500;

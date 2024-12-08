@@ -1,4 +1,5 @@
 /**
+ * @author Joshua Aka
  * Represents the colours of keys in the game.
  * Each colour corresponds to a different type of key.
  */

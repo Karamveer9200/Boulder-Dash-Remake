@@ -13,6 +13,7 @@ public class Fly extends Element {
     };
 
     /**
+     * @author Karamveer Singh
      * Creates a new Fly object at the specified row and column.
      *
      * @param row the row of the new Fly
