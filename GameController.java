@@ -241,6 +241,7 @@ public class GameController {
                                 gridManager
                         );
                     }
+                    getPlayer().imageAnimation();
                 }
             }
             draw();
@@ -282,7 +283,7 @@ public class GameController {
         }
     }
 
-
+    
     public static void gameOver() {
         gameStatus = false;
         System.out.println("GAME OVER");
@@ -344,6 +345,11 @@ public class GameController {
         );
     }
 
+    /**
+     * Retrieves the Player object being managed by the GameController.
+     *
+     * @return the Player object currently managed by the GameController.
+     */
     // allows the player being managed by Game Controller to be retrieved
     public Player getPlayer() {
         return gridManager.getPlayer();
