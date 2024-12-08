@@ -89,6 +89,16 @@ public class Player extends Element {
         }
     }
 
+    /**
+     * Determines if the player's desired move to a specified location on the grid is valid.
+     * The validity of the move depends on several factors such as the type of element at the target location,
+     * the availability of keys if the element is a locked door, and the direction of the move if it involves pushing a boulder.
+     *
+     * @param targetRow  the row player intends to move to
+     * @param targetColumn the column the player intends to move to
+     * @param gridManager the grid manager responsible for managing the grid's state and elements
+     * @return true if the move is valid according to the game's rules, false otherwise
+     */
     private boolean isValidMove(int targetRow, int targetColumn, GridManager gridManager) {
         Element[][] grid = gridManager.getElementGrid();
         // Ensure the move is within bounds
@@ -166,6 +176,9 @@ public class Player extends Element {
     }
 
 
+    /**
+     * Reset collected diamond count when user restarts the game.
+     */
     public void resetDiamondCountStatus() {
         this.diamondCount = 0;
         this.hasEnoughDiamonds = false;
