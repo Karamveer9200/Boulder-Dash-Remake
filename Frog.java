@@ -46,7 +46,6 @@ public class Frog extends Element {
         // Dijkstra's algorithm setup
         int[][] distances = new int[rows][cols];
         boolean[][] visited = new boolean[rows][cols];
-        // Store the previous cell in the shortest path
         int[][][] previous = new int[rows][cols][2];
 
         for (int i = 0; i < rows; i++) {
@@ -60,7 +59,6 @@ public class Frog extends Element {
                         distances[cell[0]][cell[1]]));
         pq.add(new int[]{frogRow, frogCol});
 
-        // Directions for movement: up, down, left, right
         int[][] directions = {
                 {-1, 0}, {1, 0}, {0, -1}, {0, 1} // Up, down, left, right
         };
@@ -69,29 +67,22 @@ public class Frog extends Element {
             int[] current = pq.poll();
             int currRow = current[0];
             int currCol = current[1];
-
             if (visited[currRow][currCol]) {
                 continue;
             }
             visited[currRow][currCol] = false;
-
-            // Stop if we reach the player
             if (currRow == playerRow && currCol == playerCol) {
-                break;
+                break; // Stop if we reach the player
             }
-
             for (int[] dir : directions) {
                 int newRow = currRow + dir[0];
                 int newCol = currCol + dir[1];
-
                 // Check bounds and valid paths
                 if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < cols
                         && !visited[newRow][newCol]
                         && (grid[newRow][newCol] instanceof Path
                         || grid[newRow][newCol] instanceof Player)) {
-
-                    // Add movement cost
-                    int newDist = distances[currRow][currCol] + 1;
+                    int newDist = distances[currRow][currCol] + 1; // Add movement cost
                     if (newDist < distances[newRow][newCol]) {
                         distances[newRow][newCol] = newDist;
                         previous[newRow][newCol] = new int[]{currRow, currCol};
@@ -100,11 +91,8 @@ public class Frog extends Element {
                 }
             }
         }
-
-        // Check if the player is unreachable
+        // Check if the player is unreachable, move randomly
         if (distances[playerRow][playerCol] == Integer.MAX_VALUE) {
-
-            // Random movement
             List<int[]> validMoves = new ArrayList<>();
             for (int[] dir : directions) {
                 int newRow = frogRow + dir[0];
@@ -116,7 +104,6 @@ public class Frog extends Element {
                     validMoves.add(new int[]{newRow, newCol});
                 }
             }
-
             if (!validMoves.isEmpty()) {
                 // Choose a random valid move
                 Random random = new Random();
@@ -132,49 +119,50 @@ public class Frog extends Element {
             }
             return;
         }
+        moveToNextStep(gridManager,grid,previous,frogRow,frogCol,playerRow,playerCol);
+    }
 
-        // Trace the path back from the player to the frog
+    /**
+     *
+     * Moves the Frog to its next step
+     * @param gridManager gridManager
+     * @param grid the element grid
+     * @param previous the previous cell in the shortest path
+     * @param frogRow the frog row position
+     * @param frogCol the frog column position
+     * @param playerRow the player row position
+     * @param playerCol the player column position
+     */
+    private void moveToNextStep(GridManager gridManager, Element[][] grid, int[][][] previous,
+                                int frogRow, int frogCol, int playerRow, int playerCol) {
         LinkedList<int[]> path = new LinkedList<>();
         int[] current = new int[]{playerRow, playerCol};
         while (!Arrays.equals(current, new int[]{frogRow, frogCol})) {
             path.addFirst(current);
             current = previous[current[0]][current[1]];
-
-            // Safeguard against invalid paths
             if (current == null) {
                 return;
             }
         }
 
-        // Move one step along the shortest path
         if (!path.isEmpty()) {
             int[] nextStep = path.getFirst();
             int newRow = nextStep[0];
             int newCol = nextStep[1];
-
-            // Move the Frog
-            // Replace current position
-            gridManager.setElement(frogRow, frogCol,
-                    new Path(frogRow, frogCol));
+            gridManager.setElement(frogRow, frogCol, new Path(frogRow, frogCol));
             Element target = grid[newRow][newCol];
-
             if (target instanceof Path) {
-                // Move to new position
                 gridManager.setElement(newRow, newCol, this);
                 this.setRow(newRow);
                 this.setColumn(newCol);
-
             } else if (target instanceof Player) {
-                // Replace player with Frog
                 gridManager.setElement(newRow, newCol, this);
-                // Remove player from the game
-                gridManager.destroyRemoveFromList(player);
+                gridManager.destroyRemoveFromList((Player) target);
                 this.setRow(newRow);
                 this.setColumn(newCol);
             }
         }
     }
-
 
     /**
      * Returns a string representation of the Frog object.
