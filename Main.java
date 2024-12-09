@@ -29,7 +29,7 @@ import javafx.scene.image.ImageView;
  * @author Ibrahim Boukhalfa
  * @author Omar Sanad
  * @author Tahi
- * @author Alex
+ * @author Alex Vesely
  */
 public class Main extends Application {
 	public static final int WINDOW_WIDTH = 1500;
