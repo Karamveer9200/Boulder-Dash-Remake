@@ -1,6 +1,6 @@
 /**
- * @author Tahi Rahman
  * Represents a PlayerProfile, storing the player's name, id and max level reached.
+ * @author Tahi Rahman
  */
 public class PlayerProfile {
 

@@ -7,8 +7,8 @@ import java.util.Scanner;
 
 
 /**
- * @author Alex Vesely
  * This class handles reading and writing information from level files.
+ * @author Alex Vesely
  */
 public class FileHandler {
     private static final int DIAMOND_COUNT_INDEX = 0;

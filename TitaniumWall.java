@@ -1,10 +1,10 @@
 import javafx.scene.image.Image;
 
 /**
- * @author Rhys Llewellyn
- * @author Joshua Aka
  * Represents a Titanium Wall tile in the game.
  * This tile cannot be entered or exploded.
+ * @author Rhys Llewellyn
+ * @author Joshua Aka
  */
 public class TitaniumWall extends Element {
 

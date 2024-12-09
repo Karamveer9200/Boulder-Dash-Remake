@@ -2,8 +2,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Karamveer Singh
  * This class manages all the Amoeba on the game's grid.
+ * @author Karamveer Singh
  */
 public class AmoebaManager {
     private static final List<AmoebaGroup> amoebaGroups = new ArrayList<>();
