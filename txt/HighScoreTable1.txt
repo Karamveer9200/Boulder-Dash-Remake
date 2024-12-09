@@ -1,6 +1,6 @@
 Tim 5000
 Ben 2775
-x 2725
+Tom 2725
 Pete 2575
 George 2350
 Jeremy 2000

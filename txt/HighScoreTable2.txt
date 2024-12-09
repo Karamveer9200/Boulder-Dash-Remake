@@ -1,3 +1,1 @@
-Alex 5525
-Ben 500
-Jerry 500
+Jerry 2000

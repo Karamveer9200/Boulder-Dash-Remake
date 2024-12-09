@@ -1,5 +1,3 @@
-Alex 7675
+Dan 7675
 Pete 7650
 Liz 4200
-Tom 500
-Dan 300
