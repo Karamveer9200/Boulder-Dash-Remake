@@ -79,7 +79,7 @@ public class GameController {
         gridManager.setElement(playerRow, playerCol, new Path(playerRow, playerCol));
 
         // Remove the player from the game
-        gridManager.removeFromList(gridManager.getPlayer());
+        gridManager.destroyRemoveFromList(gridManager.getPlayer());
 
         //Stop input handling and end the game
         gameOver();

@@ -67,6 +67,7 @@ public abstract class DangerousRock extends Element {
             // If the boulder lands on a player and has momentum
             if (hasMomentum) {
                 gridManager.removeFromList(grid[newRow][col]); // Remove the player or enemy
+                gridManager.destroyRemoveFromList(this); //destroy falling boulder/diamond
                 gridManager.setElement(newRow, col, this);     // Replace player with the diamond
 
                 Element p = new Path(this.getRow(), this.getColumn());

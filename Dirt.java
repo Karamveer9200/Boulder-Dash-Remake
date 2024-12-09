@@ -1,6 +1,8 @@
 import javafx.scene.image.Image;
 
 /**
+ * @author Alex Vesely
+ * @author Omar Sanad
  * Represents a Dirt tile in the game.
  * This tile can explode and be entered/walked over.
  * It's represented by an image found at "images/dirt.png".
