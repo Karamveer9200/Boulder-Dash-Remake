@@ -1,11 +1,11 @@
 import javafx.scene.image.Image;
 
 /**
- * @author Joshua Aka
- * @author Rhys Llewellyn
  * Represents a Normal Wall tile in the game.
  * This tile cannot be entered/walked over but can explode.
  * It is represented by an image located at "images/normalwall.png".
+ * @author Joshua Aka
+ * @author Rhys Llewellyn
  */
 public class NormalWall extends Element {
 

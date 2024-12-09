@@ -1,10 +1,10 @@
 import javafx.scene.image.Image;
 
 /**
- * @author Joshua Aka
  * Represents a Locked Door tile in the game.
  * This tile cannot be entered until it is unlocked.
  * It is represented by an image based on the key colour.
+ * @author Joshua Aka
  */
 public class LockedDoor extends Element {
     /**

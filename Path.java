@@ -1,8 +1,8 @@
 /**
- * @author Omar Sanad
- * @author Alex Vesely
  * Represents a Path tile in the game.
  * This tile can be entered/walked over and can explode.
+ * @author Omar Sanad
+ * @author Alex Vesely
  */
 public class Path extends Element {
 
