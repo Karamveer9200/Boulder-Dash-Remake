@@ -2,6 +2,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -306,6 +309,24 @@ public class FileHandler {
         return keyInventoryString.toString();
     }
 
+    /**
+     * Deletes a player's saveFile.
+     * @param currentProfile the player whose saveFile is to be deleted.
+     */
+    public static void deleteSaveFile(PlayerProfile currentProfile) {
+        int idToDelete = currentProfile.getPlayerId();
+        String filePath = "txt/Save" + idToDelete + ".txt";
+        Path path = Paths.get(filePath);
 
+        if (!Files.exists(path)) {
+            return;
+        }
+
+        try {
+            Files.delete(path);
+        } catch (IOException e) {
+            System.err.println("An error occurred: " + e.getMessage());
+        }
+    }
 
 }

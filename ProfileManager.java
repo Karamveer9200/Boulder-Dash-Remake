@@ -7,6 +7,9 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.Files;
 import java.util.*;
 
 /**
@@ -103,35 +106,12 @@ public class ProfileManager {
      * @param idToDelete The ID of the profile to delete.
      */
     public static void deleteProfile(final int idToDelete) {
-        String folderPath = "txt";
-        File folder = new File(folderPath);
-
-        if (!folder.exists() || !folder.isDirectory()) {
-            System.out.println("Folder does not exist or is not a directory: " + folderPath);
-            return;
-        }
-
-        File[] files = folder.listFiles((dir, name) -> name.matches("\\d+\\.txt"));
-
-        if (files == null || files.length == 0) {
-            System.out.println("No matching files found in the folder.");
-            return;
-        }
-
-        for (File file : files) {
-            try (Scanner scanner = new Scanner(file)) {
-                int playerId = Integer.parseInt(scanner.nextLine());
-                if (playerId == idToDelete) {
-                    try {
-                        scanner.close();
-                        java.nio.file.Files.delete(file.toPath());
-                    } catch (IOException e) {
-                        System.out.println("Failed to delete file: " + file.getName());
-                    }
-                }
-            } catch (IOException | NumberFormatException e) {
-                System.out.println("Error reading file: " + file.getName());
-            }
+        String filePath = "txt/" + idToDelete + ".txt";
+        Path path = Paths.get(filePath);
+        try {
+            Files.delete(path);
+        } catch (IOException e) {
+            System.err.println("An error occurred: " + e.getMessage());
         }
     }
 
