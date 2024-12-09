@@ -3,8 +3,8 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * This class represents all the amoeba groups on the game's grid.
  * @author Karamveer Singh
+ * This class represents all the amoeba groups on the game's grid.
  */
 public class AmoebaGroup {
     private final List<Amoeba> amoebas;

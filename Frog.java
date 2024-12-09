@@ -2,9 +2,9 @@ import javafx.scene.image.Image;
 import java.util.*;
 
 /**
- * This class represents a frog on the game grid.
  * @author Karamveer Singh
- */
+ * This class represents a frog on the game grid.
+  */
 public class Frog extends Element {
     public static boolean dropDiamond = false;
 

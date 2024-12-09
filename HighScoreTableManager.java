@@ -14,10 +14,10 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * Manages the high scores for the game. Allows new entries to be added
- * and saved to a level's high score table.
  * @author Alex Vesely
  * @author Tahi Rahman
+ * Manages the high scores for the game. Allows new entries to be added
+ * and saved to a level's high score table.
  */
 public class HighScoreTableManager {
     private static final int MAX_HIGH_SCORES = 10;

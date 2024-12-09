@@ -25,8 +25,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 /**
- * Main sets up the GUI and initialises everything for a game to take place.
  * @author Ibrahim Boukhalfa
+ * Main sets up the GUI and initialises everything for a game to take place.
  */
 public class Main extends Application {
 	public static final int WINDOW_WIDTH = 1500;

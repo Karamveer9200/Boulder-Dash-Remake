@@ -1,8 +1,8 @@
 import javafx.scene.image.Image;
 
 /**
- * This class represents an amoeba element on the game grid.
  * @author Karamveer Singh
+ * This class represents an amoeba element on the game grid.
  */
 public class Amoeba extends Element {
 

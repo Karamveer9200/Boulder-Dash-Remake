@@ -1,10 +1,10 @@
 /**
+ * @author Omar Sanad
  * Represents a dangerous rock within the grid-based game. This rock
  * can potentially cause harm to entities like players, frogs, or flies
  * when falling or rolling, and can pass through magic walls to transform.
  * The dangerous rock cannot be entered and has the capability to gain
  * momentum during movement.
- * @author Omar Sanad
  */
 public abstract class DangerousRock extends Element {
 

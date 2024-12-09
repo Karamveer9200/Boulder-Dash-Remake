@@ -1,10 +1,9 @@
 import javafx.scene.image.Image;
 
 /**
- *
+ * @author Karamveer Singh
  * The Firefly class represents a type of fly in the grid-based game environment
  * that extends the capabilities of a Fly.
- * @author Karamveer Singh
  * In addition to the properties and methods of Fly, Firefly can optionally drop a diamond.
  */
 public class Firefly extends Fly{
