@@ -15,7 +15,6 @@ public class LockedDoor extends Element {
     /**
      * Creates a new Locked Door tile at the specified
      * row and column with the specified key colour.
-     *
      * @param row the row position of the tile
      * @param column the column position of the tile
      * @param colour the colour of the key required to unlock the door
@@ -37,7 +36,6 @@ public class LockedDoor extends Element {
 
     /**
      * Gets the colour of the key required to unlock the door.
-     *
      * @return the colour of the key
      */
     public KeyColour getColour() {

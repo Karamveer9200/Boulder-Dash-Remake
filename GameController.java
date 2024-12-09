@@ -3,12 +3,9 @@ import javafx.scene.input.KeyCode;
 import java.util.ArrayList;
 
 /**
- * @author Omar Sanad
  * GameController manages the element's movements, interactions,
- * and rendering of the grid-based game.
- * It handles key inputs, updates the player's position,
- * manages boulder interactions, and coordinates
- * with the Renderer and GridManager to display the game.
+ * and rendering of the game.
+ * @author Omar Sanad
  */
 public class GameController {
     private final Canvas canvas;
@@ -25,7 +22,7 @@ public class GameController {
     private int amoebaLimit;
     private int diamondsRequired;
 
-    public static boolean gameStatus = true;
+    private static boolean gameStatus = true;
 
     /**
      * Represents possible inputs for the player.
@@ -40,7 +37,6 @@ public class GameController {
     /**
      * Constructs a GameController with the given grid template and canvas.
      * Initializes the grid, player, renderer, and input handler.
-     *
      * @param gridTemplate the 2D array representing the initial grid layout
      * @param canvas       the Canvas object used for rendering the game
      */
@@ -54,7 +50,6 @@ public class GameController {
     /**
      * Replaces the player at the specified grid position with a Path element,
      * removes the player from the game, and optionally ends the game.
-     *
      * @param targetRow the row position of the amoeba to be replaced
      * @param targetColumn the column position of the amoeba to be replaced
      */
@@ -70,7 +65,6 @@ public class GameController {
     /**
      * Replaces the player at the specified grid position with a Path element,
      * removes the player from the game, and optionally ends the game.
-     *
      * @param playerRow the row position of the player to be replaced
      * @param playerCol the column position of the player to be replaced
      */
@@ -91,11 +85,10 @@ public class GameController {
      * to determine if a neighboring element is a player. If a player is found in
      * any of the neighboring positions (up, down, left, or right), it replaces the
      * player with a path element.
-     *
      * @param enemy the enemy element whose neighbors are to be checked
      * @param grid a 2D array of elements representing the game grid
      */
-    private void checkNeighboursForPlayer(Element enemy, Element [][] grid) {
+    private void checkNeighboursForPlayer(Element enemy, Element[][] grid) {
         // Check bounds and get neighbors safely
         int enemyRow = enemy.getRow();
         int enemyCol = enemy.getColumn();
@@ -117,10 +110,10 @@ public class GameController {
 
     /**
      * Goes through all enemies on the grid, and checks their neighbours for amoeba.
-     * @param enemy
-     * @param grid
+     * @param enemy an enemy on the grid.
+     * @param grid the grid of elements.
      */
-    private void checkNeighboursForAmoeba(Element enemy, Element [][] grid) {
+    private void checkNeighboursForAmoeba(Element enemy, Element[][] grid) {
         // Check bounds and get neighbors safely
         int enemyRow = enemy.getRow();
         int enemyCol = enemy.getColumn();
@@ -189,8 +182,6 @@ public class GameController {
      * Updates the grid and redraws the game.
      */
     public void dangerousRockFallTick() {
-        // Making a copy of the boulders Arraylist,
-        // avoids problems with concurrently changing the arraylist when a boulder passes through magic wall
         ArrayList<Diamond> diamonds = new ArrayList<>(gridManager.getDiamonds());
         ArrayList<Boulder> boulders = new ArrayList<>(gridManager.getBoulders());
 
@@ -204,6 +195,9 @@ public class GameController {
             draw();
     }
 
+    /**
+     * Executes the frog's tick method and redraws the game.
+     */
     public void frogTick() {
         // Making a copy of the boulders Arraylist,
         // avoids problems with concurrency
@@ -217,7 +211,7 @@ public class GameController {
     /**
      * Executes the amoeba tick, which checks and updates all active amoeba groups on the game grid.
      * If amoeba groups are present, it updates their state using the GridManager.
-     * After updating the amoeba groups, the game grid is redrawn to reflect any changes.
+     * After updating the amoeba groups, the game grid is redrawn.
      */
     public void amoebaTick() {
         if (!AmoebaManager.isEmpty()) { // Check if there are any active amoeba groups
@@ -245,7 +239,7 @@ public class GameController {
      * Processes player movement and redraws the game.
      */
     public void playerTick() {
-        if(gameStatus) {
+        if (gameStatus) {
             if (inputHandler.isInputPending()) {
                 PlayerInput input = inputHandler.consumeInput();
                 if (input != null) {
@@ -280,12 +274,10 @@ public class GameController {
 
     /**
      * Selects an index in the ElementGrid to create a 3x3 Explosion and then its aftermath at the specified spot.
-     *
-     * @param row the row index on the grid where the explosion will occur
-     * @param column the column index on the grid where the explosion will occur
-     * @param dropsDiamonds true if the explosion should cause diamonds to drop, false otherwise
+     * @param row the row index on the grid where the explosion will occur.
+     * @param column the column index on the grid where the explosion will occur.
+     * @param dropsDiamonds true if the explosion should cause diamonds to drop, false otherwise.
      */
-    // Select an index in the ElementGrid and create a 3x3 Explosion and then AfterMath at that spot
     public static void applyExplosion(int row, int column, boolean dropsDiamonds) {
         waitingForExplosion = true;
         nextExplosionRow = row;
@@ -302,21 +294,21 @@ public class GameController {
         // the next tick cycle and explosion aftermath should occur
         if (waitingForExplosion) {
             // Create the initial explosion
-            Explosion.createExplosion(nextExplosionRow, nextExplosionCol,gridManager);
+            Explosion.createExplosion(nextExplosionRow, nextExplosionCol, gridManager);
             draw();
             waitingForExplosionAfterMath = true;
-            waitingForExplosion= false;
+            waitingForExplosion = false;
         } else if // Create the aftermath
         (waitingForExplosionAfterMath && transformToDiamonds) {
             // if dropsDiamonds
-            Explosion.createDiamondExplosionAfterMath(nextExplosionRow, nextExplosionCol,gridManager);
+            Explosion.createDiamondExplosionAfterMath(nextExplosionRow, nextExplosionCol, gridManager);
             draw();
             waitingForExplosionAfterMath = false;
             transformToDiamonds = false;
         } else if // Create the aftermath
          (waitingForExplosionAfterMath) {
           // if dropsDiamonds
-            Explosion.createExplosionAfterMath(nextExplosionRow, nextExplosionCol,gridManager);
+            Explosion.createExplosionAfterMath(nextExplosionRow, nextExplosionCol, gridManager);
             draw();
             waitingForExplosionAfterMath = false;
         }
@@ -324,7 +316,6 @@ public class GameController {
 
     /**
      * Checks if the player has won the level.
-     *
      * @return true if the player has won, false otherwise.
      */
     public boolean checkLevelWinTick() {
@@ -353,8 +344,7 @@ public class GameController {
 
     /**
      * Registers a key press input and passes it to the InputHandler.
-     *
-     * @param code the KeyCode representing the player's input
+     * @param code the KeyCode representing the player's input.
      */
     public void registerInput(KeyCode code) {
         inputHandler.registerInput(code);
@@ -362,8 +352,7 @@ public class GameController {
 
     /**
      * Retrieves the Canvas object used for rendering the game.
-     *
-     * @return the Canvas object
+     * @return the Canvas object.
      */
     public Canvas getCanvas() {
         return canvas;
@@ -371,8 +360,7 @@ public class GameController {
 
     /**
      * Retrieves the GridManager responsible for managing the game grid.
-     *
-     * @return the GridManager object
+     * @return the GridManager object.
      */
     public GridManager getGridManager() {
         return gridManager;
@@ -380,10 +368,8 @@ public class GameController {
 
     /**
      * Retrieves the player currently managed by the GameController.
-     *
-     * @return the Player object being managed
+     * @return the Player object being managed.
      */
-    // allows the player being managed by Game Controller to be retrieved
     public Player getPlayer() {
         return gridManager.getPlayer();
     }
@@ -391,36 +377,37 @@ public class GameController {
     /**
      * Sets the number of diamonds required for completing the game level.
      * Updates both the game controller's configuration and notifies the player.
-     *
      * @param diamondsRequired the integer representing the number of diamonds
      *                         needed to finish the current level.
      */
     public void setDiamondsRequired(int diamondsRequired) {
         this.diamondsRequired = diamondsRequired;
-        this.gridManager.getPlayer().setDiamondsRequired(diamondsRequired); //Tell the player the diamonds required
+        this.gridManager.getPlayer().setDiamondsRequired(diamondsRequired);
 
     }
 
+    /**
+     * Returns the diamonds required for the player to beat a level.
+     * @return diamonds required for player to beat a level.
+     */
     public int getDiamondsRequired() {
         return diamondsRequired;
     }
 
     /**
      * Sets the maximum allowable limit for amoebas in the game.
-     *
      * @param amoebaLimit the maximum number of amoebas allowed
      */
     public void setAmoebaLimit(int amoebaLimit) {
         this.amoebaLimit = amoebaLimit;
-        for(int i = 0; i < gridManager.getAmoebaGroups().size(); i++) {
+        for (int i = 0; i < gridManager.getAmoebaGroups().size(); i++) {
             gridManager.getAmoebaGroups().get(i).setAmoebaSizeLimit(amoebaLimit);
         }
     }
 
     /**
      * Retrieves the maximum allowable limit for amoebas in the game.
-     *
-     * @return the amoeba limit as an integer
+     * @return the amoeba limit as an integer.
      */
     public int getAmoebaLimit() {
         return amoebaLimit;

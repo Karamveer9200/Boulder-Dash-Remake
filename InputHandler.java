@@ -1,10 +1,10 @@
 import javafx.scene.input.KeyCode;
 
 /**
- * @author Omar Sanad
- * @author Alex Vesely
  * InputHandler processes and manages player inputs in the game.
  * It tracks the most recent input and provides mechanisms to consume and check for pending inputs.
+ * @author Omar Sanad
+ * @author Alex Vesely
  */
 public class InputHandler {
     private boolean isInputPending;
@@ -12,7 +12,6 @@ public class InputHandler {
 
     /**
      * Registers a key press and maps it to a corresponding player input.
-     *
      * @param code the KeyCode representing the player's input
      */
     public void registerInput(KeyCode code) {
@@ -35,8 +34,7 @@ public class InputHandler {
 
     /**
      * Checks if there is a pending player input.
-     *
-     * @return {@code true} if there is an input waiting to be consumed, {@code false} otherwise
+     * @return true if there is an input waiting to be consumed, false otherwise
      */
     public boolean isInputPending() {
         return isInputPending;
@@ -45,7 +43,6 @@ public class InputHandler {
     /**
      * Consumes the current player input and marks it as processed.
      * If no input is pending, returns {@code null}.
-     *
      * @return the current player input if available, or {@code null} if no input is pending
      */
     public GameController.PlayerInput consumeInput() {

@@ -1,12 +1,11 @@
 import javafx.scene.image.Image;
 
 /**
+ * Represents an abstract base class for elements within the grid-based game.
+ * The Element class maintains attributes for its position, image,
+ * and properties such as whether it can explode or be entered by a player.
  * @author Omar Sanad
  * @author Alex Vesely
- * Represents an abstract base class for elements within a grid-based game.
- * The Element class maintains attributes for its position, display image,
- * and properties such as whether it can explode or be entered by a player.
- * It serves as a foundational component for specific game elements.
  */
 public abstract class Element {
 
@@ -20,7 +19,6 @@ public abstract class Element {
 
     /**
      * Constructs an Element object with specified row and column positions.
-     *
      * @param row the row position of the element in the grid.
      * @param column the column position of the element in the grid.
      */
@@ -31,7 +29,6 @@ public abstract class Element {
 
     /**
      * Retrieves the name of the element.
-     *
      * @return the name of the element as a String.
      */
     public String getName() {
@@ -40,7 +37,6 @@ public abstract class Element {
 
     /**
      * Retrieves the row position of the element within the grid.
-     *
      * @return the row position as an integer.
      */
     public int getRow() {
@@ -49,7 +45,6 @@ public abstract class Element {
 
     /**
      * Sets the row position of the element within the grid.
-     *
      * @param row the new row position to be set.
      */
     public void setRow(int row) {
@@ -58,7 +53,6 @@ public abstract class Element {
 
     /**
      * Retrieves the column position of the element within the grid.
-     *
      * @return the column position as an integer.
      */
     public int getColumn() {
@@ -67,7 +61,6 @@ public abstract class Element {
 
     /**
      * Sets the column position of the element within the grid.
-     *
      * @param column the new column position to be set.
      */
     public void setColumn(int column) {
@@ -80,7 +73,6 @@ public abstract class Element {
 
     /**
      * Sets the image representation of this Element.
-     *
      * @param image the Image object to be set for this Element's visual representation.
      */
     public void setImage(Image image) {
@@ -89,7 +81,6 @@ public abstract class Element {
 
     /**
      * Checks whether the element is capable of exploding.
-     *
      * @return true if the element can explode, false otherwise.
      */
     public boolean isCanExplode() {
@@ -98,7 +89,6 @@ public abstract class Element {
 
     /**
      * Determines whether the element can be entered by a player.
-     *
      * @return true if the element is enterable, false otherwise.
      */
     public boolean isCanBeEntered() {
@@ -107,7 +97,6 @@ public abstract class Element {
 
     /**
      * Returns a string representation of the element.
-     *
      * @return the name of the element as a string.
      */
     @Override

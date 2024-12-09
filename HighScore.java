@@ -1,5 +1,7 @@
 /**
  * This represents a high score entry in the game, storing the player's name and score.
+ * @author Tahi Rahman
+ * @author Alex Vesely
  */
 public class HighScore {
     private int score;

@@ -1,10 +1,10 @@
 import java.util.ArrayList;
 
 /**
- * @author Omar Sanad
  * The GridManager is responsible for managing the grid of elements in the game.
  * It initializes the grid based on a template, provides access to individual elements,
  * manages lists of specific element types, and supports adding, removing, and updating elements.
+ * @author Omar Sanad
  */
 public class GridManager {
     private final Element[][] elementGrid;
@@ -19,13 +19,11 @@ public class GridManager {
     final ArrayList<Amoeba> amoebas = new ArrayList<>();
     private final ArrayList<AmoebaGroup> amoebaGroups = new ArrayList<>();
     private  Player player;
-    private Exit exit;
 
 
     /**
-     * Constructs a GridManager with a grid template.
-     * Initializes the grid based on the provided template and categorizes elements into lists.
-     *
+     * Constructs a GridManager from a grid template.
+     * Initializes the grid of elements based on the provided template.
      * @param gridTemplate the 2D array representing the initial grid setup
      */
     public GridManager(String[][] gridTemplate) {
@@ -36,8 +34,6 @@ public class GridManager {
 
     /**
      * Initializes the player's position based on the grid template.
-     * Searches for the Player element in the grid and sets its initial location.
-     *
      * @param gridTemplate the 2D array representing the grid layout
      */
     public void initializePlayer(String[][] gridTemplate) {
@@ -55,8 +51,6 @@ public class GridManager {
 
     /**
      * Initializes the grid and categorizes elements into appropriate lists.
-     * Clears any existing lists before initializing.
-     *
      * @param gridTemplate the 2D array representing the initial grid setup
      */
     public void reinitializeGrid(String[][] gridTemplate) {
@@ -89,7 +83,6 @@ public class GridManager {
     /**
      * Initializes the grid and categorizes elements into appropriate lists.
      * Clears any existing lists before initializing.
-     *
      * @param gridTemplate the 2D array representing the initial grid setup
      */
     public void initializeGrid(String[][] gridTemplate) {
@@ -113,8 +106,7 @@ public class GridManager {
     }
     /**
      * Creates an element based on the provided code and its position in the grid.
-     *
-     * @param gridManager
+     * @param gridManager the gridManager
      * @param code        the String code representing the type of element
      * @param row         the row position of the element
      * @param col         the column position of the element
@@ -160,7 +152,6 @@ public class GridManager {
 
     /**
      * Adds an element to its corresponding list based on its type.
-     *
      * @param element the Element to be added
      */
     public void addToList(Element element) {
@@ -253,7 +244,6 @@ public class GridManager {
 
     /**
      * Retrieves the 2D array of elements in the grid.
-     *
      * @return the element grid
      */
     public Element[][] getElementGrid() {
@@ -273,7 +263,6 @@ public class GridManager {
 
     /**
      * Sets an element at the specified position in the grid.
-     *
      * @param row     the row position of the element
      * @param col     the column position of the element
      * @param element the Element to set at the specified position
@@ -285,7 +274,6 @@ public class GridManager {
     /**
      * Removes an element from the grid at the specified position.
      * Replaces the removed element with a Path and removes it from its corresponding list.
-     *
      * @param row the row position of the element to remove
      * @param col the column position of the element to remove
      */
@@ -297,7 +285,6 @@ public class GridManager {
 
     /**
      * Retrieves the list of Boulder elements in the grid.
-     *
      * @return the ArrayList of Boulder elements
      */
     public ArrayList<Boulder> getBoulders() {
@@ -306,7 +293,6 @@ public class GridManager {
 
     /**
      * Retrieves the list of Diamond elements in the grid.
-     *
      * @return the ArrayList of Boulder elements
      */
     public ArrayList<Diamond> getDiamonds() {
@@ -315,7 +301,6 @@ public class GridManager {
 
     /**
      * Retrieves the list of Butterfly and Fireflies elements in the grid.
-     *
      * @return the ArrayList of Butterfly and Fireflies elements
      */
     public ArrayList<Fly> getFlies() {
@@ -324,7 +309,6 @@ public class GridManager {
 
     /**
      * Retrieves the list of Frog elements in the grid.
-     *
      * @return the ArrayList of Frog elements
      */
     public ArrayList<Frog> getFrogs() {
@@ -333,7 +317,6 @@ public class GridManager {
 
     /**
      * Retrieves the current Player object in the grid.
-     *
      * @return the Player object representing the player character in the grid
      */
     public Player getPlayer() {
@@ -342,13 +325,15 @@ public class GridManager {
 
     /**
      * Retrieves the list of Amoeba elements in the grid.
-     *
      * @return the ArrayList of Amoeba elements
      */
     public ArrayList<Amoeba> getAmoebas() {
         return amoebas;
     }
 
+    /**
+     * Method to kill the player and stop the player from continuing to interact with the game.
+     */
     public void killPlayer() {
         removeFromList(player);
         Path path = new Path(player.getRow(), player.getColumn());
@@ -358,7 +343,6 @@ public class GridManager {
     /**
      * Returns the list of AmoebaGroup objects, each representing a group of connected
      * Amoeba elements in the grid.
-     *
      * @return the list of AmoebaGroup objects
      */
     public ArrayList<AmoebaGroup> getAmoebaGroups() {
@@ -410,22 +394,4 @@ public class GridManager {
         exploreAmoebaGroup(row, col + 1, group, visited); // Right
     }
 
-
-    /**
-     * Prints the current state of the grid to the standard output.
-     * Each element in the grid is printed in a tabular format, allowing for a visual
-     * representation of the grid's layout and contents. This method can be useful
-     * for debugging purposes to understand the current configuration of the grid
-     * elements.
-     */
-    // built for debugging purpose
-    public void printGridState() {
-        for (int row = 0; row < elementGrid.length; row++) {
-            for (int col = 0; col < elementGrid[row].length; col++) {
-                System.out.print(elementGrid[row][col].toString() + " ");
-            }
-            System.out.println(",");
-        }
-        System.out.println("---------------------------------------------------------------------------------");
-    }
 }

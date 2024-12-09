@@ -1,8 +1,14 @@
 import javafx.scene.image.Image;
 
+/**
+ * Class represents Flies within the game. That move
+ * uniquely by following either the left or right edge.
+ * @author Karamveer Singh
+ */
 public class Fly extends Element {
-
-    public boolean followsLeftEdge;
+    public static final int POSSIBLE_DIRECTIONS = 4;
+    public static final int FEWER_POSSIBLE_DIRECTIONS = 3;
+    protected boolean followsLeftEdge;
     private int currentDirection;
 
     private static final int[][] DIRECTIONS = {
@@ -13,9 +19,7 @@ public class Fly extends Element {
     };
 
     /**
-     * @author Karamveer Singh
      * Creates a new Fly object at the specified row and column.
-     *
      * @param row the row of the new Fly
      * @param column the column of the new Fly
      * @param followsLeftEdge whether the Fly follows the left edge
@@ -34,9 +38,7 @@ public class Fly extends Element {
      * Moves the Fly to the next valid position in the grid,
      * based on its current direction and the grid's contents.
      * If the Fly reaches a Path, it moves to the new position.
-     * If the Fly reaches a Player, it kills the player and replaces
-     * it with a new Path. If the Fly reaches an Amoeba, it explodes.
-     *
+     * If the Fly reaches a Player, it kills the player.
      * @param gridManager the grid manager to update the Fly's position
      * @param player the player to check for collision
      */
@@ -50,9 +52,7 @@ public class Fly extends Element {
             int newRow = this.getRow() + DIRECTIONS[nextDirection][0];
             int newCol = this.getColumn() + DIRECTIONS[nextDirection][1];
 
-
             Element target = grid[newRow][newCol];
-
             // Move to new position if the target is a Path
             if (target instanceof Path) {
                 gridManager.setElement(this.getRow(), this.getColumn(),
@@ -76,20 +76,16 @@ public class Fly extends Element {
                 this.setColumn(newCol);
                 System.out.println("Player has been killed by the fly!");
 
-
             } else if (target instanceof Amoeba) {
                 // explode!!!!!
             }
         }
     }
 
-
-
     /**
      * Determines the next direction for the fly to move based on the rule.
      * The fly will follow either the left or right edge,
      * depending on the configuration.
-     *
      * @param grid the 2D array representing the current state of the grid
      * @return the next direction index for the fly to move,
      * or -1 if no valid move is found
@@ -98,9 +94,9 @@ public class Fly extends Element {
         int direction = currentDirection;
 
         // Check the wall-following rule
-        for (int i = 0; i < 4; i++) {
-            int checkDirection = followsLeftEdge ? (direction + 3)
-                    % 4 : (direction + 1) % 4; // Left or Right turn
+        for (int i = 0; i < POSSIBLE_DIRECTIONS; i++) {
+            int checkDirection = followsLeftEdge ? (direction + FEWER_POSSIBLE_DIRECTIONS)
+                    % POSSIBLE_DIRECTIONS : (direction + 1) % POSSIBLE_DIRECTIONS;
             int row = this.getRow() + DIRECTIONS[checkDirection][0];
             int col = this.getColumn() + DIRECTIONS[checkDirection][1];
 
@@ -111,7 +107,7 @@ public class Fly extends Element {
 
             // Rotate fly's direction clockwise or counterclockwise
             direction = followsLeftEdge ? (direction + 1)
-                    % 4 : (direction + 3) % 4;
+                    % POSSIBLE_DIRECTIONS : (direction + FEWER_POSSIBLE_DIRECTIONS) % POSSIBLE_DIRECTIONS;
         }
 
         // No valid move found
@@ -121,7 +117,6 @@ public class Fly extends Element {
 
     /**
      * Determines if the fly can move to the specified position in the grid.
-     *
      * @param grid the 2D array representing the current state of the grid
      * @param row  the row index of the target position
      * @param col  the column index of the target position
@@ -142,8 +137,7 @@ public class Fly extends Element {
 
     /**
      * Returns a string representation of the Fly object.
-     *
-     * <p>Returns "fly" for Fly objects.
+     * @return "fly"
      */
     @Override
     public String toString() {

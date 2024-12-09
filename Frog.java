@@ -3,15 +3,15 @@ import java.util.*;
 
 /**
  * This class represents a frog on the game grid.
- * @author Karamveer Singh
+ * @author Karamveer Singh.
  */
 public class Frog extends Element {
     public static boolean dropDiamond = false;
 
     /**
      * Constructor for the Frog class.
-     * @param row row position
-     * @param column column position
+     * @param row row position.
+     * @param column column position.
      */
     public Frog(final int row, final int column) {
         super(row, column);
@@ -24,8 +24,8 @@ public class Frog extends Element {
     /**
      * Moves the Frog one step closer to the player using Dijkstra's algorithm.
      * Removes the player from the grid on collision.
-     * @param gridManager gridManager
-     * @param player player
+     * @param gridManager gridManager.
+     * @param player player.
      */
     // Uses Dijkstra's algorithm to move the Frog one step closer to the player.
     public void seekAndKill(final GridManager gridManager, final Player player) {
@@ -91,7 +91,7 @@ public class Frog extends Element {
                 }
             }
         }
-        // Check if the player is unreachable, move randomly
+        // Check if the player is unreachable, if yes move randomly
         if (distances[playerRow][playerCol] == Integer.MAX_VALUE) {
             List<int[]> validMoves = new ArrayList<>();
             for (int[] dir : directions) {
@@ -105,13 +105,11 @@ public class Frog extends Element {
                 }
             }
             if (!validMoves.isEmpty()) {
-                // Choose a random valid move
+                // Random move
                 Random random = new Random();
                 int[] randomMove = validMoves.get(random.nextInt(validMoves.size()));
                 int newRow = randomMove[0];
                 int newCol = randomMove[1];
-
-                // Move the Frog
                 gridManager.setElement(frogRow, frogCol, new Path(frogRow, frogCol));
                 gridManager.setElement(newRow, newCol, this);
                 this.setRow(newRow);
@@ -124,14 +122,14 @@ public class Frog extends Element {
 
     /**
      *
-     * Moves the Frog to its next step
-     * @param gridManager gridManager
-     * @param grid the element grid
-     * @param previous the previous cell in the shortest path
-     * @param frogRow the frog row position
-     * @param frogCol the frog column position
-     * @param playerRow the player row position
-     * @param playerCol the player column position
+     * Moves the Frog to its next step.
+     * @param gridManager gridManager.
+     * @param grid the element grid.
+     * @param previous the previous cell in the shortest path.
+     * @param frogRow the frog row position.
+     * @param frogCol the frog column position.
+     * @param playerRow the player row position.
+     * @param playerCol the player column position.
      */
     private void moveToNextStep(GridManager gridManager, Element[][] grid, int[][][] previous,
                                 int frogRow, int frogCol, int playerRow, int playerCol) {
@@ -166,8 +164,7 @@ public class Frog extends Element {
 
     /**
      * Returns a string representation of the Frog object.
-     *
-     * @return a string "Frog"
+     * @return a string "Frog".
      */
     @Override
     public String toString() {

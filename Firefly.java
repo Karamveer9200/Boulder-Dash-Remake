@@ -1,11 +1,8 @@
 import javafx.scene.image.Image;
 
 /**
- *
- * The Firefly class represents a type of fly in the grid-based game environment
- * that extends the capabilities of a Fly.
+ * The Firefly class represents a type of fly, that does not drop diamonds when exploded
  * @author Karamveer Singh
- * In addition to the properties and methods of Fly, Firefly can optionally drop a diamond.
  */
 public class Firefly extends Fly{
     public static final Boolean dropDiamond = false;
@@ -16,6 +13,10 @@ public class Firefly extends Fly{
         name = getName();
     }
 
+    /**
+     * Gets the name of the Firefly
+     * @return The name of the Firefly.
+     */
     public String getName(){
         String extraInfo;
         if (followsLeftEdge) {
@@ -26,8 +27,10 @@ public class Firefly extends Fly{
         return "Firefly" + extraInfo;
     }
 
-
-
+    /**
+     * Return a string representation of a FireFly.
+     * @return "Firefly"
+     */
     @Override
     public String toString() {
         return "Firefly";

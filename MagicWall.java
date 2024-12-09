@@ -25,7 +25,6 @@ public class MagicWall extends Element {
     /**
      * Transforms a rock element (Boulder or Diamond)
      * when it enters a Magic Wall.
-     *
      * @param element the element to transform
      * @param gridManager the grid manager to handle element transformations
      */
@@ -51,7 +50,6 @@ public class MagicWall extends Element {
 
     /**
      * Returns the name of the tile as a string.
-     *
      * @return the name "MagicWall"
      */
     @Override

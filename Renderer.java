@@ -2,9 +2,9 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 /**
+ * Renderer is responsible for rendering the game's grid and its elements onto the canvas.
  * @author Omar Sanad
  * @author Alex Vesely
- * Renderer is responsible for rendering the game's grid and its elements onto the canvas.
  */
 public class Renderer {
     private static final int GRID_CELL_WIDTH = Main.GRID_CELL_WIDTH;

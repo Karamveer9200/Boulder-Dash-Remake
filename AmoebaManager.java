@@ -9,7 +9,8 @@ public class AmoebaManager {
     private static final List<AmoebaGroup> amoebaGroups = new ArrayList<>();
 
     /**
-     * Returns true if there are no amoeba groups being managed, false otherwise.
+     * Returns true if there are no amoeba groups being managed,
+     * false otherwise.
      * @return true if there are no amoeba groups, false otherwise
      */
     public static boolean isEmpty() {

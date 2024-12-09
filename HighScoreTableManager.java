@@ -145,7 +145,8 @@ public class HighScoreTableManager {
             return highScores;
         }
 
-        File[] files = folder.listFiles((dir, name) -> name.matches("HighScoreTable" + level + ".txt"));
+        File[] files = folder.listFiles((dir, name) ->
+                name.matches("HighScoreTable" + level + ".txt"));
         if (files == null || files.length == 0) {
             System.out.println("No matching file found for level " + level);
             return highScores;

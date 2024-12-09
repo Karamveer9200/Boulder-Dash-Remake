@@ -4,7 +4,6 @@ import javafx.scene.image.Image;
  * Represents an Exit tile in the game.
  * Only one exit can be created per level.
  * Initially, cannot be entered/walked over or exploded.
- * It is represented by an image located at "images/Exit.png".
  * @author Rhys Llewellyn
  * @author Joshua Aka
  */
@@ -16,7 +15,6 @@ public class Exit extends Element {
 
     /**
      * Creates a new Exit tile at the specified row and column (x and y).
-     *
      * @param row the row position of the tile
      * @param column the column position of the tile
      * @throws IllegalStateException if an exit already exists
@@ -41,7 +39,9 @@ public class Exit extends Element {
         exitExists = false;
     }
 
-    // Method to unlock the Exit so it can be entered
+    /**
+     * Method to unlock the Exit so it can be entered
+     */
     public void unlock() {
         this.canBeEntered = true;
         System.out.println("Exit Unlocked!");
@@ -57,7 +57,6 @@ public class Exit extends Element {
 
     /**
      * Checks if the exit is unlocked.
-     *
      * @return true if the exit can be entered, false otherwise
      */
     public boolean isLocked() {
@@ -66,7 +65,6 @@ public class Exit extends Element {
 
     /**
      * This returns a string representation of the exit and its locked status.
-     *
      * @return the string representation of the exit
      */
     @Override
