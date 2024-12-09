@@ -28,7 +28,7 @@ import javafx.scene.image.ImageView;
  * Main sets up the GUI and initialises everything for a game to take place.
  * @author Ibrahim Boukhalfa
  * @author Omar Sanad
- * @author Tahi
+ * @author Tahi Rahman
  * @author Alex Vesely
  */
 public class Main extends Application {
@@ -39,6 +39,12 @@ public class Main extends Application {
 
 	public static final int DIAMOND_SCORE_VALUE = 100;
 	public static final int TIME_SCORE_VALUE = 25;
+	public static final int SPACING = 10;
+	public static final int LOGO_WIDTH = 700;
+	public static final int PROFILE_SELECTION_W = 300;
+	public static final int PROFILE_SELECTION_H = 200;
+	public static final int HIGH_SCORE_SELECTION_W = 300;
+	public static final int HIGH_SCORE_SELECTION_H = 150;
 
 
 	// Timeline for periodic ticks
@@ -60,6 +66,10 @@ public class Main extends Application {
 
 	private Stage primaryStage;
 
+	/**
+	 * Start the Boulder-Dash-Remake
+	 * @param primaryStage the primary stage for this application
+	 */
 	@Override
 	public void start(Stage primaryStage) {
 		this.primaryStage = primaryStage; // Store the primary stage
@@ -76,9 +86,10 @@ public class Main extends Application {
 
 	/**
 	 * Creates the main menu layout with buttons and a logo.
+	 * @return the Main menu
 	 */
 	private VBox createMenuBox() {
-		VBox menuBox = new VBox(10);
+		VBox menuBox = new VBox(SPACING);
 
 		ImageView logo = createLogo();
 		Button newGameButton = createNewGameButton();
@@ -87,24 +98,27 @@ public class Main extends Application {
 		Button highScoresButton = createHighScoresButton();
 		Button quitButton = createQuitButton();
 
-		menuBox.getChildren().addAll(logo, newGameButton, loadGameButton, profileButton, highScoresButton, quitButton);
+		menuBox.getChildren().addAll(logo, newGameButton, loadGameButton,
+				profileButton, highScoresButton, quitButton);
 		menuBox.setStyle("-fx-padding: 20; -fx-alignment: center;");
 		return menuBox;
 	}
 
 	/**
 	 * Creates the logo for the main menu.
+	 * @return the image of the logo
 	 */
 	private ImageView createLogo() {
 		Image logoImage = new Image("images/BoulderDashTitle.png");
 		ImageView logoImageView = new ImageView(logoImage);
-		logoImageView.setFitWidth(700);
+		logoImageView.setFitWidth(LOGO_WIDTH);
 		logoImageView.setPreserveRatio(true);
 		return logoImageView;
 	}
 
 	/**
 	 * Creates the "Start New Game" button.
+	 * @return the New Game Buttion.
 	 */
 	private Button createNewGameButton() {
 		Button newGameButton = new Button("Start New Game");
@@ -119,24 +133,29 @@ public class Main extends Application {
 
 	/**
 	 * Creates the "Load Game" button.
+	 * @return the load game button
 	 */
 	private Button createLoadGameButton() {
 		Button loadGameButton = new Button("Load Game");
-		loadGameButton.setOnAction(e -> showProfileSelectionDialog("Load Game", true));
+		loadGameButton.setOnAction(e -> showProfileSelectionDialog(
+				"Load Game", true));
 		return loadGameButton;
 	}
 
 	/**
 	 * Creates the "Delete Player Profile" button.
+	 * @return the delete profile button.
 	 */
 	private Button createProfileButton() {
 		Button profileButton = new Button("Delete Player Profile");
-		profileButton.setOnAction(e -> showProfileSelectionDialog("Delete Player Profile", false));
+		profileButton.setOnAction(e -> showProfileSelectionDialog(
+				"Delete Player Profile", false));
 		return profileButton;
 	}
 
 	/**
 	 * Creates the "High Scores" button to access the High Score Table.
+	 * @return create high score button
 	 */
 	private Button createHighScoresButton() {
 		Button highScoresButton = new Button("High Scores");
@@ -146,6 +165,7 @@ public class Main extends Application {
 
 	/**
 	 * Creates the "Quit Game" button.
+	 * @return the quit button.
 	 */
 	private Button createQuitButton() {
 		Button quitButton = new Button("Quit Game");
@@ -155,6 +175,8 @@ public class Main extends Application {
 
 	/**
 	 * Displays a profile selection dialog for either loading or deleting a profile.
+	 * @param title Title of what the selection is for
+	 * @param isLoadGame true if selection is to load game, false if it is for deletion.
 	 */
 	private void showProfileSelectionDialog(String title, boolean isLoadGame) {
 		Stage dialog = new Stage();
@@ -200,17 +222,19 @@ public class Main extends Application {
 
 		Label label = new Label("Select a player profile:");
 
-		VBox layout = new VBox(10);
+		VBox layout = new VBox(SPACING);
 		layout.getChildren().addAll(label, profileDropdown, actionButton);
 		layout.setAlignment(Pos.CENTER);
 
-		Scene scene = new Scene(layout, 300, 200);
+		Scene scene = new Scene(layout, PROFILE_SELECTION_W, PROFILE_SELECTION_H);
 		dialog.setScene(scene);
 		dialog.show();
 	}
 
 	/**
 	 * Handles loading a game for the selected profile.
+	 * @param selectedProfileName name of selected profile.
+	 * @param dialog this window.
 	 */
 	private void handleLoadGame(String selectedProfileName, Stage dialog) {
 		int index = 0;
@@ -238,6 +262,8 @@ public class Main extends Application {
 
 	/**
 	 * Handles deleting the selected profile.
+	 * @param selectedProfileName name of selected profile.
+	 * @param dialog this window.
 	 */
 	private void handleDeleteProfile(String selectedProfileName, Stage dialog) {
 		PlayerProfile profileToDelete = null;
@@ -283,21 +309,21 @@ public class Main extends Application {
 			HighScoreTableManager.displayHighScoresInMainMenu(3, dialog);
 		});
 
-		VBox dialogBox = new VBox(10, highScores1Button, highScores2Button, highScores3Button);
+		VBox dialogBox = new VBox(SPACING, highScores1Button, highScores2Button, highScores3Button);
 		dialogBox.setStyle("-fx-padding: 20; -fx-alignment: center;");
 
-		Scene dialogScene = new Scene(dialogBox, 300, 150);
+		Scene dialogScene = new Scene(dialogBox,
+				HIGH_SCORE_SELECTION_W, HIGH_SCORE_SELECTION_H);
 		dialog.setScene(dialogScene);
 		dialog.showAndWait();
 	}
 
-
 	/**
 	 * Sets up the game interface and initializes everything for a game to take place.
 	 * @param primaryStage the primary stage for the game
+	 * @param levelFile the file of the level being loaded in
 	 */
 	public void setupGame(Stage primaryStage, String levelFile) {
-		// Load the initial grid from a file
 		String[][] initialGrid = FileHandler.readElementGridFromLevelFile(levelFile);
 		int amoebaGrowthRate = FileHandler.readAmoebaGrowthRateFromLevelFile(levelFile); //Read amoeba growth rate
 		secondsRemaining = FileHandler.readSecondsFromLevelFile(levelFile);
@@ -307,13 +333,10 @@ public class Main extends Application {
 
 		Canvas canvas = new Canvas(canvasWidth, canvasHeight);
 
-		//Initialise the gameController
 		GameController gameController = initializeGameController(initialGrid, canvas, levelFile);
 
-		// Build the GUI
 		Pane root = buildGUI(gameController);
 
-		// Create a scene and register key press events
 		Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
 		scene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
 			gameController.registerInput(event.getCode());
@@ -324,7 +347,6 @@ public class Main extends Application {
 			gameController.playerTick();
 		});
 
-		//add keyframe for checking neighboring tiles to enemies , instance of that method is in flies 12/1/2024 - Omar
 		KeyFrame killPlayerKeyFrame = new KeyFrame(Duration.millis(50), event -> {
 			gameController.killTick();
 		});
@@ -346,7 +368,7 @@ public class Main extends Application {
 			gameController.frogTick();
 		});
 
-		KeyFrame amoebaKeyFrame = new KeyFrame(Duration.millis(amoebaGrowthRate), event -> { // Previously set to 1000
+		KeyFrame amoebaKeyFrame = new KeyFrame(Duration.millis(amoebaGrowthRate), event -> {
 			gameController.amoebaTick();
 		});
 
@@ -360,7 +382,6 @@ public class Main extends Application {
 			}
 		});
 
-		// Set up the periodic tick timeline
 		playerTickTimeline = new Timeline(playerKeyFrame);
 		dangerousRockFallTickTimeline = new Timeline(dangerousRocksFallKeyFrame);
 		dangerousRockRollTimeline = new Timeline(dangerousRocksRollKeyFrame);
@@ -371,13 +392,10 @@ public class Main extends Application {
 		explosionTickTimeLine = new Timeline(explosionKeyFrame);
 		checkLevelWinTimeline = new Timeline(checkLevelWinKeyFrame);
 
-		// Set the cycle count to Animation.INDEFINITE
 		setTimelinesToIndefinite();
 
-		// Draw the initial grid
 		gameController.draw();
 
-		// Show the stage
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
@@ -395,8 +413,8 @@ public class Main extends Application {
 		root.setCenter(gameController.getCanvas());
 
 		// Create a toolbar with buttons
-		HBox toolbar = new HBox(10);
-		toolbar.setPadding(new Insets(10));
+		HBox toolbar = new HBox(SPACING);
+		toolbar.setPadding(new Insets(SPACING));
 
 		Button startTickButton = new Button("Resume");
 		Button stopTickButton = new Button("Pause");
@@ -427,17 +445,7 @@ public class Main extends Application {
 		});
 
 		startTickButton.setOnAction(e -> {
-			timerTimeline.play();
-			diamondCountTimeline.play();
-			playerTickTimeline.play();
-			dangerousRockFallTickTimeline.play();
-			dangerousRockRollTimeline.play();
-			flyTickTimeline.play();
-			frogTickTimeline.play();
-			amoebaTickTimeline.play();
-			killPlayerTickTimeLine.play();
-			explosionTickTimeLine.play();
-			checkLevelWinTimeline.play();
+			playAllTimelines();
 			startTickButton.setDisable(true);
 			stopTickButton.setDisable(false);
 			saveButton.setDisable(true);
@@ -462,8 +470,6 @@ public class Main extends Application {
 			resetGridButton.setDisable(false);
 		});
 
-
-		// adds timer to the toolbar
 		timerTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
 			secondsRemaining--;
 			timerText.setText("Time Remaining: " + secondsRemaining + "s");
@@ -475,21 +481,21 @@ public class Main extends Application {
 		}));
 		timerTimeline.setCycleCount(Animation.INDEFINITE);
 
-		// adds diamond count to the toolbar, displays as zero if player has not been initialised
 		int diamondsCollected = gameController.getPlayer().getDiamondCount();
-		int diamondsRequired = FileHandler.readRequiredDiamondsFromLevelFile("txt/Level" + currentProfile.getMaxLevelReached() + ".txt");
+		int diamondsRequired = FileHandler.readRequiredDiamondsFromLevelFile(
+				"txt/Level" + currentProfile.getMaxLevelReached() + ".txt");
 		Text diamondCountText = new Text("Diamonds Collected: " + diamondsCollected + " / " + diamondsRequired);
 		diamondCountTimeline = new Timeline(new KeyFrame(Duration.millis(49), event -> {
 			if (gameController.getPlayer() != null) {
-				diamondCountText.setText("Diamonds collected: " + gameController.getPlayer().getDiamondCount() + " / " + diamondsRequired);
+				diamondCountText.setText("Diamonds collected: "
+						+ gameController.getPlayer().getDiamondCount() + " / " + diamondsRequired);
 			} else {
 				diamondCountText.setText("Diamonds collected: 0 / " + diamondsRequired);
 			}
 		}));
 		diamondCountTimeline.setCycleCount(Animation.INDEFINITE);
 
-		// display current level for the player
-		Text levelText = new Text ("Current Level: " + currentProfile.getMaxLevelReached());
+		Text levelText = new Text("Current Level: " + currentProfile.getMaxLevelReached());
 
 		toolbar.getChildren().addAll(startTickButton, stopTickButton, resetGridButton,
 				saveButton, timerText, diamondCountText, levelText);
@@ -533,7 +539,7 @@ public class Main extends Application {
 		// Show the high score table for level just beat
 		int currentLevel = currentProfile.getMaxLevelReached();
 		String currentPlayerName = currentProfile.getName();
-		HighScoreTableManager.updateHighScoreTable(currentPlayerName,score,currentLevel);
+		HighScoreTableManager.updateHighScoreTable(currentPlayerName, score, currentLevel);
 		Platform.runLater(() -> {
 			HighScoreTableManager.displayHighScoresAfterLevel(currentLevel, score);
 		});
@@ -572,6 +578,23 @@ public class Main extends Application {
 	}
 
 	/**
+	 * Starts all the timelines.
+	 */
+	private void playAllTimelines() {
+		timerTimeline.play();
+		diamondCountTimeline.play();
+		playerTickTimeline.play();
+		dangerousRockFallTickTimeline.play();
+		dangerousRockRollTimeline.play();
+		flyTickTimeline.play();
+		frogTickTimeline.play();
+		amoebaTickTimeline.play();
+		killPlayerTickTimeLine.play();
+		explosionTickTimeLine.play();
+		checkLevelWinTimeline.play();
+	}
+
+	/**
 	 * Sets all the timelines associated with game events to cycle indefinitely.
 	 */
 	private void setTimelinesToIndefinite() {
@@ -605,6 +628,10 @@ public class Main extends Application {
 		return gameController;
 	}
 
+	/**
+	 * Launch Boulder-Dash-Remake.
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		launch(args);
 	}
