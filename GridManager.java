@@ -199,30 +199,24 @@ public class GridManager {
             dirts.remove(dirt);
         } else if (element instanceof Player player) {
             players.remove(player);
-            System.out.println("Player removed");
             GameController.gameOver();
             GameController.applyExplosion(element.row, element.column, Player.dropDiamond);
         } else if (element instanceof NormalWall wall) {
             walls.remove(wall);
         } else if (element instanceof Boulder boulder) {
             boulders.remove(boulder);
-            System.out.println("Boulder removed");
         } else if (element instanceof Frog frog) {
             frogs.remove(frog);
-            System.out.println("Frog removed");
             GameController.applyExplosion(element.row, element.column, Frog.dropDiamond);
         } else if (element instanceof Amoeba amoeba) {
             amoebas.remove(amoeba);
         } else if (element instanceof Diamond diamond) {
             diamonds.remove(diamond);
-            System.out.println("Diamond removed");
         } else if (element instanceof Butterfly butterfly) {
             flies.remove(butterfly);
-            System.out.println("Butterfly removed");
             GameController.applyExplosion(element.row, element.column, Butterfly.dropDiamond);
         } else if (element instanceof Firefly firefly) {
             flies.remove(firefly);
-            System.out.println("Firefly removed");
             GameController.applyExplosion(element.row, element.column, Firefly.dropDiamond);
         }
     }
@@ -417,13 +411,20 @@ public class GridManager {
     }
 
 
+    /**
+     * Prints the current state of the grid to the standard output.
+     * Each element in the grid is printed in a tabular format, allowing for a visual
+     * representation of the grid's layout and contents. This method can be useful
+     * for debugging purposes to understand the current configuration of the grid
+     * elements.
+     */
     // built for debugging purpose
     public void printGridState() {
         for (int row = 0; row < elementGrid.length; row++) {
             for (int col = 0; col < elementGrid[row].length; col++) {
-                System.out.print(elementGrid[row][col] + " ");
+                System.out.print(elementGrid[row][col].toString() + " ");
             }
-            System.out.println();
+            System.out.println(",");
         }
         System.out.println("---------------------------------------------------------------------------------");
     }
